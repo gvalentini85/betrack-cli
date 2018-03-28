@@ -7,7 +7,7 @@ python:
   - "3.6"
   
 install:
-  - pip install -e .[test]
+  - pip install .[test]
 
 script:
   - python setup.py test
