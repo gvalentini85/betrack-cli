@@ -1,6 +1,7 @@
 """Tests for our main betrack CLI module."""
 
 
+from __future__ import unicode_literals
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
