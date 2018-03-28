@@ -9,7 +9,8 @@ environment:
 
 install:
   - cmd: "cd C:\\projects\\betrack-cli"
-  
+  - cmd: "pip install .[test]"
+
 build: off
 
 test_script:
