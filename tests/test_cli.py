@@ -13,7 +13,7 @@ class TestHelp(TestCase):
         self.assertTrue(b'Usage:' in output)
 
         output = popen(['betrack', '--help'], stdout=PIPE).communicate()[0]
-        self.assertTrue('Usage:' in output)
+        self.assertTrue(b'Usage:' in output)
 
 
 class TestVersion(TestCase):
