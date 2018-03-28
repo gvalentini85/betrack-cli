@@ -1,7 +1,6 @@
 """Tests for our main betrack CLI module."""
 
 
-from __future__ import unicode_literals
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
@@ -11,7 +10,7 @@ from betrack import __version__ as VERSION
 class TestHelp(TestCase):
     def test_returns_usage_information(self):
         output = popen(['betrack', '-h'], stdout=PIPE).communicate()[0]
-        self.assertTrue('Usage:' in output)
+        self.assertTrue(b'Usage:' in output)
 
         output = popen(['betrack', '--help'], stdout=PIPE).communicate()[0]
         self.assertTrue('Usage:' in output)
