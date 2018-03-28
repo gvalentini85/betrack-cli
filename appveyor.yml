@@ -8,7 +8,7 @@ environment:
     - PYTHON: "C:\\Python36-x64"
 
 install:
-  - cmd: "cd C:\projects\betrack-cli"
+  - cmd: "cd C:\\projects\\betrack-cli"
   
 build: off
 
