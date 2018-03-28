@@ -1,0 +1,6 @@
+[
+  "tests/test_cli.py::TestHelp::test_returns_usage_information", 
+  "tests/test_cli.py::TestVersion::test_returns_version_information", 
+  "tests/commands/test_hello.py::TestHello::test_returns_hello_world", 
+  "tests/commands/test_hello.py::TestHello::test_returns_multiple_lines"
+]

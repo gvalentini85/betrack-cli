@@ -19,4 +19,4 @@ class TestHelp(TestCase):
 class TestVersion(TestCase):
     def test_returns_version_information(self):
         output = popen(['betrack', '--version'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), VERSION)
+        self.assertEqual(output.strip(), VERSION.encode())
