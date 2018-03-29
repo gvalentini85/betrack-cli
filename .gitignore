@@ -99,3 +99,16 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Temporary files created by emacs
+*~
+*#*
+
+# Binary files
+*.o
+*.so
+*.a
+
+# Mac finder files
+.DS_Store
+
