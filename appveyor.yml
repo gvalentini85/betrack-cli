@@ -8,8 +8,9 @@ environment:
     - PYTHON: "C:\\Python36-x64"
 
 install:
+  - cmd: "%PYTHON%\\python.exe -m pip install --upgrade pip"
   - cmd: "cd C:\\projects\\betrack-cli"
-  - cmd: "pip install .[test]"
+  - cmd: "pip install -e .[test]"
 
 build: off
 
