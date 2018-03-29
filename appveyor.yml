@@ -18,4 +18,5 @@ install:
 build: off
 
 test_script:
+  - "echo %cd%"
   - "python setup.py test"
