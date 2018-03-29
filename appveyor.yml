@@ -19,5 +19,7 @@ build: off
 
 test_script:
   - "echo %cd%"
+  - "betrack -h"
   - "where py.test"
   - "python setup.py test"
+  - "py.test --cov=betrack --cov-report=term-missing"
