@@ -1,5 +1,15 @@
-betrack-cli
-=========
+betrack
+===========
+
+.. image:: https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=dev
+    :target: https://travis-ci.org/gvalentini85/betrack-cli
+    :alt: Travis build status	     
+
+.. image:: https://ci.appveyor.com/api/projects/status/x0h7p5o3f3r04m6a/branch/dev?svg=true 
+   :target: https://ci.appveyor.com/project/gvalentini85/betrack-cli
+   :alt: Appveyor build status	 
+
+
 
 A Python command line toolkit to track collective behaviors.
 
