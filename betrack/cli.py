@@ -2,16 +2,17 @@
 betrack
 
 Usage:
-  betrack hello
   betrack -h | --help
   betrack --version
+  betrack track-particles
+  betrack annotate-video
 
 Options:
-  -h --help                         Show this screen.
-  --version                         Show version.
+  -h --help                         Show help screen.
+  --version                         Show betrack version.
 
 Examples:
-  betrack hello
+  betrack track-particles
 
 Help:
   For help using this tool, please open an issue on the Github repository:
@@ -33,9 +34,9 @@ def main():
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.
-    for (k, v) in options.items(): 
-        if hasattr(betrack.commands, k) and v:
-            module = getattr(betrack.commands, k)
+    for (k, v) in options.items():
+        if hasattr(betrack.commands, k.replace('-', '')) and v:
+            module = getattr(betrack.commands, k.replace('-', ''))
             betrack.commands = getmembers(module, isclass)
             command = [command[1] for command in betrack.commands if command[0] != 'BetrackCommand'][0]
             command = command(options)
