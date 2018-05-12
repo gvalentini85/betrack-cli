@@ -3,10 +3,10 @@
 
 from json import dumps
 
-from .base import Base
+from .command import BetrackCommand
 
 
-class Hello(Base):
+class Hello(BetrackCommand):
     """Say hello, world!"""
 
     def run(self):

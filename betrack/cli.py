@@ -37,6 +37,6 @@ def main():
         if hasattr(betrack.commands, k) and v:
             module = getattr(betrack.commands, k)
             betrack.commands = getmembers(module, isclass)
-            command = [command[1] for command in betrack.commands if command[0] != 'Base'][0]
+            command = [command[1] for command in betrack.commands if command[0] != 'BetrackCommand'][0]
             command = command(options)
             command.run()

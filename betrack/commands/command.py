@@ -1,7 +1,9 @@
-"""The base command."""
+"""
+The BetrackCommand command.
+"""
 
 
-class Base(object):
+class BetrackCommand(object):
     """A base command."""
 
     def __init__(self, options, *args, **kwargs):
