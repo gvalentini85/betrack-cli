@@ -1,5 +1,5 @@
 betrack
-===========
+=======
 
 .. image:: https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=dev
     :target: https://travis-ci.org/gvalentini85/betrack-cli
@@ -13,8 +13,21 @@ betrack
 
 A Python command line toolkit to track collective behaviors.
 
-What follow is kept here temporary for reference annd come from the skeleton
+What follow is kept here temporary for reference and come from the skeleton
 template skele-cli.
+
+Installation
+------------
+
+Examples
+--------
+
+Getting Help
+------------
+
+Copyright and Licensing
+-----------------------
+
 
 skele-cli
 =========
