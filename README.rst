@@ -10,8 +10,7 @@ betrack
    :alt: Appveyor build status	 
 
 
-
-A Python command line toolkit to track collective behaviors.
+*A command line toolkit to automatically track collective behaviors.*
 
 What follow is kept here temporary for reference and come from the skeleton
 template skele-cli.
