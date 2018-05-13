@@ -15,7 +15,7 @@ class TrackParticles(BetrackCommand):
     def run(self):
 
         # Parse options and get list of jobs..
-        mprint('Parsing parameters..', 'm')
+        mprint('Parsing parameters..')
         
         # Loop over jobs..
         for job in range(0, 10):
