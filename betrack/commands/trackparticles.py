@@ -4,7 +4,9 @@ The `track-particles` command.
 
 
 from json import dumps
+
 from .command import BetrackCommand
+from ..utils.message import mprint
 
 
 class TrackParticles(BetrackCommand):
@@ -13,7 +15,7 @@ class TrackParticles(BetrackCommand):
     def run(self):
 
         # Parse options and get list of jobs..
-        print('\033[01m' + '\033[94m' + 'Parsing parameters..' + '\x1b[0m')
+        mprint('Parsing parameters..', 'm')
         
         # Loop over jobs..
         for job in range(0, 10):
