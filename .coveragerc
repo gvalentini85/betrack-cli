@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = betrack
+source = betrack/
 
 [report]
 exclude_lines =
