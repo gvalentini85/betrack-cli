@@ -6,7 +6,7 @@ The `track-particles` command.
 from json import dumps
 
 from .command import BetrackCommand
-from ..utils.message import mprint
+from ..utils.message import mprint, wprint, eprint
 
 
 class TrackParticles(BetrackCommand):
