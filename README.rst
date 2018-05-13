@@ -1,14 +1,17 @@
 betrack
 =======
 
-.. image:: https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=dev
+.. image:: https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=master
     :target: https://travis-ci.org/gvalentini85/betrack-cli
     :alt: Travis build status	     
 
-.. image:: https://ci.appveyor.com/api/projects/status/x0h7p5o3f3r04m6a/branch/dev?svg=true 
+.. image:: https://ci.appveyor.com/api/projects/status/x0h7p5o3f3r04m6a/branch/master?svg=true 
    :target: https://ci.appveyor.com/project/gvalentini85/betrack-cli
    :alt: Appveyor build status	 
 
+.. image:: https://codecov.io/gh/gvalentini85/betrack-cli/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/gvalentini85/betrack-cli
+   :alt: Codecov coverage status
 
 *A command line toolkit to automatically track collective behaviors.*
 
