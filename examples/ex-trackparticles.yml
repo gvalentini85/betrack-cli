@@ -1,0 +1,10 @@
+jobs:
+  - video:   ../../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
+
+  - video:   ../../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
+    outdir:  ../../Dropbox (ASU)/TandemRuns/data/betrack/
+
+  - video:   somefile3.mp4
+    outdir:  somedir3/
+    
+  - outdir: somedir4/
