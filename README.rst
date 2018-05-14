@@ -1,5 +1,5 @@
 betrack
-=======
+*******
 
 .. image:: https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=master
     :target: https://travis-ci.org/gvalentini85/betrack-cli
@@ -19,7 +19,26 @@ What follow is kept here temporary for reference and come from the skeleton
 template skele-cli.
 
 Installation
-------------
+============
+
+Documentation
+=============
+
+HTML Format
+-----------
+
+Generate the documentation in *html* formt::
+    $ cd docs/
+    $ sphinx-build -b html \source \build
+
+PDF Format
+----------
+
+Generate the documentation in *pdf* formt::
+    $ cd docs/
+    $ sphinx-build -b latex \source \build
+    $ cd build/
+    $ make
 
 Examples
 --------
