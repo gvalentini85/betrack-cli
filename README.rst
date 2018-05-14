@@ -27,14 +27,16 @@ Documentation
 HTML Format
 -----------
 
-Generate the documentation in *html* formt::
+Generate the documentation in *html* format::
+  
     $ cd docs/
     $ sphinx-build -b html \source \build
 
 PDF Format
 ----------
 
-Generate the documentation in *pdf* formt::
+Generate the documentation in *pdf* format::
+  
     $ cd docs/
     $ sphinx-build -b latex \source \build
     $ cd build/
