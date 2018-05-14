@@ -24,6 +24,9 @@ Installation
 Documentation
 =============
 
+The documentation can be accessed online `here <https://gvalentini85.github.io/betrack-cli/>`_
+
+
 HTML Format
 -----------
 
