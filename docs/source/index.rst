@@ -10,7 +10,9 @@ Welcome to betrack's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   getstarted
+   usage
+   development
 
 Indices and tables
 ==================
