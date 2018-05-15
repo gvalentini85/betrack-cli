@@ -9,9 +9,10 @@ Description of the job module..
 
 
 from os.path import dirname, realpath, isfile
+from pims import Video
 
 from betrack.utils.message import wprint
-from .parser import parse_file, parse_directory
+from betrack.utils.parser  import parse_file, parse_directory
 
 class Job:
     """
@@ -50,9 +51,13 @@ class Job:
         """
         """
         if isfile(self.video):
-            self.frames = pims.Video(self.video)
+            self.frames = Video(self.video)
         else:
             raise IOError(errno.ENOENT, 'file not found', self.video)
+
+    def unload_frames(self):
+        """
+        """
         
 
 

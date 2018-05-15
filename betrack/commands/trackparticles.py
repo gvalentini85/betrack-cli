@@ -13,7 +13,7 @@ from json import dumps
 import sys
 
 from .command import BetrackCommand
-from ..utils.message import mprint, wprint, eprint
+from betrack.utils.message import mprint, wprint, eprint
 from ..utils.parser import open_configuration
 from ..utils.job import configure_jobs 
 
@@ -113,8 +113,13 @@ class TrackParticles(BetrackCommand):
 
             
             # Open video..
-            wprint('Reading video file:', 'filename', end='')
-            eprint('\tNot yet implemented!')
+            try:
+                job.load_frames()
+                mprint('...Number of frames: ', len(job.frames))
+            except IOError:
+                wprint('...Video file not found. Skipping job.')
+                
+                
 
             # Preprocess video..
             wprint('Preprocessing video..', end='')            
