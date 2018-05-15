@@ -4,8 +4,8 @@
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
+from betrack import __cli__ as CLI
 from betrack import __version__ as VERSION
-
 
 class TestHelp(TestCase):
     def test_returns_usage_information(self):
@@ -19,4 +19,4 @@ class TestHelp(TestCase):
 class TestVersion(TestCase):
     def test_returns_version_information(self):
         output = popen(['betrack', '--version'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), VERSION.encode())
+        self.assertEqual(output.strip(), CLI.encode() + ' ' + VERSION.encode())

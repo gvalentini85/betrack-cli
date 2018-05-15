@@ -22,16 +22,16 @@ Help:
 
 
 from inspect import getmembers, isclass
-
 from docopt import docopt
 
+from . import __cli__ as CLI
 from . import __version__ as VERSION
 
 
 def main():
     """Main CLI entrypoint."""
     import betrack.commands
-    options = docopt(__doc__, version='betrack ' + VERSION)
+    options = docopt(__doc__, version=CLI + ' ' + VERSION)
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.
