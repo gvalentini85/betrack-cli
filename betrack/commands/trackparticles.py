@@ -26,8 +26,11 @@ class TrackParticles(BetrackCommand):
         """
         TrackParticles constructor. 
         """
+        
         super(TrackParticles, self).__init__(options, *args, **kwargs)
-        self.jobs = []
+        
+        self.jobs         = []         # List of jobs to process
+        self.featuresdark = False      # True if features in the video are dark
 
         
     def configure_tracker(self, filename):
@@ -41,18 +44,13 @@ class TrackParticles(BetrackCommand):
             sys.exit()
 
         # Parse tracker configuration..
+        # invert colors --> features-dark: True
 
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
         if len(self.jobs) == 0:
             eprint('No job specified!')
             sys.exit()                
-                
-
-
-    def preprocess_video(self):
-        """
-        """
 
 
     def locate_features(self):
@@ -72,7 +70,7 @@ class TrackParticles(BetrackCommand):
         
     def save_trajectories(self):
         """
-        """
+         """
         
 
     def export_video(self):
@@ -110,20 +108,18 @@ class TrackParticles(BetrackCommand):
         for job, i in zip(self.jobs, range(1, njobs + 1)):
             mprint('Working on job ', i, ':', sep='')
             mprint(job.str(ind='...'))
-
             
             # Open video..
             try:
                 job.load_frames()
                 mprint('...Number of frames: ', len(job.frames))
             except IOError:
-                wprint('...Video file not found. Skipping job.')
-                
-                
+                wprint('...Unable to load video. Skipping job.')
+                continue
 
             # Preprocess video..
             wprint('Preprocessing video..', end='')            
-            self.preprocess_video()
+            job.preprocess_video(invert=self.featuresdark)
             eprint('\tNot yet implemented!')
 
             # Locate features..

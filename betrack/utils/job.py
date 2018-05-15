@@ -12,13 +12,14 @@ from os.path import dirname, realpath, isfile
 from pims import Video
 
 from betrack.utils.message import wprint
-from betrack.utils.parser  import parse_file, parse_directory
+from betrack.utils.parser  import parse_file, parse_directory, parse_int
+from betrack.utils.frames  import as_gray, crop, invert_colors
 
 class Job:
     """
     """
 
-    def __init__(self, video, outdir=''):
+    def __init__(self, video, outdir='', margins=None):
         """
         Constructor for the Job class.
 
@@ -29,10 +30,11 @@ class Job:
 
         """
 
-
-        self.video   = video        # Video file name
-        self.outdir  = outdir       # Output directory
-        self.frames  = None         # Video frames
+        self.video    = video        # Video file name
+        self.outdir   = outdir       # Output directory
+        self.margins  = margins      # Margins to crop frames
+        self.frames   = None         # Original video frames
+        self.pframes  = None         # Preprocessed video frames
         
         if self.outdir == '':
             self.outdir= dirname(realpath(self.video))
@@ -41,8 +43,9 @@ class Job:
         """
         """
         
-        rval  = ind + 'Video file: ' + self.video + '\n'
-        rval += ind + 'Output directory: ' + self.outdir
+        rval  = ind + 'Video file: '       + self.video        + '\n'
+        rval += ind + 'Output directory: ' + self.outdir       + '\n'
+        rval += ind + 'Crop margins: '     + str(self.margins)
         
         return rval
 
@@ -58,6 +61,30 @@ class Job:
     def unload_frames(self):
         """
         """
+        wprint('def unload_frames(self): Not yet implemented!')
+        
+
+    def preprocess_video(self, invert=False):
+        """
+        """
+                
+        # Initialize pframes..
+        if self.frames is not None:
+            self.pframes = self.frames
+        else:
+            raise TypeError('video not loaded')
+        
+        # Crop video..
+        if self.margins is not None:
+            self.pframes = crop(self.pframes, self.margins)
+            
+        # Convert to gray scale..
+        if len(self.pframes[0].shape) == 3:
+            self.pframes = as_gray(self.pframes)
+
+        # Invert video..
+        if invert:
+            self.pframes = invert_colors(self.pframes)
         
 
 
@@ -90,8 +117,18 @@ def configure_jobs(jobs):
             outdir = parse_directory(j, 'outdir')
         except (ValueError, IOError):
             outdir = ''
+
+        try:
+            margins = parse_int(j, 'crop-margins', nentries=4)
+        except ValueError as err:
+            if err[0] != 'Attribute not found!':
+                wprint('\tJob ', i, ': Invalid attribute video (', err[0],
+                       '). Skipping job.', sep='')
+                continue
+            else:
+                margins = None
         
-        obj = Job(video, outdir)
+        obj = Job(video, outdir, margins)
         jobobjs.append(obj)
 
     return jobobjs

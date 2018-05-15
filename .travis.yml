@@ -5,25 +5,26 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-    after_success:
-      - codecov
-
-    before_deploy:
-      - pip install sphinx
-      - chmod 755 ./.deploy-gh-pages.sh    
-      - ./.deploy-gh-pages.sh
-
-    deploy:
-      provider: pages
-      skip-cleanup: true
-      github-token: $GITHUB_TOKEN
-      keep-history: true
-      local-dir: docs/build/html/
-      on:
-        all_branches: true
   
 install:
   - pip install .[test]
 
 script:
   - python setup.py test
+  
+after_success:
+  - codecov
+
+before_deploy:
+  - pip install sphinx
+  - chmod 755 ./.deploy-gh-pages.sh    
+  - ./.deploy-gh-pages.sh
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: docs/build/html/
+  on:
+    all_branches: trues
