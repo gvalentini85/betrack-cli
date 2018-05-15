@@ -12,10 +12,10 @@ from json import dumps
 
 import sys
 
-from .command import BetrackCommand
+from betrack.commands.command import BetrackCommand
 from betrack.utils.message import mprint, wprint, eprint
-from ..utils.parser import open_configuration
-from ..utils.job import configure_jobs 
+from betrack.utils.parser import open_configuration
+from betrack.utils.job import configure_jobs 
 
 
 class TrackParticles(BetrackCommand):
