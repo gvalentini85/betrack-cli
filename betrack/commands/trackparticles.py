@@ -103,10 +103,15 @@ class TrackParticles(BetrackCommand):
         # Parse options and get list of jobs..
         mprint('Reading configuration file.. ')        
         self.configure_tracker(self.options['--configuration'])
-        mprint('Found', len(self.jobs), 'valid jobs.')
+        njobs = len(self.jobs)        
+        mprint('Found', njobs, 'valid jobs.')
     
         # Loop over jobs..
-        for job in self.jobs:
+        for job, i in zip(self.jobs, range(1, njobs + 1)):
+            mprint('Working on job ', i, ':', sep='')
+            mprint(job.str(ind='...'))
+
+            
             # Open video..
             wprint('Reading video file:', 'filename', end='')
             eprint('\tNot yet implemented!')

@@ -8,9 +8,9 @@ Description of the job module..
 """
 
 
-import os
+from os.path import dirname, realpath, isfile
 
-from .message import wprint
+from betrack.utils.message import wprint
 from .parser import parse_file, parse_directory
 
 class Job:
@@ -19,14 +19,41 @@ class Job:
 
     def __init__(self, video, outdir=''):
         """
+        Constructor for the Job class.
+
+        :param video: path to video file 
+        :param outdir: path of output directory
+        :returns: a job object
+        :rtype: Job
+
         """
 
 
-        self.video   = video
-        self.outdir  = outdir
+        self.video   = video        # Video file name
+        self.outdir  = outdir       # Output directory
+        self.frames  = None         # Video frames
         
         if self.outdir == '':
-            self.outdir= os.path.dirname(os.path.realpath(self.video))
+            self.outdir= dirname(realpath(self.video))
+
+    def str(self, ind=''):
+        """
+        """
+        
+        rval  = ind + 'Video file: ' + self.video + '\n'
+        rval += ind + 'Output directory: ' + self.outdir
+        
+        return rval
+
+    
+    def load_frames(self):
+        """
+        """
+        if isfile(self.video):
+            self.frames = pims.Video(self.video)
+        else:
+            raise IOError(errno.ENOENT, 'file not found', self.video)
+        
 
 
 def configure_jobs(jobs):
@@ -48,10 +75,10 @@ def configure_jobs(jobs):
         try:
             video = parse_file(j, 'video')            
         except ValueError:
-            wprint('\tJob ', i, ': attribute <video> not found. Skipping job.', sep='')
+            wprint('\tJob ', i, ': Attribute <video> not found. Skipping job.', sep='')
             continue        
         except IOError:
-            wprint('\tJob ', i, ': file not found. Skipping job.', sep='')
+            wprint('\tJob ', i, ': Video file not found. Skipping job.', sep='')
             continue
         
         try:
