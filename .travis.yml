@@ -16,6 +16,7 @@ after_success:
   - codecov
 
 before_deploy:
+  - pip install sphinx
   - chmod 755 ./.deploy-gh-pages.sh    
   - ./.deploy-gh-pages.sh
 
