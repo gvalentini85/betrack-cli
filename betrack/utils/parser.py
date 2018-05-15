@@ -1,13 +1,14 @@
-# Add copyright here..
+#------------------------------------------------------------------------------#
+# Copyright 2018 Gabriele Valentini. All rights reserved. Use of this source   #
+# code is governed by a MIT license that can be found in the LICENSE file.     #
+#------------------------------------------------------------------------------#
+
 """
 Description of the `parser` module..
 """
 
-"""
 
-"""
-
-import os
+from os.path import isfile, isdir, abspath
 import errno
 import yaml
 
@@ -19,9 +20,9 @@ def open_configuration(filename):
     
     """
 
-    if os.path.isfile(filename):
+    if isfile(filename):
         # Open yml file..
-        filename = os.path.abspath(filename)        
+        filename = abspath(filename)        
         with open(filename, 'r') as f:
             config = yaml.safe_load(f)
         return config
@@ -44,7 +45,7 @@ def parse_file(src, key):
 
     if src.has_key(key):
         val = src.get(key)
-        if os.path.isfile(val):
+        if isfile(val):
             return val
         else:
             raise IOError(errno.ENOENT, 'file not found', val)            
@@ -67,7 +68,7 @@ def parse_directory(src, key):
 
     if src.has_key(key):
         val = src.get(key)
-        if os.path.isdir(val):
+        if isdir(val):
             return val
         else:
             raise IOError(errno.ENOENT, 'directory not found', val)            
