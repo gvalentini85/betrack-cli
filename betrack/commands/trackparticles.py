@@ -14,7 +14,7 @@ import sys
 
 from betrack.commands.command import BetrackCommand
 from betrack.utils.message import mprint, wprint, eprint
-from betrack.utils.parser import open_configuration
+from betrack.utils.parser import open_configuration, parse_bool
 from betrack.utils.job import configure_jobs 
 
 
@@ -44,6 +44,14 @@ class TrackParticles(BetrackCommand):
             sys.exit()
 
         # Parse tracker configuration..
+        try:
+            self.featuresdark = parse_bool(config, 'features-dark')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+            
+        
         # invert colors --> features-dark: True
 
         # Parse jobs..
@@ -118,9 +126,13 @@ class TrackParticles(BetrackCommand):
                 continue
 
             # Preprocess video..
-            wprint('Preprocessing video..', end='')            
-            job.preprocess_video(invert=self.featuresdark)
-            eprint('\tNot yet implemented!')
+            mprint('...Preprocessing video..', end='\r')
+            try:
+                job.preprocess_video(invert=self.featuresdark)
+            except ValueError as err:
+                wprint('Preprocessing video: ', err[0], '. Skipping job.', sep='')
+                continue
+            mprint('...Preprocessing video: Done.')
 
             # Locate features..
             wprint('Locating features:', end='')            

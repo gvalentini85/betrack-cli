@@ -1,16 +1,18 @@
+features-dark: True
+
 jobs:
   - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-001.mp4
     crop-margins:  1360, 2800, 400, 1300
 
-  - video:   ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
-    outdir:  ../Dropbox (ASU)/TandemRuns/data/betrack/
+  - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
+    outdir:        ../Dropbox (ASU)/TandemRuns/data/betrack/
     crop-margins:  [1360, 2800, 400, 1300]
 
-  - video:   somefile3.mp4
-    outdir:  somedir3/
+  - video:         somefile3.mp4
+    outdir:        somedir3/
 
-  - video:   ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
-    outdir:  ../Dropbox (ASU)/TandemRuns/data/betrack/
+  - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
+    outdir:        ../Dropbox (ASU)/TandemRuns/data/betrack/
     crop-margins:  [1360, 2800, 400]
 
-  - outdir:  somedir4/ 
+  - outdir:        somedir4/ 

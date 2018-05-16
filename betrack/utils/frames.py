@@ -36,7 +36,8 @@ def as_gray(frame):
 @pipeline
 def crop(frame, margins):
     """
-    Convert a frame to gray scale. This function implements lazy evaluation.
+    Crop a frame according to the passed margins ([xmin, xmax, ymin, ymax]). 
+    This function implements lazy evaluation.
 
 #    Examples: ::
 #    
@@ -47,12 +48,12 @@ def crop(frame, margins):
 #        (14.8, -6.3, 8.5)
     :param frame: the frame to be converted
     :type ``pims.frame.Frame`` or ``numpy.ndarray``
-    :returns: the frame in gray scale
+    :param list margins: the new margins of the cropped frame 
+    :returns: the cropped frame
     :rtype: ``pims.frame.Frame`` or ``numpy.ndarray``
     """
-    
-    print('frames.crop not yet implemented!')
-    return frame
+
+    return frame[margins[2]:margins[3], margins[0]:margins[1]]
 
 @pipeline
 def flip(frame, direction):
@@ -91,8 +92,22 @@ def invert_colors(frame):
 #    :rtype: 3-tuple (float, float, float)
 #    :raises InformError: if an error occurs within the ``inform`` C call
     """
-    
-    print('frames.invert not yet implemented!')
+
+    maxval = None
+    if   frame.dtype == 'uint8':  maxval = 255
+    elif frame.dtype == 'uint16': maxval = 65535
+    elif frame.dtype == 'uint32': maxval = 2**32
+    else: raise ValueError('frame type ' + frame.dtype + 'not supported')
+
+    if frame.shape == 3:
+        frame[:, :, 0] = maxval - frame[:, :, 0]
+        frame[:, :, 1] = maxval - frame[:, :, 1]
+        frame[:, :, 2] = maxval - frame[:, :, 2]
+    else:
+        frame[:, :]    = maxval - frame[:, :]
+        
+    return frame
+
 
 @pipeline
 def reverse_colors(frame):

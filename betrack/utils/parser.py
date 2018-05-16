@@ -77,15 +77,16 @@ def parse_directory(src, key):
 
 def parse_int(src, key, nentries=1):
     """
-    Parse a dictionary ``src`` and return a directory name specified by ``key``. 
-    This function checks that the directory specified by ``key`` exists.
+    Parse a dictionary ``src`` and return an int or a list of int specified by ``key``. 
+    This function checks that the value or values specified by ``key`` is of 
+    type int or list of int and raises a ``ValueError`` otherwise.
 
     :param dict src: the source dictionary
     :param str key: the key specifing the directory name
-    :returns: a directory name
-    :rtype: str
-    :raises IOError: if the directory specified by ``key`` is not found 
-    :raises ValueError: if the attribute ``key`` is not found in ``src``
+    :param int nentries: the number of integers to parse
+    :returns: read integer(s)
+    :rtype: int or list of int
+    :raises ValueError: if the read value/values are not valid
     """
 
     if nentries < 1:
@@ -110,6 +111,46 @@ def parse_int(src, key, nentries=1):
             return val                            
         else:
             raise ValueError('attribute ' + key + ' is not of type int or list')
+    else:
+        raise ValueError('attribute not found!', key)            
+
+
+def parse_bool(src, key, nentries=1):
+    """
+    Parse a dictionary ``src`` and return a bool or a list of bool specified by ``key``. 
+    This function checks that the value or values specified by ``key`` is of 
+    type bool or list of bool and raises a ``ValueError`` otherwise.
+
+    :param dict src: the source dictionary
+    :param str key: the key specifing the directory name
+    :param int nentries: the number of booleans to parse
+    :returns: read boolean(s)
+    :rtype: bool or list of bool
+    :raises ValueError: if the read value/values are not valid
+    """
+
+    if nentries < 1:
+        raise ValueError('expected number of entries must be greater than zero')
+    
+    if src.has_key(key):
+        val = src.get(key)
+        if type(val) == bool:
+            if nentries != 1:
+                msg = 'attribute ' + key + ' has 1 entry, expected ' + str(nentries)
+                raise ValueError(msg)
+            return val
+        elif type(val) == list:
+            nval = len(val)
+            if nval != nentries:
+                msg  = 'attribute ' + key + ' has ' + str(nval)
+                msg += ' entries, expected ' + str(nentries)
+                raise ValueError(msg)
+            for m in range(0, nval):
+                if type(val[m]) != bool:                    
+                    raise ValueError('entry ' + str(m + 1) + ' is not bool')
+            return val                            
+        else:
+            raise ValueError('attribute ' + key + ' is not of type bool or list')
     else:
         raise ValueError('attribute not found!', key)            
 

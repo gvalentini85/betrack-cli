@@ -62,6 +62,35 @@ class Job:
         """
         """
         wprint('def unload_frames(self): Not yet implemented!')
+
+    def valid_margins(self):
+        """
+        """
+
+        if self.frames is None:
+            raise TypeError('video not loaded')        
+        
+        if type(self.margins) is list:
+            if len(self.margins) == 4:
+                for m in range(0, 4):
+                    if type(self.margins[m]) is not int:
+                        return False
+                    
+                xmin = self.margins[0]
+                xmax = self.margins[1]
+                ymin = self.margins[2]
+                ymax = self.margins[3]
+                
+                if xmin < 0 or xmin >= xmax or xmin > self.frames.frame_shape[1]:
+                    return False
+                if xmax < 1 or xmax <= xmin or xmax > self.frames.frame_shape[1]:
+                    return False                
+                if ymin < 0 or ymin >= ymax or ymin > self.frames.frame_shape[0]:
+                    return False
+                if ymax < 1 or ymax <= ymin or ymax > self.frames.frame_shape[0]:
+                    return False
+                return True 
+        return False
         
 
     def preprocess_video(self, invert=False):
@@ -71,16 +100,18 @@ class Job:
         # Initialize pframes..
         if self.frames is not None:
             self.pframes = self.frames
-        else:
-            raise TypeError('video not loaded')
+        else: raise TypeError('video not loaded')
         
         # Crop video..
-        if self.margins is not None:
+        if self.valid_margins():
             self.pframes = crop(self.pframes, self.margins)
+        else: raise ValueError('crop margins are not valid')
             
-        # Convert to gray scale..
+        # If RGB, convert to gray scale..
         if len(self.pframes[0].shape) == 3:
             self.pframes = as_gray(self.pframes)
+        elif len(self.pframes[0].shape) != 1:
+            raise ValueError('video color format not recognized')
 
         # Invert video..
         if invert:
@@ -107,10 +138,10 @@ def configure_jobs(jobs):
         try:
             video = parse_file(j, 'video')            
         except ValueError:
-            wprint('\tJob ', i, ': Attribute <video> not found. Skipping job.', sep='')
+            wprint('...Job ', i, ': Attribute <video> not found. Skipping job.', sep='')
             continue        
         except IOError:
-            wprint('\tJob ', i, ': Video file not found. Skipping job.', sep='')
+            wprint('...Job ', i, ': Video file not found. Skipping job.', sep='')
             continue
         
         try:
@@ -121,8 +152,8 @@ def configure_jobs(jobs):
         try:
             margins = parse_int(j, 'crop-margins', nentries=4)
         except ValueError as err:
-            if err[0] != 'Attribute not found!':
-                wprint('\tJob ', i, ': Invalid attribute video (', err[0],
+            if err[0] != 'attribute not found!':
+                wprint('...Job ', i, ': Invalid attribute video (', err[0],
                        '). Skipping job.', sep='')
                 continue
             else:
