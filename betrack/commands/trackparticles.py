@@ -10,12 +10,15 @@ The `track-particles` command.
 
 from json import dumps
 
+from os import remove
+from os.path import splitext, basename, isfile
 import sys
+import trackpy
 
 from betrack.commands.command import BetrackCommand
-from betrack.utils.message import mprint, wprint, eprint
-from betrack.utils.parser import open_configuration, parse_bool
-from betrack.utils.job import configure_jobs 
+from betrack.utils.message    import mprint, wprint, eprint
+from betrack.utils.parser     import open_configuration, parse_bool, parse_int, parse_float
+from betrack.utils.job        import configure_jobs 
 
 
 class TrackParticles(BetrackCommand):
@@ -29,9 +32,19 @@ class TrackParticles(BetrackCommand):
         
         super(TrackParticles, self).__init__(options, *args, **kwargs)
         
-        self.jobs         = []         # List of jobs to process
-        self.featuresdark = False      # True if features in the video are dark
+        self.jobs          = []         # List of jobs to process
+        self.featuresdark  = False      # True if features in the video are dark
 
+        self.diameter      = None
+        self.minmass       = 100
+        self.maxsize       = None
+        self.separation    = None
+        self.noisesize     = 1
+        self.smoothingsize = None
+        self.threshold     = None
+        self.percentile    = 64
+        self.topn          = None
+        self.preprocess    = True
         
     def configure_tracker(self, filename):
         """
@@ -45,14 +58,101 @@ class TrackParticles(BetrackCommand):
 
         # Parse tracker configuration..
         try:
-            self.featuresdark = parse_bool(config, 'features-dark')
+            self.featuresdark = parse_bool(config, 'tp-featuresdark')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
-            
-        
-        # invert colors --> features-dark: True
+
+        try:
+            self.diameter = parse_int(config, 'tp-diameter')
+            if self.diameter % 2 == 0:
+                raise ValueError('<tp-diameter> must be odd')
+        except ValueError as err:
+            if err[0] == 'attribute not found!':
+                eprint('Attribute <tp-diameter> is required.')
+            else:                
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+
+        try:
+            self.minmass = parse_float(config, 'tp-minmass')
+            if self.minmass < 0:
+                raise ValueError('<tp-minmass> must be non-negative')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.maxsize = parse_float(config, 'tp-maxsize')
+            if self.maxsize <= 0:
+                raise ValueError('<tp-maxsize> must be positive')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.separation = parse_float(config, 'tp-separation')
+            if self.separation < 0:
+                raise ValueError('<tp-separation> must be non-negative')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.noisesize = parse_float(config, 'tp-noisesize')
+            if self.noisesize <= 0:
+                raise ValueError('<tp-noisesize> must be positive')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.smoothingsize = parse_float(config, 'tp-smoothingsize')
+            if self.smoothingsize <= 0:
+                raise ValueError('<tp-smoothingsize> must be positive')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.threshold = parse_float(config, 'tp-threshold')
+            if self.threshold <= 0:
+                raise ValueError('<tp-threshold> must be positive')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.percentile = parse_float(config, 'tp-percentile')
+            if self.percentile < 0 or self.percentile >= 100.0:
+                raise ValueError('<tp-percentile> must be in the interval [0, 100)')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.topn = parse_int(config, 'tp-topn')
+            if self.topn <= 0:
+                raise ValueError('<tp-topn> must be positive')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.preprocess = parse_bool(config, 'tp-preprocess')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
 
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
@@ -61,9 +161,22 @@ class TrackParticles(BetrackCommand):
             sys.exit()                
 
 
-    def locate_features(self):
+    def locate_features(self, job):
         """
         """
+        
+        h5storagefile = job.outdir + splitext(basename(job.video))[0] + '-locate.h5'
+        
+        # Remove storage file if it already exists..
+        if isfile(h5storagefile): remove(h5storagefile)
+
+        # Locate features in all frames..
+        with trackpy.PandasHDFStoreBig(h5storagefile) as sf:
+            trackpy.batch(job.pframes, diameter=self.diameter, minmass=self.minmass,
+                          maxsize=self.maxsize, separation=self.separation,
+                          noise_size=self.noisesize, smoothing_size=self.smoothingsize,
+                          percentile=self.percentile, topn=self.topn,
+                          preprocess=self.preprocess, threshold=self.threshold, output=sf)
 
         
     def link_trajectories(self):
@@ -136,7 +249,7 @@ class TrackParticles(BetrackCommand):
 
             # Locate features..
             wprint('Locating features:', end='')            
-            self.locate_features()
+            self.locate_features(job)
             eprint('\tNot yet implemented!')
 
             # Link trajectories..

@@ -115,7 +115,14 @@ class Job:
 
         # Invert video..
         if invert:
-            self.pframes = invert_colors(self.pframes)
+            if self.frames.pixel_type == 'uint8':
+                self.pframes = invert_colors(self.pframes, 255)
+            elif self.frames.pixel_type == 'uint16':
+                self.pframes = invert_colors(self.pframes, 65535)
+            elif self.frames.pixel_type == 'uint32':
+                self.pframes = invert_colors(self.pframes, 2**32)
+            else:
+                ValueError('cannot invert colors for dtype' + str(self.frames.pixel_type))
         
 
 

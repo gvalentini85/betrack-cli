@@ -1,4 +1,5 @@
-features-dark: True
+tp-featuresdark: False
+tp-diameter: 13
 
 jobs:
   - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-001.mp4

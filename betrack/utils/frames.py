@@ -26,12 +26,13 @@ def as_gray(frame):
     :returns: the frame in gray scale
     :rtype: ``pims.frame.Frame`` or ``numpy.ndarray``
     """
-
+    
     red   = frame[:, :, 0]
     blue  = frame[:, :, 1]
     green = frame[:, :, 2]
-        
+
     return 0.2125 * red + 0.7154 * green + 0.0721 * blue
+
     
 @pipeline
 def crop(frame, margins):
@@ -76,7 +77,7 @@ def flip(frame, direction):
     print('frames.flip not yet implemented!')
 
 @pipeline
-def invert_colors(frame):
+def invert_colors(frame, maxval=255):
     """
 #    Compute the range of a continuously-valued time series.
 #    
@@ -92,21 +93,8 @@ def invert_colors(frame):
 #    :rtype: 3-tuple (float, float, float)
 #    :raises InformError: if an error occurs within the ``inform`` C call
     """
-
-    maxval = None
-    if   frame.dtype == 'uint8':  maxval = 255
-    elif frame.dtype == 'uint16': maxval = 65535
-    elif frame.dtype == 'uint32': maxval = 2**32
-    else: raise ValueError('frame type ' + frame.dtype + 'not supported')
-
-    if frame.shape == 3:
-        frame[:, :, 0] = maxval - frame[:, :, 0]
-        frame[:, :, 1] = maxval - frame[:, :, 1]
-        frame[:, :, 2] = maxval - frame[:, :, 2]
-    else:
-        frame[:, :]    = maxval - frame[:, :]
         
-    return frame
+    return maxval - frame[:, :]
 
 
 @pipeline

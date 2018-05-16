@@ -64,7 +64,7 @@ setup(
     ],
     keywords = 'cli',
     packages = find_packages(exclude=['docs', 'tests*']),
-    install_requires = ['docopt', 'pyyaml', 'pims'],
+    install_requires = ['docopt', 'pyyaml', 'pims', 'trackpy'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov', 'codecov'],
     },
