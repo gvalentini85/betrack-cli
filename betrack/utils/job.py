@@ -19,7 +19,7 @@ class Job:
     """
     """
 
-    def __init__(self, video, outdir='', margins=None):
+    def __init__(self, video, outdir='', margins=None, period=None, periodtype=None):
         """
         Constructor for the Job class.
 
@@ -30,11 +30,13 @@ class Job:
 
         """
 
-        self.video     = video        # Video file name
-        self.outdir    = outdir       # Output directory
-        self.margins   = margins      # Margins to crop frames
-        self.frames    = None         # Original video frames
-        self.pframes   = None         # Preprocessed video frames
+        self.video      = video        # Video file name
+        self.outdir     = outdir       # Output directory
+        self.margins    = margins      # Margins to crop frames
+        self.frames     = None         # Original video frames
+        self.pframes    = None         # Preprocessed video frames
+        self.period     = period       # Initial and final frame indexes (2-tuple)
+        self.periodtype = periodtype   # Period type: 'frame', 'second', 'minute'
         
         if self.outdir == '':
             self.outdir= dirname(realpath(self.video))
@@ -45,9 +47,13 @@ class Job:
         """
         """
         
-        rval  = ind + 'Video file: '       + self.video        + '\n'
-        rval += ind + 'Output directory: ' + self.outdir       + '\n'
-        rval += ind + 'Crop margins: '     + str(self.margins)
+        rval  = ind + 'Video file: '       + self.video
+        rval += '\n' + ind + 'Output directory: ' + self.outdir
+        if self.margins is not None:
+            rval += '\n' + ind + 'Crop margins: '     + str(self.margins)
+        if self.period is not None and self.periodtype is not None:
+            rval += '\n' + ind + 'Selected period (' + self.periodtype + '): '
+            rval += str(self.period)
         
         return rval
 
@@ -98,7 +104,18 @@ class Job:
     def preprocess_video(self, invert=False):
         """
         """
-                
+
+        # Select period..
+        if self.period is not None and self.periodtype is not None:
+            if self.periodtype == 'second':
+                self.period = [int(round(p*self.frames.frame_rate)) for p in self.period]
+                self.period = 'frame'
+            if self.periodtype == 'minute':
+                self.period = [int(round(p*60*self.frames.frame_rate)) for p in self.period]
+                self.period = 'frame'
+            if self.periodtype == 'frame':
+                self.frames = self.frames[range(self.period[0], self.period[1])]
+        
         # Initialize pframes..
         if self.frames is not None:
             self.pframes = self.frames
@@ -144,6 +161,7 @@ def configure_jobs(jobs):
 
     # Parse jobs..
     for j, i in zip(jobs, range(1, len(jobs) + 1)):
+        # Parse attribute <video>..
         try:
             video = parse_file(j, 'video')            
         except ValueError:
@@ -152,23 +170,68 @@ def configure_jobs(jobs):
         except IOError:
             wprint('...Job ', i, ': Video file not found. Skipping job.', sep='')
             continue
-        
+
+        # Parse attribute <outdir>..        
         try:
             outdir = parse_directory(j, 'outdir')
         except (ValueError, IOError):
             outdir = ''
 
+        # Parse attribute <crop-margins..            
         try:
             margins = parse_int(j, 'crop-margins', nentries=4)
         except ValueError as err:
             if err[0] != 'attribute not found!':
-                wprint('...Job ', i, ': Invalid attribute video (', err[0],
+                wprint('...Job ', i, ': Invalid attribute (', err[0],
                        '). Skipping job.', sep='')
                 continue
             else:
                 margins = None
+
+        # Parse attribute <period-*>..                                
+        period     = None
+        periodtype = None
+        pf         = j.has_key('period-frame')
+        ps         = j.has_key('period-second')
+        pm         = j.has_key('period-minute')
         
-        obj = Job(video, outdir, margins)
+        # Parse attribute <period-frame>..                        
+        if pf and not (ps or pm):
+            try:
+                period     = parse_int(j, 'period-frame', nentries=2)
+                periodtype = 'frame'
+            except:
+                if err[0] != 'attribute not found!':
+                    wprint('...Job ', i, ': Invalid attribute (', err[0],
+                           '). Skipping job.', sep='')
+                    continue
+        # Parse attribute <period-second>..                
+        elif ps and not (pf or pm):
+            try:
+                period = parse_float(j, 'period-second', nentries=2)
+                periodtype = 'second'
+            except:
+                if err[0] != 'attribute not found!':
+                    wprint('...Job ', i, ': Invalid attribute (', err[0],
+                           '). Skipping job.', sep='')
+                    continue
+        # Parse attribute <period-minute>..                        
+        elif pm and not (pf or ps):
+            try:
+                period = parse_float(j, 'period-minute', nentries=2)
+                periodtype = 'minute'
+            except:
+                if err[0] != 'attribute not found!':
+                    wprint('...Job ', i, ': Invalid attribute (', err[0],
+                           '). Skipping job.', sep='')
+                    continue
+        else:
+            wprint('...Job ', i, ': <period-frame>, <period-second> and <period-miinute>' +
+                   ' are mutually exclusive. Skipping job.', sep='')
+            continue
+        
+        # Add job to the list..         
+        obj = Job(video, outdir, margins, period, periodtype)
         jobobjs.append(obj)
 
     return jobobjs

@@ -200,7 +200,6 @@ class TrackParticles(BetrackCommand):
     def link_trajectories(self, job):
         """
         # TODO:
-        # - make h5storagefile a variable of the job
         # - add first-frame last-frame as job attributes/variables
         # - add first-second last-second as job attributes
         # - add first-minute last-minute as job attributes
