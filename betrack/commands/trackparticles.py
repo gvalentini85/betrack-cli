@@ -173,11 +173,11 @@ class TrackParticles(BetrackCommand):
         
 
         # Locate features in all frames..
-        nframes = len(job.pframes)
-        desc    = '...Locating features'
-        unit    = ' frame'
-        with trackpy.PandasHDFStoreBig(h5storagefile) as sf:       
-            for i, frame in enumerate(tqdm(job.pframes, desc=desc, unit=unit)):
+        d  = '\033[01m' + '...Locating features'
+        ut = ' frame'
+        pf = [dict(features=0)]  
+        with trackpy.PandasHDFStoreBig(h5storagefile) as sf, tqdm(job.pframes, desc=d, unit=ut) as t:       
+            for i, frame in enumerate(t):
                 features = trackpy.locate(frame, diameter=self.diameter, minmass=self.minmass,
                                           maxsize=self.maxsize, separation=self.separation,
                                           noise_size=self.noisesize,
@@ -192,26 +192,34 @@ class TrackParticles(BetrackCommand):
                     frame_no = i
                     features['frame'] = i
                     
-#                mprint('...Locating features: Frame ', frame_no, '/', nframes, ' (',
-#                       len(features), ' features)', sep = '', end='\r')
+                t.set_postfix(nfeatures=len(features))
                 if len(features) == 0:
                     continue                
-                sf.put(features)
-        
-        
+                sf.put(features)        
 
         
-    def link_trajectories(self):
+    def link_trajectories(self, job):
         """
         """
-
+        
+        # Initalize storage file name..        
+        h5storagefile = job.outdir + splitext(basename(job.video))[0] + '-locate.h5'
+        
+        # Link trajectories in all frames..
+        nframes = len(job.pframes) 
+        with trackpy.PandasHDFStoreBig(h5storagefile) as sf:
+            d  = '\033[01m' + '...Linking trajectories'
+            ut = ' frame'            
+            for linked in tqdm(trackpy.link_df_iter(sf, search_range=5, memory=3), desc=d, unit=ut, total=nframes):
+                sf.put(linked)
+                
         
     def filter_trajectories(self):
         """
         """
 
         
-    def save_trajectories(self):
+    def export_trajectories(self):
         """
          """
         
@@ -239,7 +247,8 @@ class TrackParticles(BetrackCommand):
 #    :raises InformError: if an error occurs within the ``inform`` C call
 
         """
-
+        
+        trackpy.quiet()
         
         # Parse options and get list of jobs..
         mprint('Reading configuration file.. ')        
@@ -273,9 +282,7 @@ class TrackParticles(BetrackCommand):
             self.locate_features(job)
 
             # Link trajectories..
-            wprint('Linking trajectories:', end='')            
-            self.link_trajectories()
-            eprint('\tNot yet implemented!')
+            self.link_trajectories(job)
 
             # Filter trajectories..
             wprint('Filtering trajectories:', end='')            
@@ -283,8 +290,8 @@ class TrackParticles(BetrackCommand):
             eprint('\tNot yet implemented!')
 
             # Saving trajectories..
-            wprint('Saving trajectories:', end='')            
-            self.save_trajectories()
+            wprint('Exporting trajectories:', end='')            
+            self.export_trajectories()
             eprint('\tNot yet implemented!')
 
             # Export annotated video..
