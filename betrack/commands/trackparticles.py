@@ -11,7 +11,7 @@ The `track-particles` command.
 from json import dumps
 
 from os import remove
-from os.path import splitext, basename, isfile
+from os.path import isfile
 from tqdm import tqdm
 import sys
 import trackpy
@@ -168,15 +168,14 @@ class TrackParticles(BetrackCommand):
         """
 
         # Initalize storage file..        
-        h5storagefile = job.outdir + splitext(basename(job.video))[0] + '-locate.h5'        
-        if isfile(h5storagefile): remove(h5storagefile)
+        if isfile(job.h5storage): remove(job.h5storage)
         
 
         # Locate features in all frames..
         d  = '\033[01m' + '...Locating features'
         ut = ' frame'
-        pf = [dict(features=0)]  
-        with trackpy.PandasHDFStoreBig(h5storagefile) as sf, tqdm(job.pframes, desc=d, unit=ut) as t:       
+        pf = [dict(features=0)]
+        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(job.pframes, desc=d, unit=ut) as t:       
             for i, frame in enumerate(t):
                 features = trackpy.locate(frame, diameter=self.diameter, minmass=self.minmass,
                                           maxsize=self.maxsize, separation=self.separation,
@@ -200,14 +199,17 @@ class TrackParticles(BetrackCommand):
         
     def link_trajectories(self, job):
         """
+        # TODO:
+        # - make h5storagefile a variable of the job
+        # - add first-frame last-frame as job attributes/variables
+        # - add first-second last-second as job attributes
+        # - add first-minute last-minute as job attributes
+        # - add linking paramters to yml..
         """
-        
-        # Initalize storage file name..        
-        h5storagefile = job.outdir + splitext(basename(job.video))[0] + '-locate.h5'
         
         # Link trajectories in all frames..
         nframes = len(job.pframes) 
-        with trackpy.PandasHDFStoreBig(h5storagefile) as sf:
+        with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
             d  = '\033[01m' + '...Linking trajectories'
             ut = ' frame'            
             for linked in tqdm(trackpy.link_df_iter(sf, search_range=5, memory=3), desc=d, unit=ut, total=nframes):

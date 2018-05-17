@@ -8,7 +8,7 @@ Description of the job module..
 """
 
 
-from os.path import dirname, realpath, isfile
+from os.path import dirname, realpath, isfile, splitext, basename
 from pims import Video
 
 from betrack.utils.message import wprint
@@ -30,14 +30,16 @@ class Job:
 
         """
 
-        self.video    = video        # Video file name
-        self.outdir   = outdir       # Output directory
-        self.margins  = margins      # Margins to crop frames
-        self.frames   = None         # Original video frames
-        self.pframes  = None         # Preprocessed video frames
+        self.video     = video        # Video file name
+        self.outdir    = outdir       # Output directory
+        self.margins   = margins      # Margins to crop frames
+        self.frames    = None         # Original video frames
+        self.pframes   = None         # Preprocessed video frames
         
         if self.outdir == '':
             self.outdir= dirname(realpath(self.video))
+        self.h5storage = outdir + splitext(basename(video))[0] + '-locate.h5'        
+
 
     def str(self, ind=''):
         """
