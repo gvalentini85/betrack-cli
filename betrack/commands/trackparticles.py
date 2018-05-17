@@ -12,6 +12,7 @@ from json import dumps
 
 from os import remove
 from os.path import splitext, basename, isfile
+from tqdm import tqdm
 import sys
 import trackpy
 
@@ -163,20 +164,41 @@ class TrackParticles(BetrackCommand):
 
     def locate_features(self, job):
         """
+
         """
-        
-        h5storagefile = job.outdir + splitext(basename(job.video))[0] + '-locate.h5'
-        
-        # Remove storage file if it already exists..
+
+        # Initalize storage file..        
+        h5storagefile = job.outdir + splitext(basename(job.video))[0] + '-locate.h5'        
         if isfile(h5storagefile): remove(h5storagefile)
+        
 
         # Locate features in all frames..
-        with trackpy.PandasHDFStoreBig(h5storagefile) as sf:
-            trackpy.batch(job.pframes, diameter=self.diameter, minmass=self.minmass,
-                          maxsize=self.maxsize, separation=self.separation,
-                          noise_size=self.noisesize, smoothing_size=self.smoothingsize,
-                          percentile=self.percentile, topn=self.topn,
-                          preprocess=self.preprocess, threshold=self.threshold, output=sf)
+        nframes = len(job.pframes)
+        desc    = '...Locating features'
+        unit    = ' frame'
+        with trackpy.PandasHDFStoreBig(h5storagefile) as sf:       
+            for i, frame in enumerate(tqdm(job.pframes, desc=desc, unit=unit)):
+                features = trackpy.locate(frame, diameter=self.diameter, minmass=self.minmass,
+                                          maxsize=self.maxsize, separation=self.separation,
+                                          noise_size=self.noisesize,
+                                          smoothing_size=self.smoothingsize,
+                                          percentile=self.percentile, topn=self.topn,
+                                          preprocess=self.preprocess,
+                                          threshold=self.threshold)
+                
+                if hasattr(frame, 'frame_no') and frame.frame_no is not None:
+                    frame_no = frame.frame_no
+                else:
+                    frame_no = i
+                    features['frame'] = i
+                    
+#                mprint('...Locating features: Frame ', frame_no, '/', nframes, ' (',
+#                       len(features), ' features)', sep = '', end='\r')
+                if len(features) == 0:
+                    continue                
+                sf.put(features)
+        
+        
 
         
     def link_trajectories(self):
@@ -248,9 +270,7 @@ class TrackParticles(BetrackCommand):
             mprint('...Preprocessing video: Done.')
 
             # Locate features..
-            wprint('Locating features:', end='')            
             self.locate_features(job)
-            eprint('\tNot yet implemented!')
 
             # Link trajectories..
             wprint('Linking trajectories:', end='')            
