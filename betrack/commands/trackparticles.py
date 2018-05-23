@@ -269,14 +269,17 @@ class TrackParticles(BetrackCommand):
             except IOError:
                 wprint('...Unable to load video. Skipping job.')
                 continue
+            except IndexError:
+                wprint('...Selected period is out of range for the video. Skipping job.')
+                continue                
 
             # Preprocess video..
             mprint('...Preprocessing video..', end='\r')
             try:
                 job.preprocess_video(invert=self.featuresdark)
-            except ValueError as err:
+            except ValueError as err:                
                 wprint('Preprocessing video: ', err[0], '. Skipping job.', sep='')
-                continue
+                continue            
             mprint('...Preprocessing video: Done.')
 
             # Locate features..
@@ -301,7 +304,8 @@ class TrackParticles(BetrackCommand):
             eprint('\tNot yet implemented!')
 
             # Clean up..
-        
+
+        # Summarize completed jobs..
         print('TrackParticles: Hello, world!')
         print('You supplied the following options:',
               dumps(self.options, indent=2, sort_keys=True))

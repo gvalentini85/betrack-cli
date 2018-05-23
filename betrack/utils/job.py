@@ -12,7 +12,8 @@ from os.path import dirname, realpath, isfile, splitext, basename
 from pims import Video
 
 from betrack.utils.message import wprint
-from betrack.utils.parser  import parse_file, parse_directory, parse_int
+from betrack.utils.parser  import (parse_file, parse_directory, parse_int, parse_float,
+                                   parse_int_or_float)
 from betrack.utils.frames  import as_gray, crop, invert_colors
 
 class Job:
@@ -61,11 +62,25 @@ class Job:
     def load_frames(self):
         """
         """
+
+        # Load video..
         if isfile(self.video):
             self.frames = Video(self.video)
         else:
             raise IOError(errno.ENOENT, 'file not found', self.video)
 
+        # Select period..
+        if self.period is not None and self.periodtype is not None:
+            if self.periodtype == 'second':
+                self.period = [int(round(p*self.frames.frame_rate)) for p in self.period]
+                self.periodtype = 'frame'
+            if self.periodtype == 'minute':
+                self.period = [int(round(p*60*self.frames.frame_rate)) for p in self.period]
+                self.periodtype = 'frame'
+            if self.periodtype == 'frame':
+                self.frames = self.frames[range(self.period[0], self.period[1])]
+
+        
     def unload_frames(self):
         """
         """
@@ -104,17 +119,6 @@ class Job:
     def preprocess_video(self, invert=False):
         """
         """
-
-        # Select period..
-        if self.period is not None and self.periodtype is not None:
-            if self.periodtype == 'second':
-                self.period = [int(round(p*self.frames.frame_rate)) for p in self.period]
-                self.period = 'frame'
-            if self.periodtype == 'minute':
-                self.period = [int(round(p*60*self.frames.frame_rate)) for p in self.period]
-                self.period = 'frame'
-            if self.periodtype == 'frame':
-                self.frames = self.frames[range(self.period[0], self.period[1])]
         
         # Initialize pframes..
         if self.frames is not None:
@@ -194,13 +198,14 @@ def configure_jobs(jobs):
         pf         = j.has_key('period-frame')
         ps         = j.has_key('period-second')
         pm         = j.has_key('period-minute')
+
         
         # Parse attribute <period-frame>..                        
         if pf and not (ps or pm):
             try:
                 period     = parse_int(j, 'period-frame', nentries=2)
                 periodtype = 'frame'
-            except:
+            except ValueError as err:
                 if err[0] != 'attribute not found!':
                     wprint('...Job ', i, ': Invalid attribute (', err[0],
                            '). Skipping job.', sep='')
@@ -208,9 +213,9 @@ def configure_jobs(jobs):
         # Parse attribute <period-second>..                
         elif ps and not (pf or pm):
             try:
-                period = parse_float(j, 'period-second', nentries=2)
+                period = parse_int_or_float(j, 'period-second', nentries=2)
                 periodtype = 'second'
-            except:
+            except ValueError as err:
                 if err[0] != 'attribute not found!':
                     wprint('...Job ', i, ': Invalid attribute (', err[0],
                            '). Skipping job.', sep='')
@@ -218,9 +223,9 @@ def configure_jobs(jobs):
         # Parse attribute <period-minute>..                        
         elif pm and not (pf or ps):
             try:
-                period = parse_float(j, 'period-minute', nentries=2)
+                period = parse_int_or_float(j, 'period-minute', nentries=2)
                 periodtype = 'minute'
-            except:
+            except ValueError as err:
                 if err[0] != 'attribute not found!':
                     wprint('...Job ', i, ': Invalid attribute (', err[0],
                            '). Skipping job.', sep='')
