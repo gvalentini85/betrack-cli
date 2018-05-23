@@ -39,26 +39,29 @@ class TrackParticles(BetrackCommand):
         
         super(TrackParticles, self).__init__(options, *args, **kwargs)
         
-        self.jobs          = []         # List of jobs to process
-        self.featuresdark  = False      # True if features in the video are dark
+        self.jobs                      = []      # List of jobs to process
+        self.featuresdark              = False   # True if features in the video are dark
 
-        self.diameter      = None
-        self.minmass       = 100
-        self.maxsize       = None
-        self.separation    = None
-        self.noisesize     = 1
-        self.smoothingsize = None
-        self.threshold     = None
-        self.percentile    = 64
-        self.topn          = None
-        self.preprocess    = True
+        self.locate_diameter           = None
+        self.locate_minmass            = 100
+        self.locate_maxsize            = None
+        self.locate_separation         = None
+        self.locate_noisesize          = 1
+        self.locate_smoothingsize      = None
+        self.locate_threshold          = None
+        self.locate_percentile         = 64
+        self.locate_topn               = None
+        self.locate_preprocess         = True
 
-        self.searchrange   = None
-        self.memory        = 0
-        self.predict       = False
-        self.adaptivestop  = None
-        self.adaptivestep  = 0.95
-        
+        self.link_searchrange          = None
+        self.link_memory               = 0
+        self.link_predict              = False
+        self.link_adaptivestop         = None
+        self.link_adaptivestep         = 0.95
+
+        self.filter_stubs_threshold    = None
+        self.filter_quantile           = None
+        self.filter_clusters_threshold = None
         
     def configure_tracker(self, filename):
         """
@@ -79,140 +82,168 @@ class TrackParticles(BetrackCommand):
                 sys.exit()
 
         try:
-            self.diameter = parse_int(config, 'tp-diameter')
-            if self.diameter % 2 == 0:
-                raise ValueError('<tp-diameter> must be odd')
+            self.locate_diameter = parse_int(config, 'tp-locate-diameter')
+            if self.locate_diameter % 2 == 0:
+                raise ValueError('<tp-locate-diameter> must be odd')
         except ValueError as err:
             if err[0] == 'attribute not found!':
-                eprint('Attribute <tp-diameter> is required.')
+                eprint('Attribute <tp-locate-diameter> is required.')
             else:                
                 eprint('Invalid attribute: ', err[0], '.', sep='')
             sys.exit()
 
         try:
-            self.minmass = parse_float(config, 'tp-minmass')
-            if self.minmass < 0:
-                raise ValueError('<tp-minmass> must be non-negative')
+            self.locate_minmass = parse_float(config, 'tp-locate-minmass')
+            if self.locate_minmass < 0:
+                raise ValueError('<tp-locate-minmass> must be non-negative')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.maxsize = parse_float(config, 'tp-maxsize')
-            if self.maxsize <= 0:
-                raise ValueError('<tp-maxsize> must be positive')
+            self.locate_maxsize = parse_float(config, 'tp-locate-maxsize')
+            if self.locate_maxsize <= 0:
+                raise ValueError('<tp-locate-maxsize> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.separation = parse_float(config, 'tp-separation')
-            if self.separation < 0:
-                raise ValueError('<tp-separation> must be non-negative')
+            self.locate_separation = parse_float(config, 'tp-locate-separation')
+            if self.locate_separation < 0:
+                raise ValueError('<tp-locate-separation> must be non-negative')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.noisesize = parse_float(config, 'tp-noisesize')
-            if self.noisesize <= 0:
-                raise ValueError('<tp-noisesize> must be positive')
+            self.locate_noisesize = parse_float(config, 'tp-locate-noisesize')
+            if self.locate_noisesize <= 0:
+                raise ValueError('<tp-locate-noisesize> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.smoothingsize = parse_float(config, 'tp-smoothingsize')
-            if self.smoothingsize <= 0:
-                raise ValueError('<tp-smoothingsize> must be positive')
+            self.locate_smoothingsize = parse_float(config, 'tp-locate-smoothingsize')
+            if self.locate_smoothingsize <= 0:
+                raise ValueError('<tp-locate-smoothingsize> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.threshold = parse_float(config, 'tp-threshold')
-            if self.threshold <= 0:
-                raise ValueError('<tp-threshold> must be positive')
+            self.locate_threshold = parse_float(config, 'tp-locate-threshold')
+            if self.locate_threshold <= 0:
+                raise ValueError('<tp-locate-threshold> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.percentile = parse_float(config, 'tp-percentile')
-            if self.percentile < 0 or self.percentile >= 100.0:
-                raise ValueError('<tp-percentile> must be in the interval [0, 100)')
+            self.locate_percentile = parse_float(config, 'tp-locate-percentile')
+            if self.locate_percentile < 0 or self.locate_percentile >= 100.0:
+                raise ValueError('<tp-locate-percentile> must be in the interval [0, 100)')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.topn = parse_int(config, 'tp-topn')
-            if self.topn <= 0:
-                raise ValueError('<tp-topn> must be positive')
+            self.locate_topn = parse_int(config, 'tp-locate-topn')
+            if self.locate_topn <= 0:
+                raise ValueError('<tp-locate-topn> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.preprocess = parse_bool(config, 'tp-preprocess')
+            self.locate_preprocess = parse_bool(config, 'tp-locate-preprocess')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.searchrange = parse_int_or_float(config, 'tp-searchrange')
-            if self.searchrange <= 0:
-                raise ValueError('<tp-searchrange> must be positive')
+            self.link_searchrange = parse_int_or_float(config, 'tp-link-searchrange')
+            if self.link_searchrange <= 0:
+                raise ValueError('<tp-link-searchrange> must be positive')
         except ValueError as err:
             if err[0] == 'attribute not found!':
-                eprint('Attribute <tp-searchrange> is required.')
+                eprint('Attribute <tp-link-searchrange> is required.')
             else:                
                 eprint('Invalid attribute: ', err[0], '.', sep='')
             sys.exit()
 
         try:
-            self.memory = parse_int(config, 'tp-memory')
-            if self.memory < 0:
-                raise ValueError('<tp-topn> must be non-negative')
+            self.link_memory = parse_int(config, 'tp-link-memory')
+            if self.link_memory < 0:
+                raise ValueError('<tp-link-memory> must be non-negative')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.predict = parse_bool(config, 'tp-predict')
+            self.link_predict = parse_bool(config, 'tp-link-predict')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.adaptivestop = parse_float(config, 'tp-adaptivestop')
-            if self.adaptivestop <= 0:
-                raise ValueError('<tp-adaptivestop> must be positive')
+            self.link_adaptivestop = parse_float(config, 'tp-link-adaptivestop')
+            if self.link_adaptivestop <= 0:
+                raise ValueError('<tp-link-adaptivestop> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
         try:
-            self.adaptivestep = parse_float(config, 'tp-adaptivestep')
-            if self.adaptivestep <= 0 or self.adaptivestep >= 1.0:
-                raise ValueError('<tp-adaptivestep> must be in the interval (0.0, 1.0)')
+            self.link_adaptivestep = parse_float(config, 'tp-link-adaptivestep')
+            if self.link_adaptivestep <= 0 or self.link_adaptivestep >= 1.0:
+                raise ValueError('<tp-link-adaptivestep> must be in the interval (0.0, 1.0)')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.filter_stubs_threshold = parse_int(config, 'tp-filter-stubs-threshold')
+            if self.filter_stubs_threshold <= 0:
+                raise ValueError('<tp-filter-stubs-threshold> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
                 
+        try:
+            self.filter_quantile = parse_float(config, 'tp-filter-quantile')
+            if self.filter_quantile <= 0 or self.filter_quantile >= 1.0:
+                raise ValueError('<tp-filter-quantile> must be in the interval (0.0, 1.0)')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.filter_clusters_threshold = parse_int(config,
+                                                       'tp-filter-clusters-threshold')
+            if self.filter_clusters_threshold <= 0:
+                raise ValueError('<tp-filter-clusters-threshold> must be positive')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+                                
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
         if len(self.jobs) == 0:
@@ -235,13 +266,16 @@ class TrackParticles(BetrackCommand):
         pf = [dict(features=0)]
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(job.pframes, desc=d, unit=ut) as t:       
             for i, frame in enumerate(t):
-                features = trackpy.locate(frame, diameter=self.diameter, minmass=self.minmass,
-                                          maxsize=self.maxsize, separation=self.separation,
-                                          noise_size=self.noisesize,
-                                          smoothing_size=self.smoothingsize,
-                                          percentile=self.percentile, topn=self.topn,
-                                          preprocess=self.preprocess,
-                                          threshold=self.threshold)
+                features = trackpy.locate(frame, diameter=self.locate_diameter,
+                                          minmass=self.locate_minmass,
+                                          maxsize=self.locate_maxsize,
+                                          separation=self.locate_separation,
+                                          noise_size=self.locate_noisesize,
+                                          smoothing_size=self.locate_smoothingsize,
+                                          percentile=self.locate_percentile,
+                                          topn=self.locate_topn,
+                                          preprocess=self.locate_preprocess,
+                                          threshold=self.locate_threshold)
                 
                 if hasattr(frame, 'frame_no') and frame.frame_no is not None:
                     frame_no = frame.frame_no
@@ -264,25 +298,41 @@ class TrackParticles(BetrackCommand):
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
             d  = '\033[01m' + '...Linking trajectories'
             ut = ' frame'
-            if self.predict: tp = trackpy.predict.NearestVelocityPredict()
+            if self.link_predict: tp = trackpy.predict.NearestVelocityPredict()
             else: tp = trackpy
-            for linked in tqdm(tp.link_df_iter(sf, search_range=self.searchrange,
-                                               memory=self.memory,
-                                               adaptive_stop=self.adaptivestop,
-                                               adaptive_step=self.adaptivestep),
+            for linked in tqdm(tp.link_df_iter(sf,
+                                               search_range=self.link_searchrange,
+                                               memory=self.link_memory,
+                                               adaptive_stop=self.link_adaptivestop,
+                                               adaptive_step=self.link_adaptivestep),
                                desc=d, unit=ut, total=nframes):
                 sf.put(linked)
                 
         
-    def filter_trajectories(self):
+    def filter_trajectories(self, job):
         """
         """
 
+        # Read dataframe from h5 storage file..
+        job.dflink = trackpy.PandasHDFStoreBig(job.h5storage).dump()
+
+        # Filter out trajectories with few points..
+        if self.filter_stubs_threshold is not None:
+            job.dflink = trackpy.filter_stubs(job.dflink,
+                                              threshold=self.filter_stubs_threshold)
+
+        # Filter out trajectories with a mean particle size above a quantile..
+        if self.filter_quantile is not None or self.filter_clusters_threshold is not None:
+            job.dflink = trackpy.filter_clusters(job.dflink,
+                                                 quantile=self.filter_quantile,
+                                                 threshold=self.filter_clusters_threshold)
+            
         
     def export_trajectories(self):
         """
-         """
-        
+        """
+
+        # Convert trajectories to the size of the original video..
 
     def export_video(self):
         """
@@ -339,7 +389,7 @@ class TrackParticles(BetrackCommand):
             except ValueError as err:                
                 wprint('Preprocessing video: ', err[0], '. Skipping job.', sep='')
                 continue            
-            mprint('...Preprocessing video: Done.')
+            mprint('...Preprocessing video: Done')
 
             # Locate features..
             self.locate_features(job)
@@ -348,14 +398,17 @@ class TrackParticles(BetrackCommand):
             self.link_trajectories(job)
 
             # Filter trajectories..
-            wprint('Filtering trajectories:', end='')            
-            self.filter_trajectories()
-            eprint('\tNot yet implemented!')
+            if (self.filter_stubs_threshold is not None or
+                self.filter_quantile is not None or
+                self.filter_clusters_threshold is not None):
+                mprint('...Filtering trajectories:', end='\r')            
+                self.filter_trajectories(job)
+                mprint('...Filtering trajectories: Done')            
 
             # Saving trajectories..
-            wprint('Exporting trajectories:', end='')            
+            wprint('...Exporting trajectories:', end='\r')            
             self.export_trajectories()
-            eprint('\tNot yet implemented!')
+            wprint('...Exporting trajectories: Done')
 
             # Export annotated video..
             wprint('Exporting video..', end='')            

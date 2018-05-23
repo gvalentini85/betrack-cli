@@ -38,6 +38,7 @@ class Job:
         self.pframes    = None         # Preprocessed video frames
         self.period     = period       # Initial and final frame indexes (2-tuple)
         self.periodtype = periodtype   # Period type: 'frame', 'second', 'minute'
+        self.dflink     = None         # Dataframe of the linked trajectories
         
         if self.outdir == '':
             self.outdir= dirname(realpath(self.video))
