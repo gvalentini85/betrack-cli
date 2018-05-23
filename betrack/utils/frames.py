@@ -30,8 +30,9 @@ def as_gray(frame):
     red   = frame[:, :, 0]
     blue  = frame[:, :, 1]
     green = frame[:, :, 2]
-
-    return 0.2125 * red + 0.7154 * green + 0.0721 * blue
+    rval  = 0.2125 * red + 0.7154 * green + 0.0721 * blue
+    
+    return rval.astype(frame.dtype)
 
     
 @pipeline

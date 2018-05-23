@@ -18,7 +18,8 @@ import trackpy
 
 from betrack.commands.command import BetrackCommand
 from betrack.utils.message    import mprint, wprint, eprint
-from betrack.utils.parser     import open_configuration, parse_bool, parse_int, parse_float
+from betrack.utils.parser     import (open_configuration, parse_bool, parse_int,
+                                      parse_float, parse_int_or_float)
 from betrack.utils.job        import configure_jobs 
 
 
@@ -46,6 +47,13 @@ class TrackParticles(BetrackCommand):
         self.percentile    = 64
         self.topn          = None
         self.preprocess    = True
+
+        self.searchrange   = None
+        self.memory        = 0
+        self.predict       = False
+        self.adaptivestop  = None
+        self.adaptivestep  = 0.95
+        
         
     def configure_tracker(self, filename):
         """
@@ -155,6 +163,51 @@ class TrackParticles(BetrackCommand):
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
+        try:
+            self.searchrange = parse_int_or_float(config, 'tp-searchrange')
+            if self.searchrange <= 0:
+                raise ValueError('<tp-searchrange> must be positive')
+        except ValueError as err:
+            if err[0] == 'attribute not found!':
+                eprint('Attribute <tp-searchrange> is required.')
+            else:                
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+
+        try:
+            self.memory = parse_int(config, 'tp-memory')
+            if self.memory < 0:
+                raise ValueError('<tp-topn> must be non-negative')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.predict = parse_bool(config, 'tp-predict')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.adaptivestop = parse_float(config, 'tp-adaptivestop')
+            if self.adaptivestop <= 0:
+                raise ValueError('<tp-percentile> must be positive')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+
+        try:
+            self.adaptivestep = parse_float(config, 'tp-adaptivestep')
+            if self.adaptivestep <= 0 or self.adaptivestep >= 1.0:
+                raise ValueError('<tp-adaptivestep> must be in the interval (0.0, 1.0)')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+                
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
         if len(self.jobs) == 0:
@@ -199,19 +252,20 @@ class TrackParticles(BetrackCommand):
         
     def link_trajectories(self, job):
         """
-        # TODO:
-        # - add first-frame last-frame as job attributes/variables
-        # - add first-second last-second as job attributes
-        # - add first-minute last-minute as job attributes
-        # - add linking paramters to yml..
         """
         
         # Link trajectories in all frames..
         nframes = len(job.pframes) 
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
             d  = '\033[01m' + '...Linking trajectories'
-            ut = ' frame'            
-            for linked in tqdm(trackpy.link_df_iter(sf, search_range=5, memory=3), desc=d, unit=ut, total=nframes):
+            ut = ' frame'
+            if self.predict: tp = trackpy.predict.NearestVelocityPredict()
+            else: tp = trackpy
+            for linked in tqdm(tp.link_df_iter(sf, search_range=self.searchrange,
+                                               memory=self.memory,
+                                               adaptive_stop=self.adaptivestop,
+                                               adaptive_step=self.adaptivestep),
+                               desc=d, unit=ut, total=nframes):
                 sf.put(linked)
                 
         
