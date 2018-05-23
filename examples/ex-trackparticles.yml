@@ -1,6 +1,7 @@
 tp-featuresdark: False
 tp-diameter: 13
 tp-searchrange: 10
+tp-predict: True
 
 jobs:
   - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-001.mp4

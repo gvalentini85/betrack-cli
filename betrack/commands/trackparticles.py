@@ -10,6 +10,11 @@ The `track-particles` command.
 
 from json import dumps
 
+# Needed to turn off 'PyTables will pickle object' warnings..
+import warnings
+import pandas
+warnings.filterwarnings('ignore', category=pandas.io.pytables.PerformanceWarning)
+
 from os import remove
 from os.path import isfile
 from tqdm import tqdm
@@ -193,7 +198,7 @@ class TrackParticles(BetrackCommand):
         try:
             self.adaptivestop = parse_float(config, 'tp-adaptivestop')
             if self.adaptivestop <= 0:
-                raise ValueError('<tp-percentile> must be positive')
+                raise ValueError('<tp-adaptivestop> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
