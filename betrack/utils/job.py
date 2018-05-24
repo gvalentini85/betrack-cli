@@ -8,7 +8,9 @@ Description of the job module..
 """
 
 
+from os import remove
 from os.path import dirname, realpath, isfile, splitext, basename
+from pandas import HDFStore
 from pims import Video
 
 from betrack.utils.message import wprint
@@ -42,7 +44,11 @@ class Job:
         
         if self.outdir == '':
             self.outdir= dirname(realpath(self.video))
+            
         self.h5storage = outdir + splitext(basename(video))[0] + '-locate.h5'        
+        self.h5tracks  = outdir + splitext(basename(video))[0] + '-tracks.h5'        
+        self.csvtracks  = outdir + splitext(basename(video))[0] + '-tracks.csv'        
+        self.jsontracks  = outdir + splitext(basename(video))[0] + '-tracks.json'        
 
 
     def str(self, ind=''):
@@ -82,10 +88,38 @@ class Job:
                 self.frames = self.frames[range(self.period[0], self.period[1])]
 
         
-    def unload_frames(self):
+    def release_memory(self):
         """
         """
-        wprint('def unload_frames(self): Not yet implemented!')
+
+        self.frames  = None
+        self.pframes = None
+        if isfile(self.h5storage): remove(self.h5storage)
+
+
+    def export_trajectories(self, exportas):
+        """
+        """
+
+        # Convert trajectories to the size of the original video..
+        if self.valid_margins():
+            self.dflink.y += self.margins[2]
+            self.dflink.x += self.margins[0]
+
+        # Save trajectories..
+        if exportas == 'hdf':
+            if isfile(self.h5tracks): remove(self.h5tracks)
+            hdf = HDFStore(self.h5tracks)
+            hdf.put('dflink', self.dflink, format='table', data_columns=True)
+            hdf.close()
+        elif exportas == 'csv':
+            if isfile(self.csvtracks): remove(self.csvtracks)
+            self.dflink.to_csv(self.csvtracks)
+        elif exportas == 'json':
+            if isfile(self.jsontracks): remove(self.jsontracks)
+            df = self.dflink.index = range(0, self.dflink.shape[0])
+            self.dflink.to_json(self.jsontracks)
+    
 
     def valid_margins(self):
         """

@@ -24,7 +24,7 @@ import trackpy
 from betrack.commands.command import BetrackCommand
 from betrack.utils.message    import mprint, wprint, eprint
 from betrack.utils.parser     import (open_configuration, parse_bool, parse_int,
-                                      parse_float, parse_int_or_float)
+                                      parse_float, parse_int_or_float, parse_str)
 from betrack.utils.job        import configure_jobs 
 
 
@@ -41,6 +41,7 @@ class TrackParticles(BetrackCommand):
         
         self.jobs                      = []      # List of jobs to process
         self.featuresdark              = False   # True if features in the video are dark
+        self.exportas                  = 'hdf'
 
         self.locate_diameter           = None
         self.locate_minmass            = 100
@@ -62,6 +63,7 @@ class TrackParticles(BetrackCommand):
         self.filter_stubs_threshold    = None
         self.filter_quantile           = None
         self.filter_clusters_threshold = None
+
         
     def configure_tracker(self, filename):
         """
@@ -81,6 +83,15 @@ class TrackParticles(BetrackCommand):
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
 
+        try:
+            self.exportas = parse_str(config, 'tp-exportas')
+            if not self.exportas in ['hdf', 'csv', 'json']:
+                raise ValueError('<tp-exportas> must be either \'hdf\', \'csv\', or \'json\'')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()
+                
         try:
             self.locate_diameter = parse_int(config, 'tp-locate-diameter')
             if self.locate_diameter % 2 == 0:
@@ -243,7 +254,8 @@ class TrackParticles(BetrackCommand):
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
                 sys.exit()
-                                
+
+                
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
         if len(self.jobs) == 0:
@@ -328,12 +340,6 @@ class TrackParticles(BetrackCommand):
                                                  threshold=self.filter_clusters_threshold)
             
         
-    def export_trajectories(self):
-        """
-        """
-
-        # Convert trajectories to the size of the original video..
-
     def export_video(self):
         """
         """
@@ -405,10 +411,10 @@ class TrackParticles(BetrackCommand):
                 self.filter_trajectories(job)
                 mprint('...Filtering trajectories: Done')            
 
-            # Saving trajectories..
-            wprint('...Exporting trajectories:', end='\r')            
-            self.export_trajectories()
-            wprint('...Exporting trajectories: Done')
+            # Export trajectories..
+            mprint('...Exporting trajectories (', self.exportas, '):', sep='', end='\r')
+            job.export_trajectories(self.exportas)
+            mprint('...Exporting trajectories (', self.exportas, '): Done', sep='')
 
             # Export annotated video..
             wprint('Exporting video..', end='')            
@@ -416,6 +422,10 @@ class TrackParticles(BetrackCommand):
             eprint('\tNot yet implemented!')
 
             # Clean up..
+            wprint('...Release job resources:', end='\r')
+            job.release_memory()
+            wprint('...Release job resources: Done')
+
 
         # Summarize completed jobs..
         print('TrackParticles: Hello, world!')

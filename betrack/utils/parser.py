@@ -235,3 +235,45 @@ def parse_bool(src, key, nentries=1):
     else:
         raise ValueError('attribute not found!', key)            
 
+def parse_str(src, key, nentries=1):
+    """
+    Parse a dictionary ``src`` and return a str or a list of str 
+    specified by ``key``. This function checks that the value or values specified by 
+    ``key`` is of type str or list of str and raises a ``ValueError`` otherwise.
+
+    :param dict src: the source dictionary
+    :param str key: the key specifing the directory name
+    :param int nentries: the number of booleans to parse
+    :returns: read boolean(s)
+    :rtype: bool or list of bool
+    :raises ValueError: if the read value/values are not valid
+    """
+
+    if nentries < 1:
+        raise ValueError('expected number of entries must be greater than zero')
+    
+    if src.has_key(key):
+        val = src.get(key)
+        wprint(type(val))        
+        if type(val) == str or type(val) == unicode:
+            val = val.encode()
+            if nentries != 1:
+                msg = 'attribute ' + key + ' has 1 entry, expected ' + str(nentries)
+                raise ValueError(msg)
+            return val
+        elif type(val) == list:
+            nval = len(val)
+            if nval != nentries:
+                msg  = 'attribute ' + key + ' has ' + str(nval)
+                msg += ' entries, expected ' + str(nentries)
+                raise ValueError(msg)
+            for m in range(0, nval):
+                if type(val[m]) != str and type(val[m]) != unicode:
+                    raise ValueError('entry ' + str(m + 1) + ' is not str')
+                else: val[m] = val[m].encode()
+            return val                            
+        else:
+            raise ValueError('attribute ' + key + ' is not of type str or list')
+    else:
+        raise ValueError('attribute not found!', key)            
+
