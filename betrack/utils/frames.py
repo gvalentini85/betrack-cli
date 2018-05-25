@@ -101,7 +101,8 @@ def invert_colors(frame, maxval=255):
 @pipeline
 def reverse_colors(frame):
     """
-#    Compute the range of a continuously-valued time series.
+    Reverse the order of colors in a frame from RGB to BGR and from BGR to
+    RGB.
 #    
 #    Examples: ::
 #    
@@ -116,4 +117,4 @@ def reverse_colors(frame):
 #    :raises InformError: if an error occurs within the ``inform`` C call
     """
     
-    print('frames.reverse_colors not yet implemented!')
+    return frame[:, :, ::-1]

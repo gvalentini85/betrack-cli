@@ -33,22 +33,24 @@ class Job:
 
         """
 
-        self.video      = video        # Video file name
-        self.outdir     = outdir       # Output directory
-        self.margins    = margins      # Margins to crop frames
-        self.frames     = None         # Original video frames
-        self.pframes    = None         # Preprocessed video frames
-        self.period     = period       # Initial and final frame indexes (2-tuple)
-        self.periodtype = periodtype   # Period type: 'frame', 'second', 'minute'
-        self.dflink     = None         # Dataframe of the linked trajectories
+        self.video         = video        # Video file name
+        self.outdir        = outdir       # Output directory
+        self.margins       = margins      # Margins to crop frames
+        self.frames        = None         # Original video frames
+        self.framerate     = None         # Original video frame rate
+        self.frameshape    = None         # Original video frame shape
+        self.pframes       = None         # Preprocessed video frames
+        self.period        = period       # Initial and final frame indexes (2-tuple)
+        self.periodtype    = periodtype   # Period type: 'frame', 'second', 'minute'
+        self.dflink        = None         # Dataframe of the linked trajectories
+        self.drawparticles = []           # List of particles to annotate, [] means all
         
-        if self.outdir == '':
-            self.outdir= dirname(realpath(self.video))
-            
-        self.h5storage = outdir + splitext(basename(video))[0] + '-locate.h5'        
-        self.h5tracks  = outdir + splitext(basename(video))[0] + '-tracks.h5'        
+        if self.outdir == '': self.outdir= dirname(realpath(self.video))            
+        self.h5storage  = outdir + splitext(basename(video))[0] + '-locate.h5'        
+        self.h5tracks   = outdir + splitext(basename(video))[0] + '-tracks.h5'        
         self.csvtracks  = outdir + splitext(basename(video))[0] + '-tracks.csv'        
-        self.jsontracks  = outdir + splitext(basename(video))[0] + '-tracks.json'        
+        self.jsontracks = outdir + splitext(basename(video))[0] + '-tracks.json'        
+        self.avitracked = outdir + splitext(basename(video))[0] + '-tracked.avi'        
 
 
     def str(self, ind=''):
@@ -72,7 +74,9 @@ class Job:
 
         # Load video..
         if isfile(self.video):
-            self.frames = Video(self.video)
+            self.frames     = Video(self.video)
+            self.framerate  = self.frames.frame_rate
+            self.frameshape = self.frames.frame_shape
         else:
             raise IOError(errno.ENOENT, 'file not found', self.video)
 

@@ -31,7 +31,6 @@ from betrack.utils.job        import configure_jobs
 class TrackParticles(BetrackCommand):
     """Say hello, world!"""
 
-
     def __init__(self, options, *args, **kwargs):
         """
         TrackParticles constructor. 
@@ -326,7 +325,8 @@ class TrackParticles(BetrackCommand):
         """
 
         # Read dataframe from h5 storage file..
-        job.dflink = trackpy.PandasHDFStoreBig(job.h5storage).dump()
+        with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
+            job.dflink = sf.dump()
 
         # Filter out trajectories with few points..
         if self.filter_stubs_threshold is not None:
@@ -340,9 +340,22 @@ class TrackParticles(BetrackCommand):
                                                  threshold=self.filter_clusters_threshold)
             
         
-    def export_video(self):
+    def export_video(self, job):
         """
         """
+
+        from betrack.commands.annotatevideo import AnnotateVideo
+
+        # Create AnnotateVideo object..
+        av = AnnotateVideo(self.options)
+        
+        # Configure the object..
+        av.drawregion      = True
+        av.drawframenumber = True
+        av.configure_annotator(self.options['--configuration'])
+        
+        # Annotate and export video..
+        av.annotator(job)
         
         
     def run(self):
@@ -367,12 +380,13 @@ class TrackParticles(BetrackCommand):
         trackpy.quiet()
         
         # Parse options and get list of jobs..
-        mprint('Reading configuration file.. ')        
+        mprint('Reading configuration file.. ')
         self.configure_tracker(self.options['--configuration'])
         njobs = len(self.jobs)        
         mprint('Found', njobs, 'valid jobs.')
     
         # Loop over jobs..
+        completed = 0
         for job, i in zip(self.jobs, range(1, njobs + 1)):
             mprint('Working on job ', i, ':', sep='')
             mprint(job.str(ind='...'))
@@ -407,27 +421,36 @@ class TrackParticles(BetrackCommand):
             if (self.filter_stubs_threshold is not None or
                 self.filter_quantile is not None or
                 self.filter_clusters_threshold is not None):
-                mprint('...Filtering trajectories:', end='\r')            
+                mprint('...Filtering trajectories:', end='\r')
+                sys.stdout.flush()
                 self.filter_trajectories(job)
                 mprint('...Filtering trajectories: Done')            
 
             # Export trajectories..
             mprint('...Exporting trajectories (', self.exportas, '):', sep='', end='\r')
+            sys.stdout.flush()
             job.export_trajectories(self.exportas)
             mprint('...Exporting trajectories (', self.exportas, '): Done', sep='')
 
             # Export annotated video..
-            wprint('Exporting video..', end='')            
-            self.export_video()
-            eprint('\tNot yet implemented!')
+            self.export_video(job)
 
             # Clean up..
-            wprint('...Release job resources:', end='\r')
+            mprint('...Release job resources:', end='\r')
             job.release_memory()
-            wprint('...Release job resources: Done')
+            mprint('...Release job resources: Done')
+
+            completed += 1
 
 
         # Summarize completed jobs..
+        if completed > 0:
+            mprint('Batch process completed, ', completed, '/', njobs,
+                   'jobs completed! \(^-^)/', sep='')
+        else:
+            mprint('Batch process completed, ', completed, '/', njobs,
+                   'jobs completed! ¯\_(ツ)_/¯ ', sep='')
+        
         print('TrackParticles: Hello, world!')
         print('You supplied the following options:',
               dumps(self.options, indent=2, sort_keys=True))

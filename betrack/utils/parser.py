@@ -254,7 +254,6 @@ def parse_str(src, key, nentries=1):
     
     if src.has_key(key):
         val = src.get(key)
-        wprint(type(val))        
         if type(val) == str or type(val) == unicode:
             val = val.encode()
             if nentries != 1:
