@@ -17,7 +17,3 @@ class TestAnnotateVideo(TestCase):
         output = popen(['betrack', 'annotate-video'], stdout=PIPE).communicate()[0]
         lines = output.split(b'\n')
         self.assertTrue(len(lines) != 1)
-
-    def test_returns_hello_world(self):
-        output = popen(['betrack', 'annotate-video'], stdout=PIPE).communicate()[0]
-        self.assertTrue(b'AnnotateVideo: Hello, world!' in output)

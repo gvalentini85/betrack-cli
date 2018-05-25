@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #------------------------------------------------------------------------------#
 # Copyright 2018 Gabriele Valentini. All rights reserved. Use of this source   #
 # code is governed by a MIT license that can be found in the LICENSE file.     #
@@ -446,11 +447,11 @@ class TrackParticles(BetrackCommand):
         # Summarize completed jobs..
         if completed > 0:
             mprint('Batch process completed, ', completed, '/', njobs,
-                   'jobs completed! \(^-^)/', sep='')
+                   ' jobs successfully completed!     \(^-^)/', sep='')
         else:
             mprint('Batch process completed, ', completed, '/', njobs,
-                   'jobs completed! ¯\_(ツ)_/¯ ', sep='')
-        
+                   ' jobs successfully completed!     ¯\_(ツ)_/¯ ', sep='')
+            
         print('TrackParticles: Hello, world!')
         print('You supplied the following options:',
               dumps(self.options, indent=2, sort_keys=True))
