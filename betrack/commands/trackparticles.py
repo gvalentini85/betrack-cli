@@ -451,7 +451,3 @@ class TrackParticles(BetrackCommand):
         else:
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     ¯\_(ツ)_/¯ ', sep='')
-            
-        print('TrackParticles: Hello, world!')
-        print('You supplied the following options:',
-              dumps(self.options, indent=2, sort_keys=True))
