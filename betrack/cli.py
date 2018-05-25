@@ -1,15 +1,21 @@
+#------------------------------------------------------------------------------#
+# Copyright 2018 Gabriele Valentini. All rights reserved. Use of this source   #
+# code is governed by a MIT license that can be found in the LICENSE file.     #
+#------------------------------------------------------------------------------#
+
 """
 betrack
 
 Usage:
   betrack -h | --help
   betrack --version
-  betrack track-particles
+  betrack track-particles -c <file> | --configuration=<file>
   betrack annotate-video
 
 Options:
-  -h --help                         Show help screen.
-  --version                         Show betrack version.
+  -h --help                            Show help screen.
+  --version                            Show betrack version.
+  -c <file> --configuration=<file>     Specify a yml configuration file.
 
 Examples:
   betrack track-particles
@@ -21,16 +27,16 @@ Help:
 
 
 from inspect import getmembers, isclass
-
 from docopt import docopt
 
+from . import __cli__ as CLI
 from . import __version__ as VERSION
 
 
 def main():
     """Main CLI entrypoint."""
     import betrack.commands
-    options = docopt(__doc__, version=VERSION)
+    options = docopt(__doc__, version=CLI + ' ' + VERSION)
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.

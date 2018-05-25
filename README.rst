@@ -1,5 +1,5 @@
 betrack
-=======
+*******
 
 .. image:: https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=master
     :target: https://travis-ci.org/gvalentini85/betrack-cli
@@ -19,7 +19,32 @@ What follow is kept here temporary for reference and come from the skeleton
 template skele-cli.
 
 Installation
-------------
+============
+
+Documentation
+=============
+
+The documentation of *betrack* can be accessed online
+`here <https://gvalentini85.github.io/betrack-cli/>`_
+
+
+HTML Format
+-----------
+
+Generate the documentation in *html* format::
+  
+    $ cd docs/
+    $ sphinx-build -b html \source \build
+
+PDF Format
+----------
+
+Generate the documentation in *pdf* format::
+  
+    $ cd docs/
+    $ sphinx-build -b latex \source \build
+    $ cd build/
+    $ make
 
 Examples
 --------
@@ -36,21 +61,6 @@ skele-cli
 
 *A skeleton command line program in Python.*
 
-
-Purpose
--------
-
-This is a skeleton application which demonstrates how to properly structure a
-Python CLI application.
-
-I've done my best to structure this in a way that makes sense for *most* users,
-but if you have any feedback, please open a Github issue and I'll take a look.
-
-The idea with this project is that you should be able to use this as a template
-for building new CLI apps.
-
-You can fork this project and customize it to your liking, or just use it as a
-reference.
 
 
 Usage

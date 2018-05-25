@@ -1,3 +1,8 @@
+#------------------------------------------------------------------------------#
+# Copyright 2018 Gabriele Valentini. All rights reserved. Use of this source   #
+# code is governed by a MIT license that can be found in the LICENSE file.     #
+#------------------------------------------------------------------------------#
+
 """Packaging settings."""
 
 
@@ -50,18 +55,18 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     keywords = 'cli',
     packages = find_packages(exclude=['docs', 'tests*']),
-    install_requires = ['docopt'],
+    install_requires = ['docopt', 'numpy', 'pyyaml', 'pims', 'trackpy',
+                        'tqdm', 'opencv-python'],
     extras_require = {
-        'test': ['coverage', 'pytest', 'pytest-cov'],
+        'test': ['coverage', 'pytest', 'pytest-cov', 'codecov'],
     },
     entry_points = {
         'console_scripts': [

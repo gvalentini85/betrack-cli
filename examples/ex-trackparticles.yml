@@ -1,0 +1,34 @@
+tp-featuresdark:           False
+tp-locate-diameter:        13
+tp-link-searchrange:       10
+tp-link-predict:           True
+tp-filter-stubs-threshold: 10
+tp-exportas:               json
+av-flipframes:             x
+
+jobs:
+  - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-001.mp4
+    crop-margins:  1360, 2800, 400, 1300
+
+  - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T2-001.mp4
+    outdir:        ../Dropbox (ASU)/TandemRuns/data/betrack/
+    crop-margins:  [1360, 2800, 400, 1300]
+    period-frame:  [0, 20]
+
+  - video:         somefile3.mp4
+    outdir:        somedir3/
+
+  - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
+    outdir:        ../Dropbox (ASU)/TandemRuns/data/betrack/
+    crop-margins:  [1360, 2800, 400]
+
+  - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
+    outdir:        ../Dropbox (ASU)/TandemRuns/data/betrack/
+    crop-margins:  [1360, 2800, 400]
+
+  - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T1-002.mp4
+    outdir:        ../Dropbox (ASU)/TandemRuns/data/betrack/
+    period-second:  [0, 2.3]
+    period-minute:  [0, 0.33]
+
+  - outdir:        somedir4/ 

@@ -1,4 +1,8 @@
-# Add copyright here..
+#------------------------------------------------------------------------------#
+# Copyright 2018 Gabriele Valentini. All rights reserved. Use of this source   #
+# code is governed by a MIT license that can be found in the LICENSE file.     #
+#------------------------------------------------------------------------------#
+
 """
 Description of the message module..
 """
@@ -10,6 +14,7 @@ import sys
 
 class Message:
     BLUE    = '\033[94m'
+    GREEN   = '\033[92m'
     YELLOW  = '\033[93m'
     RED     = '\033[91m'
     ENDS    = '\x1b[0m'
@@ -41,7 +46,7 @@ def mprint(*args, **kwargs):
     """
 
     file  = kwargs.get('file', sys.stdout)    
-    print(Message.BOLD + Message.BLUE,   end='', file=file)
+    print(Message.BOLD + Message.GREEN,   end='', file=file)
     print(*args, **kwargs)
     print(Message.ENDS, end='', file=file)
 

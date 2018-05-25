@@ -1,6 +1,8 @@
 exclude .gitignore
 exclude .coverage
+exclude .coveragerc
 exclude .travis.yml
+exclude .deploy-gh-pages.sh
 include README.rst
 include setup.cfg
 prune .cache
