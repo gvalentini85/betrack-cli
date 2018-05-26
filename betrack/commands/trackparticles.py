@@ -104,7 +104,7 @@ class TrackParticles(BetrackCommand):
             sys.exit()
 
         try:
-            self.locate_minmass = parse_float(config, 'tp-locate-minmass')
+            self.locate_minmass = parse_int_or_float(config, 'tp-locate-minmass')
             if self.locate_minmass < 0:
                 raise ValueError('<tp-locate-minmass> must be non-negative')
         except ValueError as err:
@@ -113,7 +113,7 @@ class TrackParticles(BetrackCommand):
                 sys.exit()
 
         try:
-            self.locate_maxsize = parse_float(config, 'tp-locate-maxsize')
+            self.locate_maxsize = parse_int_or_float(config, 'tp-locate-maxsize')
             if self.locate_maxsize <= 0:
                 raise ValueError('<tp-locate-maxsize> must be positive')
         except ValueError as err:
@@ -149,7 +149,7 @@ class TrackParticles(BetrackCommand):
                 sys.exit()
 
         try:
-            self.locate_threshold = parse_float(config, 'tp-locate-threshold')
+            self.locate_threshold = parse_int_or_float(config, 'tp-locate-threshold')
             if self.locate_threshold <= 0:
                 raise ValueError('<tp-locate-threshold> must be positive')
         except ValueError as err:

@@ -269,8 +269,8 @@ def configure_jobs(jobs):
                     wprint('...Job ', i, ': Invalid attribute (', err[0],
                            '). Skipping job.', sep='')
                     continue
-        else:
-            wprint('...Job ', i, ': <period-frame>, <period-second> and <period-miinute>' +
+        elif (pf and ps) or (pf and pm) or (ps and pm):
+            wprint('...Job ', i, ': <period-frame>, <period-second> and <period-minute>' +
                    ' are mutually exclusive. Skipping job.', sep='')
             continue
         
