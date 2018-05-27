@@ -228,9 +228,9 @@ class TrackParticles(BetrackCommand):
                 sys.exit()
 
         try:
-            self.filter_stubs_threshold = parse_int(config, 'tp-filter-stubs-threshold')
+            self.filter_stubs_threshold = parse_int(config, 'tp-filter-st-threshold')
             if self.filter_stubs_threshold <= 0:
-                raise ValueError('<tp-filter-stubs-threshold> must be positive')
+                raise ValueError('<tp-filter-st-threshold> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
@@ -247,9 +247,9 @@ class TrackParticles(BetrackCommand):
 
         try:
             self.filter_clusters_threshold = parse_int(config,
-                                                       'tp-filter-clusters-threshold')
+                                                       'tp-filter-cl-threshold')
             if self.filter_clusters_threshold <= 0:
-                raise ValueError('<tp-filter-clusters-threshold> must be positive')
+                raise ValueError('<tp-filter-cl-threshold> must be positive')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')

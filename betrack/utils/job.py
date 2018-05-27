@@ -220,7 +220,7 @@ def configure_jobs(jobs):
         except (ValueError, IOError):
             outdir = ''
 
-        # Parse attribute <crop-margins..            
+        # Parse attribute <crop-margins>..            
         try:
             margins = parse_int(j, 'crop-margins', nentries=4)
         except ValueError as err:
