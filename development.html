@@ -1,68 +1,72 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!doctype html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Development &#8212; betrack 0.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>Development &#8212; betrack 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Usage" href="usage.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
   </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="development">
-<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="info">
-<h2>info<a class="headerlink" href="#info" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
-
-
-          </div>
-        </div>
-      </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">betrack 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Development</a><ul>
-<li><a class="reference internal" href="#info">info</a></li>
-<li><a class="reference internal" href="#api">API</a></li>
+<li><a class="reference internal" href="#editable-installation-from-source">Editable Installation from Source</a></li>
+<li><a class="reference internal" href="#module-betrack.cli">API Documentation</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a><ul>
+<li><a class="reference internal" href="#module-betrack.commands.command">command</a></li>
+<li><a class="reference internal" href="#module-betrack.commands.annotatevideo">annotatevideo</a></li>
+<li><a class="reference internal" href="#module-betrack.commands.trackparticles">trackparticles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utils">Utils</a><ul>
+<li><a class="reference internal" href="#module-betrack.utils.frames">frames</a></li>
+<li><a class="reference internal" href="#module-betrack.utils.job">job</a></li>
+<li><a class="reference internal" href="#module-betrack.utils.message">message</a></li>
+<li><a class="reference internal" href="#module-betrack.utils.parser">parser</a></li>
 </ul>
 </li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="usage.html" title="previous chapter">Usage</a></li>
-  </ul></li>
+</li>
 </ul>
-</div>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="previous chapter">Usage</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -84,22 +88,642 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="development">
+<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="editable-installation-from-source">
+<h2>Editable Installation from Source<a class="headerlink" href="#editable-installation-from-source" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-betrack.cli">
+<span id="api-documentation"></span><h2>API Documentation<a class="headerlink" href="#module-betrack.cli" title="Permalink to this headline">¶</a></h2>
+<p>betrack</p>
+<dl class="docutils">
+<dt>Usage:</dt>
+<dd>betrack -h | –help
+betrack –version
+betrack track-particles -c &lt;file&gt; | –configuration=&lt;file&gt;
+betrack annotate-video</dd>
+<dt>Options:</dt>
+<dd>-h –help                            Show help screen.
+–version                            Show betrack version.
+-c &lt;file&gt; –configuration=&lt;file&gt;     Specify a yml configuration file.</dd>
+<dt>Examples:</dt>
+<dd>betrack track-particles</dd>
+<dt>Help:</dt>
+<dd>For help using this tool, please open an issue on the Github repository:
+<a class="reference external" href="https://github.com/gvalentini85/betrack-cli/issues">https://github.com/gvalentini85/betrack-cli/issues</a></dd>
+</dl>
+<div class="section" id="commands">
+<h3>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-betrack.commands.command">
+<span id="command"></span><h4>command<a class="headerlink" href="#module-betrack.commands.command" title="Permalink to this headline">¶</a></h4>
+<p>The BetrackCommand command.</p>
+<dl class="class">
+<dt id="betrack.commands.command.BetrackCommand">
+<em class="property">class </em><code class="descclassname">betrack.commands.command.</code><code class="descname">BetrackCommand</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.command.BetrackCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base command.</p>
+<dl class="method">
+<dt id="betrack.commands.command.BetrackCommand.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.command.BetrackCommand.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.command.BetrackCommand.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.command.BetrackCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-betrack.commands.annotatevideo">
+<span id="annotatevideo"></span><h4>annotatevideo<a class="headerlink" href="#module-betrack.commands.annotatevideo" title="Permalink to this headline">¶</a></h4>
+<p>The <cite>annotate-video</cite> command.</p>
+<dl class="class">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo">
+<em class="property">class </em><code class="descclassname">betrack.commands.annotatevideo.</code><code class="descname">AnnotateVideo</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Say hello, world!</p>
+<dl class="method">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>AnnotateVideo</cite> constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo.configure_annotator">
+<code class="descname">configure_annotator</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo.configure_annotator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo.draw_particles">
+<code class="descname">draw_particles</code><span class="sig-paren">(</span><em>frame</em>, <em>df</em>, <em>particles</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo.draw_particles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo.draw_region">
+<code class="descname">draw_region</code><span class="sig-paren">(</span><em>frame</em>, <em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo.draw_region" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number">
+<code class="descname">draw_frame_number</code><span class="sig-paren">(</span><em>frame</em>, <em>fnum</em>, <em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>0 -&gt; auto mode
+1 -&gt; top-left outside tracked region (-1 inside)
+2 -&gt; top-right outside tracked region (-2 inside)
+3 -&gt; bottom-left outside tracked region (-3 inside)
+4 -&gt; bottom-right outside tracked region (-4 inside)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo.annotator">
+<code class="descname">annotator</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo.annotator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.annotatevideo.AnnotateVideo.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.annotatevideo.AnnotateVideo.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-betrack.commands.trackparticles">
+<span id="trackparticles"></span><h4>trackparticles<a class="headerlink" href="#module-betrack.commands.trackparticles" title="Permalink to this headline">¶</a></h4>
+<p>The <cite>track-particles</cite> command.</p>
+<dl class="class">
+<dt id="betrack.commands.trackparticles.TrackParticles">
+<em class="property">class </em><code class="descclassname">betrack.commands.trackparticles.</code><code class="descname">TrackParticles</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Say hello, world!</p>
+<dl class="method">
+<dt id="betrack.commands.trackparticles.TrackParticles.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>TrackParticles constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.trackparticles.TrackParticles.configure_tracker">
+<code class="descname">configure_tracker</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.configure_tracker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.trackparticles.TrackParticles.locate_features">
+<code class="descname">locate_features</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.locate_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.trackparticles.TrackParticles.link_trajectories">
+<code class="descname">link_trajectories</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.link_trajectories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.trackparticles.TrackParticles.filter_trajectories">
+<code class="descname">filter_trajectories</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.filter_trajectories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.trackparticles.TrackParticles.export_video">
+<code class="descname">export_video</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.export_video" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.commands.trackparticles.TrackParticles.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.run" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Run the <cite>track-particle</cite> command.</div></blockquote>
+<p>#    Compute the range of a continuously-valued time series.
+#    
+#    Examples: ::
+#    
+#        &gt;&gt;&gt; from pyinform import utils
+#        &gt;&gt;&gt; utils.series_range([0,1,2,3,4,5])
+#        (5, 0, 5)
+#        &gt;&gt;&gt; utils.series_range([-0.1, 8.5, 0.02, -6.3])
+#        (14.8, -6.3, 8.5)
+#    :param sequence series: the time series
+#    :returns: the range and the minimum/maximum values
+#    :rtype: 3-tuple (float, float, float)
+#    :raises InformError: if an error occurs within the <code class="docutils literal notranslate"><span class="pre">inform</span></code> C call</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="utils">
+<h3>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-betrack.utils.frames">
+<span id="frames"></span><h4>frames<a class="headerlink" href="#module-betrack.utils.frames" title="Permalink to this headline">¶</a></h4>
+<p>Description of the frames module..</p>
+<dl class="method">
+<dt id="betrack.utils.frames.as_gray">
+<code class="descclassname">frames.</code><code class="descname">as_gray</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.as_gray" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function has been made lazy. When passed
+a Slicerator, it will return a 
+Pipeline of the results. When passed 
+any other objects, its behavior is unchanged.</p>
+<blockquote>
+<div><p>Convert a frame to gray scale. This function implements lazy evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param frame:</th><td class="field-body">the frame to be converted</td>
+</tr>
+</tbody>
+</table>
+<p>:type <code class="docutils literal notranslate"><span class="pre">pims.frame.Frame</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>
+:returns: the frame in gray scale
+:rtype: <code class="docutils literal notranslate"><span class="pre">pims.frame.Frame</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.frames.crop">
+<code class="descclassname">frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>margins</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.crop" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function has been made lazy. When passed
+a Slicerator, it will return a 
+Pipeline of the results. When passed 
+any other objects, its behavior is unchanged.</p>
+<blockquote>
+<div><p>Crop a frame according to the passed margins ([xmin, xmax, ymin, ymax]). 
+This function implements lazy evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param frame:</th><td class="field-body">the frame to be converted</td>
+</tr>
+</tbody>
+</table>
+<p>:type <code class="docutils literal notranslate"><span class="pre">pims.frame.Frame</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>
+:param list margins: the new margins of the cropped frame 
+:returns: the cropped frame
+:rtype: <code class="docutils literal notranslate"><span class="pre">pims.frame.Frame</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.frames.flip">
+<code class="descclassname">frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>direction</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.flip" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function has been made lazy. When passed
+a Slicerator, it will return a 
+Pipeline of the results. When passed 
+any other objects, its behavior is unchanged.</p>
+<blockquote>
+<div><p>Convert a frame to gray scale. This function implements lazy evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param frame:</th><td class="field-body">the frame to be converted</td>
+</tr>
+</tbody>
+</table>
+<p>:type <code class="docutils literal notranslate"><span class="pre">pims.frame.Frame</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>
+:returns: the frame in gray scale
+:rtype: <code class="docutils literal notranslate"><span class="pre">pims.frame.Frame</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.frames.invert_colors">
+<code class="descclassname">frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>maxval=255</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.invert_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function has been made lazy. When passed
+a Slicerator, it will return a 
+Pipeline of the results. When passed 
+any other objects, its behavior is unchanged.</p>
+<p>#    Compute the range of a continuously-valued time series.
+#    
+#    :param sequence series: the time series
+#    :returns: the range and the minimum/maximum values
+#    :rtype: 3-tuple (float, float, float)
+#    :raises InformError: if an error occurs within the <code class="docutils literal notranslate"><span class="pre">inform</span></code> C call</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.frames.reverse_colors">
+<code class="descclassname">frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.reverse_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function has been made lazy. When passed
+a Slicerator, it will return a 
+Pipeline of the results. When passed 
+any other objects, its behavior is unchanged.</p>
+<blockquote>
+<div>Reverse the order of colors in a frame from RGB to BGR and from BGR to
+RGB.</div></blockquote>
+<p>#    :param sequence series: the time series
+#    :returns: the range and the minimum/maximum values
+#    :rtype: 3-tuple (float, float, float)
+#    :raises InformError: if an error occurs within the <code class="docutils literal notranslate"><span class="pre">inform</span></code> C call</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-betrack.utils.job">
+<span id="job"></span><h4>job<a class="headerlink" href="#module-betrack.utils.job" title="Permalink to this headline">¶</a></h4>
+<p>Description of the job module..</p>
+<dl class="class">
+<dt id="betrack.utils.job.Job">
+<em class="property">class </em><code class="descclassname">betrack.utils.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>video</em>, <em>outdir=''</em>, <em>margins=None</em>, <em>period=None</em>, <em>periodtype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="betrack.utils.job.Job.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>video</em>, <em>outdir=''</em>, <em>margins=None</em>, <em>period=None</em>, <em>periodtype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for the Job class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>video</strong> – path to video file</li>
+<li><strong>outdir</strong> – path of output directory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a job object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#betrack.utils.job.Job" title="betrack.utils.job.Job">Job</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.job.Job.str">
+<code class="descname">str</code><span class="sig-paren">(</span><em>ind=''</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.job.Job.load_frames">
+<code class="descname">load_frames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.load_frames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.job.Job.release_memory">
+<code class="descname">release_memory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.release_memory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.job.Job.export_trajectories">
+<code class="descname">export_trajectories</code><span class="sig-paren">(</span><em>exportas</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.export_trajectories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.job.Job.valid_margins">
+<code class="descname">valid_margins</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.valid_margins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.job.Job.preprocess_video">
+<code class="descname">preprocess_video</code><span class="sig-paren">(</span><em>invert=False</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.preprocess_video" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.job.configure_jobs">
+<code class="descclassname">job.</code><code class="descname">configure_jobs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.configure_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure and return a list of jobs. Return an empty list if
+no valid job is found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jobs</strong> – the list of jobs dictionaries to be configured</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">list of dict</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of jobs objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of Job</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-betrack.utils.message">
+<span id="message"></span><h4>message<a class="headerlink" href="#module-betrack.utils.message" title="Permalink to this headline">¶</a></h4>
+<p>Description of the message module..</p>
+<dl class="class">
+<dt id="betrack.utils.message.Message">
+<em class="property">class </em><code class="descclassname">betrack.utils.message.</code><code class="descname">Message</code><a class="headerlink" href="#betrack.utils.message.Message" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="betrack.utils.message.Message.disable">
+<code class="descname">disable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.message.Message.disable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.message.mprint">
+<code class="descclassname">message.</code><code class="descname">mprint</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.message.mprint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.message.wprint">
+<code class="descclassname">message.</code><code class="descname">wprint</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.message.wprint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.message.eprint">
+<code class="descclassname">message.</code><code class="descname">eprint</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.message.eprint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-betrack.utils.parser">
+<span id="parser"></span><h4>parser<a class="headerlink" href="#module-betrack.utils.parser" title="Permalink to this headline">¶</a></h4>
+<p>Description of the <cite>parser</cite> module..</p>
+<dl class="method">
+<dt id="betrack.utils.parser.open_configuration">
+<code class="descclassname">parser.</code><code class="descname">open_configuration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.open_configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.parser.parse_file">
+<code class="descclassname">parser.</code><code class="descname">parse_file</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and return a file name specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. 
+This function checks that the file specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – the source dictionary</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the key specifing the file name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a file name</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)">str</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IOError" title="(in Python v3.6)"><strong>IOError</strong></a> – if the file specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.parser.parse_directory">
+<code class="descclassname">parser.</code><code class="descname">parse_directory</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and return a directory name specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. 
+This function checks that the directory specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – the source dictionary</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the key specifing the directory name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a directory name</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)">str</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IOError" title="(in Python v3.6)"><strong>IOError</strong></a> – if the directory specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.parser.parse_int">
+<code class="descclassname">parser.</code><code class="descname">parse_int</code><span class="sig-paren">(</span><em>key</em>, <em>nentries=1</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and return an int or a list of int specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. 
+This function checks that the value or values specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is of 
+type int or list of int and raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – the source dictionary</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the key specifing the directory name</li>
+<li><strong>nentries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the number of integers to parse</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">read integer(s)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)">int</a> or list of int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.parser.parse_float">
+<code class="descclassname">parser.</code><code class="descname">parse_float</code><span class="sig-paren">(</span><em>key</em>, <em>nentries=1</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and return a float or a list of float specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. 
+This function checks that the value or values specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is of 
+type float or list of float and raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – the source dictionary</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the key specifing the directory name</li>
+<li><strong>nentries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the number of floats to parse</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">read float(s)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a> or list of float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.parser.parse_int_or_float">
+<code class="descclassname">parser.</code><code class="descname">parse_int_or_float</code><span class="sig-paren">(</span><em>key</em>, <em>nentries=1</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_int_or_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and return an int or float or a list of int or 
+float specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. This function checks that the value or values 
+specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is of type int or float or list of int or float and 
+raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – the source dictionary</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the key specifing the directory name</li>
+<li><strong>nentries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the number of floats to parse</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">read float(s)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a> or list of float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.parser.parse_bool">
+<code class="descclassname">parser.</code><code class="descname">parse_bool</code><span class="sig-paren">(</span><em>key</em>, <em>nentries=1</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_bool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and return a bool or a list of bool specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. 
+This function checks that the value or values specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is of 
+type bool or list of bool and raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – the source dictionary</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the key specifing the directory name</li>
+<li><strong>nentries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the number of booleans to parse</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">read boolean(s)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)">bool</a> or list of bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="betrack.utils.parser.parse_str">
+<code class="descclassname">parser.</code><code class="descname">parse_str</code><span class="sig-paren">(</span><em>key</em>, <em>nentries=1</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and return a str or a list of str 
+specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. This function checks that the value or values specified by 
+<code class="docutils literal notranslate"><span class="pre">key</span></code> is of type str or list of str and raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – the source dictionary</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the key specifing the directory name</li>
+<li><strong>nentries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the number of booleans to parse</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">read boolean(s)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)">bool</a> or list of bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2018, Gabriele Valentini.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
-      
-      |
-      <a href="_sources/development.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">betrack 0.1.0 documentation</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Gabriele Valentini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+    </div>
   </body>
 </html>
