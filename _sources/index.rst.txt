@@ -47,7 +47,7 @@ on OS X and currently tested using continuous integration on both linux and Wind
 and 3.6) and is distributed under the terms of the MIT license (see `LICENSE
 <https://github.com/gvalentini85/betrack-cli/blob/master/LICENSE>`_).
 
-.. attention::
+.. warning::
 
    *betrack* is currently under heavy development and most of its features are not yet
    available/implemented.
@@ -67,6 +67,4 @@ and 3.6) and is distributed under the terms of the MIT license (see `LICENSE
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+:ref:`genindex`, :ref:`modindex`, :ref:`search`

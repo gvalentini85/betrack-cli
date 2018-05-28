@@ -1,27 +1,22 @@
 
-
-<!doctype html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>betrack &#8212; betrack 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started" href="getstarted.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
+    <link rel="next" title="Getting Started" href="getstarted.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -37,9 +32,90 @@
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">betrack 0.1.0 documentation</a> &#187;</li> 
       </ul>
-    </div>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="betrack">
+<h1><em>betrack</em><a class="headerlink" href="#betrack" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://travis-ci.org/gvalentini85/betrack-cli"><img alt="Travis build status" src="https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://ci.appveyor.com/project/gvalentini85/betrack-cli"><img alt="Appveyor build status" src="https://ci.appveyor.com/api/projects/status/x0h7p5o3f3r04m6a/branch/master?svg=true" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/gvalentini85/betrack-cli"><img alt="Codecov coverage status" src="https://codecov.io/gh/gvalentini85/betrack-cli/branch/master/graph/badge.svg" /></a>
+<p>A major challenge in the study of collective animal behavior is to extract accurate
+data from recordings of experiments, label them according to the identity of the involved
+agents, and recognize the behaviors performed by these agents over time.</p>
+<p><em>betrack</em> aims to ease this challenge by providing a command line toolkit to support
+all the necessary steps in the above workflow. Given a set of video recordings of
+experiments performed in the same experimental setup, <em>betrack</em> allows to:</p>
+<ol class="arabic simple">
+<li>Track the identity and the position over time of agents.</li>
+<li>Label behaviors and automatically exctract images to build a database of the
+labelled behaviors.</li>
+<li>Train a deep learning classifier model based on a behavior database of labelled images.</li>
+<li>Use a trained classifier model to track, in addition to the identity and to the position
+over time of agents, also the behavior that agents perform over time.</li>
+<li>Customize the annotations shown in previously tracked videos with the aim to produce
+recordings suitable for research dissemination and scientific communication.</li>
+</ol>
+<p><em>betrack</em> is an open-source toolkit written in Python. It is cross-platform, developed
+on OS X and currently tested using continuous integration on both linux and Windows.
+<em>betrack</em> is compatible with both Python 2 (version 2.7) and Python 3 (versions 3.4, 3.5,
+and 3.6) and is distributed under the terms of the MIT license (see <a class="reference external" href="https://github.com/gvalentini85/betrack-cli/blob/master/LICENSE">LICENSE</a>).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p><em>betrack</em> is currently under heavy development and most of its features are not yet
+available/implemented.</p>
+<p class="last">As a rule of thumb, features that have been implemented and are available to the
+user are those already documented in this guide. That said, all available features
+are to be assumed as preliminary implementations and are largely untested.</p>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getstarted.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getstarted.html#suggested">Suggested</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getstarted.html#installation-using-pip">Installation using Pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getstarted.html#installation-from-source">Installation from Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#preliminary-concepts">Preliminary Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#track-the-position-of-agents">Track the Position of Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#build-a-database-of-behaviors">Build a Database of Behaviors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#train-a-behavior-classifier-model">Train a Behavior Classifier Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#track-the-behavior-of-agents">Track the Behavior of Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#customize-video-annotations">Customize Video Annotations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#editable-installation">Editable Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#generate-documentation">Generate Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#deploy-to-pypi">Deploy to PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#module-betrack.cli">API Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a>, <a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a>, <a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/betrack-logo.png" alt="Logo"/>
+            </a></p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#"><em>betrack</em></a><ul>
@@ -72,83 +148,6 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="betrack">
-<h1><em>betrack</em><a class="headerlink" href="#betrack" title="Permalink to this headline">¶</a></h1>
-<a class="reference external image-reference" href="https://travis-ci.org/gvalentini85/betrack-cli"><img alt="Travis build status" src="https://travis-ci.org/gvalentini85/betrack-cli.svg?branch=master" /></a>
-<a class="reference external image-reference" href="https://ci.appveyor.com/project/gvalentini85/betrack-cli"><img alt="Appveyor build status" src="https://ci.appveyor.com/api/projects/status/x0h7p5o3f3r04m6a/branch/master?svg=true" /></a>
-<a class="reference external image-reference" href="https://codecov.io/gh/gvalentini85/betrack-cli"><img alt="Codecov coverage status" src="https://codecov.io/gh/gvalentini85/betrack-cli/branch/master/graph/badge.svg" /></a>
-<p>A major challenge in the study of collective animal behavior is to extract accurate
-data from recordings of experiments, label them according to the identity of the involved
-agents, and recognize the behaviors performed by these agents over time.</p>
-<p><em>betrack</em> aims to ease this challenge by providing a command line toolkit to support
-all the necessary steps in the above workflow. Given a set of video recordings of
-experiments performed in the same experimental setup, <em>betrack</em> allows to:</p>
-<ol class="arabic simple">
-<li>Track the identity and the position over time of agents.</li>
-<li>Label behaviors and automatically exctract images to build a database of the
-labelled behaviors.</li>
-<li>Train a deep learning classifier model based on a behavior database of labelled images.</li>
-<li>Use a trained classifier model to track, in addition to the identity and to the position
-over time of agents, also the behavior that agents perform over time.</li>
-<li>Customize the annotations shown in previously tracked videos with the aim to produce
-recordings suitable for research dissemination and scientific communication.</li>
-</ol>
-<p><em>betrack</em> is an open-source toolkit written in Python. It is cross-platform, developed
-on OS X and currently tested using continuous integration on both linux and Windows.
-<em>betrack</em> is compatible with both Python 2 (version 2.7) and Python 3 (versions 3.4, 3.5,
-and 3.6) and is distributed under the terms of the MIT license (see <a class="reference external" href="https://github.com/gvalentini85/betrack-cli/blob/master/LICENSE">LICENSE</a>).</p>
-<div class="admonition attention">
-<p class="first admonition-title">Attention</p>
-<p><em>betrack</em> is currently under heavy development and most of its features are not yet
-available/implemented.</p>
-<p class="last">As a rule of thumb, features that have been implemented and are available to the
-user are those already documented in this guide. That said, all available features
-are to be assumed as preliminary implementations and are largely untested.</p>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getstarted.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getstarted.html#installation-using-pip">Installation using Pip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getstarted.html#installation-from-source">Installation from Source</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#preliminary-concepts">Preliminary Concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#track-the-position-of-agents">Track the Position of Agents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#build-a-database-of-behaviors">Build a Database of Behaviors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#train-a-behavior-classifier-model">Train a Behavior Classifier Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#track-the-behavior-of-agents">Track the Behavior of Agents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#customize-video-annotations">Customize Video Annotations</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="development.html#editable-installation-from-source">Editable Installation from Source</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development.html#module-betrack.cli">API Documentation</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
-</div>
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -168,7 +167,7 @@ are to be assumed as preliminary implementations and are largely untested.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Gabriele Valentini.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

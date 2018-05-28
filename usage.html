@@ -1,28 +1,23 @@
 
-
-<!doctype html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Usage &#8212; betrack 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Development" href="development.html" />
-    <link rel="prev" title="Getting Started" href="getstarted.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
+    <link rel="prev" title="Getting Started" href="getstarted.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -41,73 +36,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">betrack 0.1.0 documentation</a> &#187;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Usage</a><ul>
-<li><a class="reference internal" href="#preliminary-concepts">Preliminary Concepts</a><ul>
-<li><a class="reference internal" href="#examples">Examples</a></li>
-<li><a class="reference internal" href="#list-of-attributes">List of attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#track-the-position-of-agents">Track the Position of Agents</a><ul>
-<li><a class="reference internal" href="#particles-examples">Examples</a></li>
-<li><a class="reference internal" href="#particles-attributes">List of attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#build-a-database-of-behaviors">Build a Database of Behaviors</a><ul>
-<li><a class="reference internal" href="#minimal-example">Minimal example</a></li>
-<li><a class="reference internal" href="#list-of-all-attributes">List of all attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#train-a-behavior-classifier-model">Train a Behavior Classifier Model</a><ul>
-<li><a class="reference internal" href="#id4">Minimal example</a></li>
-<li><a class="reference internal" href="#id5">List of all attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#track-the-behavior-of-agents">Track the Behavior of Agents</a><ul>
-<li><a class="reference internal" href="#id6">Minimal example</a></li>
-<li><a class="reference internal" href="#id7">List of all attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#customize-video-annotations">Customize Video Annotations</a><ul>
-<li><a class="reference internal" href="#id8">Minimal example</a></li>
-<li><a class="reference internal" href="#id9">List of all attributes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="getstarted.html"
-                        title="previous chapter">Getting Started</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="development.html"
-                        title="next chapter">Development</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/usage.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -244,7 +173,7 @@ Default value: no subperiod selected.</td>
 <td>List of two integers or floats, <cite>[&lt;first-minute&gt;, &lt;last-minute&gt;]</cite>,
 defining a subperiod (in minutes) of the video to be processed while
 the remaining part of the video will be ignored by <em>betrack</em>.
-Default value: no subperiod selected.s</td>
+Default value: no subperiod selected.</td>
 </tr>
 </tbody>
 </table>
@@ -260,6 +189,11 @@ mutually exclusive!</p>
 <p>The first command that a <em>betrack</em> user generally encounter is the <cite>track-particles</cite>
 command. This command let a user track the identity and the position over time of
 the agents in a set of videos.</p>
+<p>The <cite>track-particles</cite> command can be issued by typing in a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ betrack track-particles --configuration<span class="o">=</span>&lt;file&gt;
+</pre></div>
+</div>
+<p>where <cite>&lt;file&gt;</cite> represent the path to a YAML configuration file.</p>
 <p>When the <cite>track-particles</cite> command is issued, <em>betrack</em> performs the same routine for
 each defined job: it preprocesses the video, locates the features in each frame,
 links features across frames to recognize particles, filters the recognized particles,
@@ -268,62 +202,89 @@ performed using the Python <a class="reference external" href="https://soft-matt
 popular Crocker–Grier algorithm <a class="reference internal" href="#cro1996" id="id1">[Cro1996]</a>. As a matter of fact, the <cite>track-particles</cite>
 command is a wrapper of the <em>trackpy</em> module designed to make the use of this
 module simple and efficient while maintaining the flexibility of its underlying
-engine.</p>
+engine. Additional information with respect to this guide on how to set parameters
+of the locate, link, and filter functionalities can be found in the
+trackpy <a class="reference external" href="http://soft-matter.github.io/trackpy/v0.4.1/api.html">API</a> and
+<a class="reference external" href="http://soft-matter.github.io/trackpy/v0.4.1/tutorial.html">tutorials</a>.</p>
 <p>The <cite>track-particles</cite> command can be used as a standalone command, if only identity
 and position of agents are of interest. More importantly, it forms the basis to build
 a behavior classifier model by pre-labelling videos from which images can be
 extracted to create a training dataset of behaviors.</p>
-<p>The <cite>track-particles</cite> command can be issued by typing in a terminal:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ betrack track-particles --configuration<span class="o">=</span>&lt;file&gt;
-</pre></div>
-</div>
-<p>where <cite>&lt;file&gt;</cite> represent the path to a YAML configuration file.</p>
+<p>See also commands <a class="reference internal" href="#sample"><span class="std std-ref">sample-behaviors</span></a>, <a class="reference internal" href="#train"><span class="std std-ref">train-classifier</span></a>,
+<a class="reference internal" href="#behaviors"><span class="std std-ref">track-behaviors</span></a>, and <a class="reference internal" href="#annotate"><span class="std std-ref">annotate-video</span></a>.</p>
 <div class="section" id="particles-examples">
 <span id="id2"></span><h3>Examples<a class="headerlink" href="#particles-examples" title="Permalink to this headline">¶</a></h3>
+<p>Minimal working example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">tp-locate-diameter</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">13</span>
+<span class="l l-Scalar l-Scalar-Plain">tp-link-searchrange</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
+
+<span class="l l-Scalar l-Scalar-Plain">jobs</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">video</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">~/path/to/video/file.avi</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="particles-attributes">
 <span id="id3"></span><h3>List of attributes<a class="headerlink" href="#particles-attributes" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><cite>tp-featuresdark</cite></td>
-<td>&#160;</td>
+<tr class="row-odd"><td><cite>tp-exportas</cite></td>
+<td>String giving the format used when exporting the tracked
+trajectories. Accepted values are <cite>‘hdf’</cite>, <cite>‘csv’</cite>, <cite>‘json’</cite>.
+Default value: <cite>‘csv’</cite>.</td>
 </tr>
-<tr class="row-even"><td><cite>tp-exportas</cite></td>
-<td>&#160;</td>
+<tr class="row-even"><td><cite>tp-locate-diameter</cite></td>
+<td>Odd integer giving the size of the feature in pixels which is
+assumed the same in each dimension. <strong>Required attribute!</strong></td>
 </tr>
-<tr class="row-odd"><td><cite>tp-locate-diameter</cite></td>
-<td>&#160;</td>
+<tr class="row-odd"><td><cite>tp-locate-featuresdark</cite></td>
+<td>Boolean specifying if the features of interest are dark or
+bright. Used to determine whether to invert the color scale
+of the video or not. Default value: <cite>False</cite>.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-locate-minmass</cite></td>
-<td>&#160;</td>
+<td>Float or integer giving the minimum integrated brightness of
+a particle. Default value: <cite>100</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-locate-maxsize</cite></td>
-<td>&#160;</td>
+<td>Float or integer giving the maximum radius-of-gyration of the
+brightness of a particle. Default value: no maximum
+radius-of-gyration set.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-locate-separation</cite></td>
-<td>&#160;</td>
+<td>Float giving the minimum separation between features. Default
+value: <cite>tp-locate-diameter + 1</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-locate-noisesize</cite></td>
-<td>&#160;</td>
+<td>Float giving the width of the Gaussian blurring kernel in
+pixels. Default value: <cite>1</cite>.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-locate-smoothingsize</cite></td>
-<td>&#160;</td>
+<td>The size in pixels of the square kernel used in the rolling
+average smoothing. Default value: <cite>tp-locate-diameter</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-locate-threshold</cite></td>
-<td>&#160;</td>
+<td>Integer or float giving the threshold based on the results of
+the bandpass filter below which to clip features. Default
+value: <cite>1</cite> and <cite>1/255</cite>, respectively, for integer and float
+videos.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-locate-percentile</cite></td>
-<td>&#160;</td>
+<td>Float giving the percentile of pixels to be used as a
+threshold when selecting features with peaks brighter than this
+percentile. Default value: <cite>64.0</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-locate-topn</cite></td>
-<td>&#160;</td>
+<td>Integer giving the maximum number of features above
+<cite>tp-locate-minmass</cite> to be returned. Default value: return all
+features above <cite>tp-locate-minmass</cite>.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-locate-preprocess</cite></td>
-<td>&#160;</td>
+<td>Boolean specifying if the video frames should be preprocessed
+with a bandpass filter or not. Default value: <cite>True</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-link-searchrange</cite></td>
 <td>&#160;</td>
@@ -354,39 +315,39 @@ extracted to create a training dataset of behaviors.</p>
 </div>
 </div>
 <div class="section" id="build-a-database-of-behaviors">
-<h2>Build a Database of Behaviors<a class="headerlink" href="#build-a-database-of-behaviors" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="minimal-example">
-<h3>Minimal example<a class="headerlink" href="#minimal-example" title="Permalink to this headline">¶</a></h3>
+<span id="sample"></span><h2>Build a Database of Behaviors<a class="headerlink" href="#build-a-database-of-behaviors" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sample-examples">
+<span id="id4"></span><h3>Examples<a class="headerlink" href="#sample-examples" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="list-of-all-attributes">
-<h3>List of all attributes<a class="headerlink" href="#list-of-all-attributes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="sample-attributes">
+<span id="id5"></span><h3>List of attributes<a class="headerlink" href="#sample-attributes" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="train-a-behavior-classifier-model">
-<h2>Train a Behavior Classifier Model<a class="headerlink" href="#train-a-behavior-classifier-model" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id4">
-<h3>Minimal example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<span id="train"></span><h2>Train a Behavior Classifier Model<a class="headerlink" href="#train-a-behavior-classifier-model" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="train-examples">
+<span id="id6"></span><h3>Examples<a class="headerlink" href="#train-examples" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id5">
-<h3>List of all attributes<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="train-attributes">
+<span id="id7"></span><h3>List of attributes<a class="headerlink" href="#train-attributes" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="track-the-behavior-of-agents">
-<h2>Track the Behavior of Agents<a class="headerlink" href="#track-the-behavior-of-agents" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id6">
-<h3>Minimal example<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<span id="behaviors"></span><h2>Track the Behavior of Agents<a class="headerlink" href="#track-the-behavior-of-agents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="behaviors-examples">
+<span id="id8"></span><h3>Examples<a class="headerlink" href="#behaviors-examples" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id7">
-<h3>List of all attributes<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="behaviors-attributes">
+<span id="id9"></span><h3>List of attributes<a class="headerlink" href="#behaviors-attributes" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="customize-video-annotations">
-<h2>Customize Video Annotations<a class="headerlink" href="#customize-video-annotations" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id8">
-<h3>Minimal example<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<span id="annotate"></span><h2>Customize Video Annotations<a class="headerlink" href="#customize-video-annotations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="annotate-examples">
+<span id="id10"></span><h3>Examples<a class="headerlink" href="#annotate-examples" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id9">
-<h3>List of all attributes<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="annotate-attributes">
+<span id="id11"></span><h3>List of attributes<a class="headerlink" href="#annotate-attributes" title="Permalink to this headline">¶</a></h3>
 <p class="rubric">References</p>
 <table class="docutils citation" frame="void" id="cro1996" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -402,6 +363,75 @@ for colloidal studies</em>. Journal of colloid and interface science,
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/betrack-logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#preliminary-concepts">Preliminary Concepts</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#list-of-attributes">List of attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#track-the-position-of-agents">Track the Position of Agents</a><ul>
+<li><a class="reference internal" href="#particles-examples">Examples</a></li>
+<li><a class="reference internal" href="#particles-attributes">List of attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#build-a-database-of-behaviors">Build a Database of Behaviors</a><ul>
+<li><a class="reference internal" href="#sample-examples">Examples</a></li>
+<li><a class="reference internal" href="#sample-attributes">List of attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#train-a-behavior-classifier-model">Train a Behavior Classifier Model</a><ul>
+<li><a class="reference internal" href="#train-examples">Examples</a></li>
+<li><a class="reference internal" href="#train-attributes">List of attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#track-the-behavior-of-agents">Track the Behavior of Agents</a><ul>
+<li><a class="reference internal" href="#behaviors-examples">Examples</a></li>
+<li><a class="reference internal" href="#behaviors-attributes">List of attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customize-video-annotations">Customize Video Annotations</a><ul>
+<li><a class="reference internal" href="#annotate-examples">Examples</a></li>
+<li><a class="reference internal" href="#annotate-attributes">List of attributes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="getstarted.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="development.html"
+                        title="next chapter">Development</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -426,7 +456,7 @@ for colloidal studies</em>. Journal of colloid and interface science,
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Gabriele Valentini.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>
