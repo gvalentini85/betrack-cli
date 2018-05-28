@@ -40,9 +40,9 @@ class TrackParticles(BetrackCommand):
         super(TrackParticles, self).__init__(options, *args, **kwargs)
         
         self.jobs                      = []      # List of jobs to process
-        self.featuresdark              = False   # True if features in the video are dark
-        self.exportas                  = 'hdf'
+        self.exportas                  = 'csv'
 
+        self.locate_featuresdark       = False   # True if features in the video are dark
         self.locate_diameter           = None
         self.locate_minmass            = 100
         self.locate_maxsize            = None
@@ -50,7 +50,7 @@ class TrackParticles(BetrackCommand):
         self.locate_noisesize          = 1
         self.locate_smoothingsize      = None
         self.locate_threshold          = None
-        self.locate_percentile         = 64
+        self.locate_percentile         = 64.0
         self.locate_topn               = None
         self.locate_preprocess         = True
 
@@ -77,13 +77,6 @@ class TrackParticles(BetrackCommand):
 
         # Parse tracker configuration..
         try:
-            self.featuresdark = parse_bool(config, 'tp-featuresdark')
-        except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
-
-        try:
             self.exportas = parse_str(config, 'tp-exportas')
             if not self.exportas in ['hdf', 'csv', 'json']:
                 raise ValueError('<tp-exportas> must be either \'hdf\', \'csv\', or \'json\'')
@@ -103,6 +96,13 @@ class TrackParticles(BetrackCommand):
                 eprint('Invalid attribute: ', err[0], '.', sep='')
             sys.exit()
 
+        try:
+            self.locate_featuresdark = parse_bool(config, 'tp-locate-featuresdark')
+        except ValueError as err:
+            if err[0] != 'attribute not found!':
+                eprint('Invalid attribute: ', err[0], '.', sep='')
+                sys.exit()                
+        
         try:
             self.locate_minmass = parse_int_or_float(config, 'tp-locate-minmass')
             if self.locate_minmass < 0:
@@ -362,20 +362,6 @@ class TrackParticles(BetrackCommand):
     def run(self):
         """
         Run the `track-particle` command.
-#    Compute the range of a continuously-valued time series.
-#    
-#    Examples: ::
-#    
-#        >>> from pyinform import utils
-#        >>> utils.series_range([0,1,2,3,4,5])
-#        (5, 0, 5)
-#        >>> utils.series_range([-0.1, 8.5, 0.02, -6.3])
-#        (14.8, -6.3, 8.5)
-#    :param sequence series: the time series
-#    :returns: the range and the minimum/maximum values
-#    :rtype: 3-tuple (float, float, float)
-#    :raises InformError: if an error occurs within the ``inform`` C call
-
         """
         
         trackpy.quiet()
@@ -406,7 +392,7 @@ class TrackParticles(BetrackCommand):
             # Preprocess video..
             mprint('...Preprocessing video..', end='\r')
             try:
-                job.preprocess_video(invert=self.featuresdark)
+                job.preprocess_video(invert=self.locate_featuresdark)
             except ValueError as err:                
                 wprint('Preprocessing video: ', err[0], '. Skipping job.', sep='')
                 continue            

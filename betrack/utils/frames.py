@@ -4,7 +4,20 @@
 #------------------------------------------------------------------------------#
 
 """
-Description of the frames module..
+The module :py:mod:`~betrack.utils.frames` provides a set of utilities to
+preprocess video frames. 
+
+These utilities include functions to convert color frames to gray scale, 
+:py:func:`~betrack.utils.frames.as_gray`, 
+to crop frames, :py:func:`~betrack.utils.frames.crop`, 
+to flip frames around one or two axis, :py:func:`~betrack.utils.frames.flip`, 
+to invert the colors of frames, :py:func:`~betrack.utils.frames.invert_colors`, 
+and to reverse the order of the frames columns giving each color channe,
+:py:func:`~betrack.utils.frames.reverse_colors`.
+
+.. note:: All functions in this module implement lazy evaluation. When passed
+          a Slicerator, they will return a Pipeline of the results. 
+          When passed any other objects, their behavior is unchanged.
 """
 
 from pims import pipeline
@@ -15,8 +28,8 @@ def as_gray(frame):
     Convert a frame to gray scale. This function implements lazy evaluation.
 
     :param frame: the frame to be converted
-    :type ``pims.frame.Frame`` or ``numpy.ndarray``
-    :returns: the frame in gray scale
+    :type frame: ``pims.frame.Frame`` or ``numpy.ndarray``
+    :returns: the frame converted in gray scale
     :rtype: ``pims.frame.Frame`` or ``numpy.ndarray``
     """
     
@@ -35,7 +48,7 @@ def crop(frame, margins):
     This function implements lazy evaluation.
 
     :param frame: the frame to be converted
-    :type ``pims.frame.Frame`` or ``numpy.ndarray``
+    :type series: ``pims.frame.Frame`` or ``numpy.ndarray``
     :param list margins: the new margins of the cropped frame 
     :returns: the cropped frame
     :rtype: ``pims.frame.Frame`` or ``numpy.ndarray``
@@ -49,7 +62,7 @@ def flip(frame, direction):
     Convert a frame to gray scale. This function implements lazy evaluation.
 
     :param frame: the frame to be converted
-    :type ``pims.frame.Frame`` or ``numpy.ndarray``
+    :type frame: ``pims.frame.Frame`` or ``numpy.ndarray``
     :returns: the frame in gray scale
     :rtype: ``pims.frame.Frame`` or ``numpy.ndarray``
     """
@@ -59,12 +72,7 @@ def flip(frame, direction):
 @pipeline
 def invert_colors(frame, maxval=255):
     """
-#    Compute the range of a continuously-valued time series.
-#    
-#    :param sequence series: the time series
-#    :returns: the range and the minimum/maximum values
-#    :rtype: 3-tuple (float, float, float)
-#    :raises InformError: if an error occurs within the ``inform`` C call
+
     """
         
     return maxval - frame[:, :]
@@ -75,10 +83,7 @@ def reverse_colors(frame):
     """
     Reverse the order of colors in a frame from RGB to BGR and from BGR to
     RGB.
-#    :param sequence series: the time series
-#    :returns: the range and the minimum/maximum values
-#    :rtype: 3-tuple (float, float, float)
-#    :raises InformError: if an error occurs within the ``inform`` C call
+
     """
     
     return frame[:, :, ::-1]

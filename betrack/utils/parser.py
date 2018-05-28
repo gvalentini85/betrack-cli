@@ -30,13 +30,14 @@ def open_configuration(filename):
         # Raise exception
         raise IOError(errno.ENOENT, 'file not found', filename)
 
+    
 def parse_file(src, key):
     """
-    Parse a dictionary ``src`` and return a file name specified by ``key``. 
+    Parses a dictionary ``src`` and returns the file name specified by ``key``. 
     This function checks that the file specified by ``key`` exists.
 
     :param dict src: the source dictionary
-    :param str key: the key specifing the file name
+    :param str key: the key specifing the file name to be parsed
     :returns: a file name
     :rtype: str
     :raises IOError: if the file specified by ``key`` is not found 
@@ -55,11 +56,11 @@ def parse_file(src, key):
 
 def parse_directory(src, key):
     """
-    Parse a dictionary ``src`` and return a directory name specified by ``key``. 
+    Parses a dictionary ``src`` and returns the directory name specified by ``key``. 
     This function checks that the directory specified by ``key`` exists.
 
     :param dict src: the source dictionary
-    :param str key: the key specifing the directory name
+    :param str key: the key specifing the directory name to be parsed
     :returns: a directory name
     :rtype: str
     :raises IOError: if the directory specified by ``key`` is not found 
@@ -77,16 +78,18 @@ def parse_directory(src, key):
 
 def parse_int(src, key, nentries=1):
     """
-    Parse a dictionary ``src`` and return an int or a list of int specified by ``key``. 
-    This function checks that the value or values specified by ``key`` is of 
-    type int or list of int and raises a ``ValueError`` otherwise.
+    Parses a dictionary ``src`` and returns a number ``nentries`` of integerss 
+    specified by ``key``. This function checks that the value or values specified 
+    by ``key`` are of type integer and raises a ``ValueError`` otherwise.
 
     :param dict src: the source dictionary
-    :param str key: the key specifing the directory name
-    :param int nentries: the number of integers to parse
-    :returns: read integer(s)
-    :rtype: int or list of int
-    :raises ValueError: if the read value/values are not valid
+    :param str key: the key specifing the integers to be parsed
+    :param int nentries: the number of integers to be parsed
+    :returns: parsed integer(s)
+    :rtype: int
+    :rtype: list
+    :raises ValueError: if the parsed values are not valid
+    :raises ValueError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:

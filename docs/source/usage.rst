@@ -146,7 +146,7 @@ List of attributes
 `period-minute`   List of two integers or floats, `[<first-minute>, <last-minute>]`,
                   defining a subperiod (in minutes) of the video to be processed while
 		  the remaining part of the video will be ignored by *betrack*.
-		  Default value: no subperiod selected.s
+		  Default value: no subperiod selected.
 ===============   =======================================================================
 
 .. note:: Attributes `period-frame`, `period-second`, and `period-minute` are
@@ -163,6 +163,14 @@ The first command that a *betrack* user generally encounter is the `track-partic
 command. This command let a user track the identity and the position over time of
 the agents in a set of videos.
 
+The `track-particles` command can be issued by typing in a terminal:
+
+.. code-block:: bash
+
+   $ betrack track-particles --configuration=<file>
+
+where `<file>` represent the path to a YAML configuration file.
+
 When the `track-particles` command is issued, *betrack* performs the same routine for
 each defined job: it preprocesses the video, locates the features in each frame,
 links features across frames to recognize particles, filters the recognized particles,
@@ -172,21 +180,18 @@ performed using the Python `trackpy
 popular Crocker–Grier algorithm [Cro1996]_. As a matter of fact, the `track-particles`
 command is a wrapper of the *trackpy* module designed to make the use of this
 module simple and efficient while maintaining the flexibility of its underlying
-engine.
-
+engine. Additional information with respect to this guide on how to set parameters
+of the locate, link, and filter functionalities can be found in the
+trackpy `API <http://soft-matter.github.io/trackpy/v0.4.1/api.html>`_ and
+`tutorials <http://soft-matter.github.io/trackpy/v0.4.1/tutorial.html>`_.
 
 The `track-particles` command can be used as a standalone command, if only identity
 and position of agents are of interest. More importantly, it forms the basis to build
 a behavior classifier model by pre-labelling videos from which images can be
 extracted to create a training dataset of behaviors.
 
-The `track-particles` command can be issued by typing in a terminal:
-
-.. code-block:: bash
-
-   $ betrack track-particles --configuration=<file>
-
-where `<file>` represent the path to a YAML configuration file.
+See also commands :ref:`sample-behaviors <sample>`, :ref:`train-classifier <train>`,
+:ref:`track-behaviors <behaviors>`, and :ref:`annotate-video <annotate>`.
 
 
 .. _particles-examples:
@@ -194,6 +199,15 @@ where `<file>` represent the path to a YAML configuration file.
 Examples
 --------
 
+Minimal working example:
+
+.. code-block:: yaml
+		
+   tp-locate-diameter: 13
+   tp-link-searchrange: 20
+   
+   jobs:
+     - video: ~/path/to/video/file.avi
 
 
 .. _particles-attributes:
@@ -202,29 +216,48 @@ List of attributes
 ------------------
 
 =========================   ==============================================================
-`tp-featuresdark`
+`tp-exportas`               String giving the format used when exporting the tracked
+                            trajectories. Accepted values are `'hdf'`, `'csv'`, `'json'`.
+			    Default value: `'csv'`.
+			    
+`tp-locate-diameter`        Odd integer giving the size of the feature in pixels which is
+                            assumed the same in each dimension. **Required attribute!**
 
-`tp-exportas`
+`tp-locate-featuresdark`    Boolean specifying if the features of interest are dark or
+                            bright. Used to determine whether to invert the color scale
+			    of the video or not. Default value: `False`.
 
-`tp-locate-diameter`
+`tp-locate-minmass`         Float or integer giving the minimum integrated brightness of
+                            a particle. Default value: `100`.
 
-`tp-locate-minmass`
+`tp-locate-maxsize`         Float or integer giving the maximum radius-of-gyration of the
+                            brightness of a particle. Default value: no maximum
+			    radius-of-gyration set.
 
-`tp-locate-maxsize`
+`tp-locate-separation`      Float giving the minimum separation between features. Default
+                            value: `tp-locate-diameter + 1`.
 
-`tp-locate-separation`
+`tp-locate-noisesize`       Float giving the width of the Gaussian blurring kernel in
+                            pixels. Default value: `1`.
 
-`tp-locate-noisesize`
+`tp-locate-smoothingsize`   The size in pixels of the square kernel used in the rolling
+                            average smoothing. Default value: `tp-locate-diameter`.
 
-`tp-locate-smoothingsize`
+`tp-locate-threshold`       Integer or float giving the threshold based on the results of
+                            the bandpass filter below which to clip features. Default
+			    value: `1` and `1/255`, respectively, for integer and float
+			    videos.
 
-`tp-locate-threshold`
+`tp-locate-percentile`      Float giving the percentile of pixels to be used as a
+                            threshold when selecting features with peaks brighter than this
+			    percentile. Default value: `64.0`.
 
-`tp-locate-percentile`
+`tp-locate-topn`            Integer giving the maximum number of features above
+                            `tp-locate-minmass` to be returned. Default value: return all
+                            features above `tp-locate-minmass`.
 
-`tp-locate-topn`
-
-`tp-locate-preprocess`
+`tp-locate-preprocess`      Boolean specifying if the video frames should be preprocessed
+                            with a bandpass filter or not. Default value: `True`.
 
 `tp-link-searchrange`
 
@@ -244,48 +277,68 @@ List of attributes
 =========================   ==============================================================
 
 
+.. _sample:
 
 Build a Database of Behaviors
 =============================
 
-Minimal example
----------------
+.. _sample-examples:
 
-List of all attributes
-----------------------
+Examples
+--------
+
+.. _sample-attributes:
+
+List of attributes
+------------------
 
 
+
+.. _train:
 
 Train a Behavior Classifier Model
 =================================
 
-Minimal example
----------------
+.. _train-examples:
 
-List of all attributes
-----------------------
+Examples
+--------
 
+.. _train-attributes:
 
+List of attributes
+------------------
+
+.. _behaviors:
 
 Track the Behavior of Agents
 ============================
 
-Minimal example
----------------
+.. _behaviors-examples:
 
-List of all attributes
-----------------------
+Examples
+--------
 
+.. _behaviors-attributes:
 
+List of attributes
+------------------
+
+.. _annotate:
 
 Customize Video Annotations
 ===========================
 
-Minimal example
----------------
+.. _annotate-examples:
 
-List of all attributes
-----------------------
+Examples
+--------
+
+.. _annotate-attributes:
+
+List of attributes
+------------------
+
 
 .. rubric:: References
 

@@ -4,7 +4,13 @@
 #------------------------------------------------------------------------------#
 
 """
-Description of the job module..
+The module :py:mod:`~betrack.utils.job` defines a container for all 
+information pertinent to one specific job (i.e., job-specific attributes) by
+means of the class :py:class:`~betrack.utils.job.Job` and a set of
+methods that support the execution of a job. 
+
+This module also provides a function, :py:func:`~betrack.utils.job.configure_jobs`,
+to initialize a list of jobs according to a configuration file.
 """
 
 
@@ -26,8 +32,11 @@ class Job:
         """
         Constructor for the Job class.
 
-        :param video: path to video file 
-        :param outdir: path of output directory
+        :param str video: path to video file 
+        :param str outdir: path of output directory
+        :param list margins: new margins to crop the video
+        :param list period: selected period of the video to be processed
+        :param str periodtype: type of the passed period (``frame``, ``second``, ``minute``)
         :returns: a job object
         :rtype: Job
 
@@ -55,6 +64,12 @@ class Job:
 
     def str(self, ind=''):
         """
+        Returns a string representation of a Job object useful to print 
+        information on screen.
+
+        :param str ind: String used for indentation of new lines.
+        :returns: a String representing the Job
+        :rtype: str 
         """
         
         rval  = ind + 'Video file: '       + self.video
@@ -70,6 +85,11 @@ class Job:
     
     def load_frames(self):
         """
+        This function loads the video frames, determines the shape and rate of
+        frames and, if necessary, select a subperiod of the video according to 
+        attributes ``tp-period-frame``, ``tp-period-second``, or ``tp-period-minute``.
+
+        :raises IOError: if the video file is not found
         """
 
         # Load video..
@@ -94,6 +114,13 @@ class Job:
         
     def release_memory(self):
         """
+        This function attempts to release the memory allocated by the original and
+        processed video frames. It also deletes the temporary storage file created by
+        :py:func:`~betrack.commands.trackparticles.TrackParticles.locate_features`.
+
+        .. note:: Memory is effectively released only if no additional variables have
+                  been created that point to the frames and/or to the processed frames 
+                  of the video.       
         """
 
         self.frames  = None
@@ -101,8 +128,12 @@ class Job:
         if isfile(self.h5storage): remove(self.h5storage)
 
 
-    def export_trajectories(self, exportas):
+    def export_trajectories(self, exportas):        
         """
+        Export a ``DataFrame`` of the linked trajectories to a file. Possible
+        output formats are ``'csv'``, ``'hdf'``, and ``'json'``.
+
+        :param str exportas: The format used to export the data
         """
 
         # Convert trajectories to the size of the original video..
@@ -127,6 +158,13 @@ class Job:
 
     def valid_margins(self):
         """
+        Checks the validity of the margins set to crop the video frames with
+        respect to the shape of the frames. That is, checks if the margins are
+        within the shape of the frames.
+
+        :returns: whether the margins are valid or not
+        :rtype: bool
+        :raise TypeError: if the video frames are not loaded
         """
 
         if self.frames is None:
@@ -157,6 +195,15 @@ class Job:
 
     def preprocess_video(self, invert=False):
         """
+        This function performs a preprocessing of the video frames according to the
+        settings in the configuration file. It crops, converts to gray scale, and
+        inverts the colors of the video.
+
+        :param bool invert: whether to invert the colors of the frame of not
+        :raise TypeError: if the video frames are not loaded
+        :raise ValueError: if the margins are not valid
+        :raise ValueError: if the color format is not recognized (number of channels)
+        :raise ValueError: if the color dtype is not supported
         """
         
         # Initialize pframes..
@@ -190,13 +237,14 @@ class Job:
 
 def configure_jobs(jobs):
     """
-    Configure and return a list of jobs. Return an empty list if
-    no valid job is found.
+    Configures and returns a list of :py:class:`~betrack.utils.job.Job` objects.
+    Jobs whose configuration is found to be invalid are skipped and not added to
+    the list. If no valid job is found in the dictionaries, this function 
+    returns an empty list.
 
-    :param jobs: the list of jobs dictionaries to be configured
-    :type: list of dict
-    :returns: a list of jobs objects
-    :rtype: list of Job
+    :param list jobs: the list of job dictionaries to be configured
+    :returns: a list of :py:class:`~betrack.utils.job.Job` objects
+    :rtype: list
     """
 
 

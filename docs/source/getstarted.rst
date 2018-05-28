@@ -4,6 +4,11 @@ Getting Started
 Requirements
 ------------
 
+Suggested
+---------
+
+* `numba` to speed up trackpy!
+
 Installation using Pip
 ----------------------
 
