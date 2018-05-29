@@ -26,6 +26,7 @@ from betrack.utils.frames  import as_gray, crop, invert_colors
 
 class Job:
     """
+    TODO: write this docstring!
     """
 
     def __init__(self, video, outdir='', margins=None, period=None, periodtype=None):
@@ -115,7 +116,8 @@ class Job:
     def release_memory(self):
         """
         This function attempts to release the memory allocated by the original and
-        processed video frames. It also deletes the temporary storage file created by
+        processed video frames and by the tracked particles data structure. 
+        It also deletes the temporary storage file created by
         :py:func:`~betrack.commands.trackparticles.TrackParticles.locate_features`.
 
         .. note:: Memory is effectively released only if no additional variables have
@@ -125,6 +127,7 @@ class Job:
 
         self.frames  = None
         self.pframes = None
+        self.dflink  = None
         if isfile(self.h5storage): remove(self.h5storage)
 
 

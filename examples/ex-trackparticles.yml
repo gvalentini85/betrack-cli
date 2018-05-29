@@ -1,9 +1,8 @@
-tp-featuresdark:           False
+tp-featuresdark:           True
 tp-locate-diameter:        13
 tp-link-searchrange:       10
 tp-link-predict:           True
-tp-filter-stubs-threshold: 10
-tp-exportas:               json
+tp-exportas:               csv
 av-flipframes:             x
 
 jobs:

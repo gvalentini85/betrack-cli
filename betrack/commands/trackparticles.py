@@ -9,7 +9,7 @@ The module :py:mod:`~betrack.commands.trackparticles` implements the
 particle tracking engine of *betrack* that is used in the ``track-particles`` 
 command. It is primary a wrapper of the 
 `trackpy <http://soft-matter.github.io/trackpy/>`_ module and is designed to
-provide a simple and efficient yet flexible interface of the ``trackpy`` 
+provide a simple and efficient yet flexible interface of ``trackpy`` 
 through the class :py:class:`~betrack.commands.trackparticles.TrackParticles`.
 """
 
@@ -21,7 +21,7 @@ import warnings
 import pandas
 warnings.filterwarnings('ignore', category=pandas.io.pytables.PerformanceWarning)
 
-from os import remove
+from os import remove, EX_OK, EX_CONFIG
 from os.path import isfile
 from tqdm import tqdm
 import sys
@@ -35,7 +35,13 @@ from betrack.utils.job        import configure_jobs
 
 
 class TrackParticles(BetrackCommand):
-    """Say hello, world!"""
+    """
+    The class :py:class:`~betrack.commands.trackparticles.TrackParticles` defines
+    a set of functionalities that combined together implement the ``track-particles``
+    command of *betrack*. It allows to load videos, locate features, link and filter
+    them as well as to export the results both as a data file and as an annotated 
+    video.
+    """
 
     def __init__(self, options, *args, **kwargs):
         """
@@ -352,6 +358,8 @@ class TrackParticles(BetrackCommand):
                                                adaptive_step=self.link_adaptivestep),
                                desc=d, unit=ut, total=nframes):
                 sf.put(linked)
+            job.dflink = sf.dump()
+                
                 
         
     def filter_trajectories(self, job):
@@ -367,10 +375,6 @@ class TrackParticles(BetrackCommand):
         :param job: the job whose trajectories need to be filtered
         :type job: :py:class:`~betrack.utils.job.Job`
         """
-
-        # Read dataframe from h5 storage file..
-        with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
-            job.dflink = sf.dump()
 
         # Filter out trajectories with few points..
         if self.filter_stubs_threshold is not None:
@@ -416,7 +420,17 @@ class TrackParticles(BetrackCommand):
         
     def run(self):
         """
-        Run the `track-particle` command.
+        This method implements the ``track-particle`` command of *betrack*. It is 
+        automatically called when the corresponding command is passed through the command
+        line interface.
+
+        This method processes in a batch a sequence of videos with the aim to
+        track the position and identity of particles. It preprocesses each video, locates
+        features, links and filters their trajectories, and exports the results both
+        as a data file and as an annotated video. 
+
+        :returns: ``os.EX_OK`` on success or ``os.EX_CONFIG`` otherwise
+        :rtype: int
         """
         
         trackpy.quiet()
@@ -489,6 +503,8 @@ class TrackParticles(BetrackCommand):
         if completed > 0:
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     \(^-^)/', sep='')
+            return EX_OK
         else:
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     ¯\_(ツ)_/¯ ', sep='')
+            return EX_CONFIG

@@ -26,8 +26,9 @@ Help:
 """
 
 
+from sys     import exit
 from inspect import getmembers, isclass
-from docopt import docopt
+from docopt  import docopt
 
 from . import __cli__ as CLI
 from . import __version__ as VERSION
@@ -46,4 +47,5 @@ def main():
             betrack.commands = getmembers(module, isclass)
             command = [command[1] for command in betrack.commands if command[0] != 'BetrackCommand'][0]
             command = command(options)
-            command.run()
+            errcode = command.run()
+            exit(errcode)
