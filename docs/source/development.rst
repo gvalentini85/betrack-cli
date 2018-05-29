@@ -65,11 +65,6 @@ Generate Documentation
 *betrack* is documented using `sphinx <http://www.sphinx-doc.org/>`_ and its
 documentation is hosted on `GitHub pages <https://gvalentini85.github.io/betrack-cli/>`_.
 
-.. note::
-   
-   To generate the documentation of *betrack* you need to `install sphinx
-   <http://www.sphinx-doc.org/en/stable/install.html>`_!
-
 The documentation can be generated in *html* format by navigating in the
 `docs/` folder and issuing the proper `sphinx-build` command:
 

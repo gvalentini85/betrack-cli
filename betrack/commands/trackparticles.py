@@ -5,7 +5,12 @@
 #------------------------------------------------------------------------------#
 
 """
-The `track-particles` command.
+The module :py:mod:`~betrack.commands.trackparticles` implements the 
+particle tracking engine of *betrack* that is used in the ``track-particles`` 
+command. It is primary a wrapper of the 
+`trackpy <http://soft-matter.github.io/trackpy/>`_ module and is designed to
+provide a simple and efficient yet flexible interface of the ``trackpy`` 
+through the class :py:class:`~betrack.commands.trackparticles.TrackParticles`.
 """
 
 
@@ -34,7 +39,11 @@ class TrackParticles(BetrackCommand):
 
     def __init__(self, options, *args, **kwargs):
         """
-        TrackParticles constructor. 
+        Constructor for the class :py:class:`~betrack.commands.trackparticles.TrackParticles`.
+
+        :param dict options: list of options passed by command line
+        :param list \*args: variable length argument list
+        :param list \*\*kwargs: arbitrary keyworded arguments
         """
         
         super(TrackParticles, self).__init__(options, *args, **kwargs)
@@ -67,6 +76,12 @@ class TrackParticles(BetrackCommand):
         
     def configure_tracker(self, filename):
         """
+        Configures the particle tracker according to the configuration file given by
+        ``filename``. If a required attribute is missing from the configuration
+        file or if the value of an attribute in the configuration is invalid, 
+        this function prints an error message and halts the execution of *betrack*.
+
+        :param str filename: the name of the configuration file
         """
 
         try:
@@ -265,7 +280,13 @@ class TrackParticles(BetrackCommand):
 
     def locate_features(self, job):
         """
-
+        Loops over each frame of the video defined by ``job`` and locates features
+        based on the current configuration of the particle tracker. This function
+        stores the results of its execution in a temporary HDF file defined by
+        :py:attr:`betrack.utils.job.Job.h5storage`.
+        
+        :param job: the job whose features need to be located
+        :type job: :py:class:`~betrack.utils.job.Job`
         """
 
         # Initalize storage file..        
@@ -303,6 +324,18 @@ class TrackParticles(BetrackCommand):
         
     def link_trajectories(self, job):
         """
+        Loops over each frame of the video defined by ``job`` and links features
+        based on the current configuration of the particle tracker. This function
+        stores the results of its execution in a temporary HDF file defined by
+        :py:attr:`betrack.utils.job.Job.h5storage` overwriting the results of the
+        execution of 
+        :py:func:`~betrack.commands.trackparticles.TrackParticles.locate_features`.
+
+        .. note:: This function must be called after a call to
+                  :py:func:`~betrack.commands.trackparticles.TrackParticles.locate_features`.
+        
+        :param job: the job whose features need to be linked
+        :type job: :py:class:`~betrack.utils.job.Job`
         """
         
         # Link trajectories in all frames..
@@ -323,6 +356,16 @@ class TrackParticles(BetrackCommand):
         
     def filter_trajectories(self, job):
         """
+        Filters the trajectories of the video defined by ``job`` based on the current 
+        configuration of the particle tracker. This function can filter trajectories
+        by length in terms of minimum number of frames and/or by clusters in terms of
+        minimum feature size.
+
+        .. note:: This function must be called after a call to
+                  :py:func:`~betrack.commands.trackparticles.TrackParticles.link_trajectories`.
+        
+        :param job: the job whose trajectories need to be filtered
+        :type job: :py:class:`~betrack.utils.job.Job`
         """
 
         # Read dataframe from h5 storage file..
@@ -343,6 +386,18 @@ class TrackParticles(BetrackCommand):
         
     def export_video(self, job):
         """
+        Exports the tracked features defined by ``job`` as a video based on the current 
+        configuration of the particle tracker and of the video annotator. This function 
+        calls :py:func:`betrack.commands.annotatevideo.AnnotateVideo.annotator` with a 
+        minimal configuration that shows particles' position and identity, tracked region,
+        and frame number. Additional arguments to the video annotator can be given
+        explicitly in the configuration file.
+
+        .. note:: This function must be called after a call to
+                  :py:func:`~betrack.commands.trackparticles.TrackParticles.link_trajectories`.
+        
+        :param job: the job whose features need to be exported as a video
+        :type job: :py:class:`~betrack.utils.job.Job`
         """
 
         from betrack.commands.annotatevideo import AnnotateVideo
