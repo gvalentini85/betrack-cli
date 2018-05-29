@@ -2,6 +2,9 @@
 Usage
 *****
 
+.. |W| image:: ../../resources/img/dialog-warning.png
+   :height: 14
+
 *betrack* is a command line toolkit that can be executed by issuing simple
 commands in a terminal. For example, typing the command `betrack` prints the
 message:
@@ -119,10 +122,10 @@ List of attributes
 ===============   =======================================================================
 `jobs`            Indented list of jobs where each job definition starts with a dash '-'
                   (see also the :ref:`preliminary-examples` above). **Required
-		  attribute!**
+		  attribute!** |W|
 
 `video`           File or path to a file specifying the video to be processed in a job.
-                  **Required attribute!**
+                  **Required attribute!** |W|
 
 `outdir`          Directory or path to a directory where to store all output files as
                   well as temporary files created by *betrack*. Default value: path to
@@ -199,16 +202,42 @@ See also commands :ref:`sample-behaviors <sample>`, :ref:`train-classifier <trai
 Examples
 --------
 
-Minimal working example:
+The `track-particle` command is a particularly flexible command that allows for
+complex combinations of configuration parameters. Nonetheless, the value of most
+of these parameters is set by default and only two attributes are required in
+the YAML configuration file: `tp-locate-diameter`, that gives the diameter of
+the tracked features, and `tp-link-searchrange`, that defines how far a particle
+can move between frames.
+
+A minimal working example of a YAML configuration file for the `track-particle`
+command is:
 
 .. code-block:: yaml
 		
-   tp-locate-diameter: 13
+   tp-locate-diameter:  13
    tp-link-searchrange: 20
    
    jobs:
      - video: ~/path/to/video/file.avi
 
+This configuration file defines a batch of one job in which particles are expected
+to have a diameter of 13 pixels and to move at most 20 pixels between frames.
+
+More complex parameter configurations can be passed to the `track-particle` command:
+
+.. code-block:: yaml
+		
+   tp-locate-diameter:     13
+   tp-link-searchrange:    20
+   tp-locate-featuresdark: True
+   tp-filter-st-threshold: 100
+   
+   jobs:
+     - video: ~/path/to/video/file.avi
+
+For example, the configuration file above extends the minimal working example by
+specifying that features in the video are darker than the background and that
+particles that are tracked for less than 100 frames should be filtered out.
 
 .. _particles-attributes:
 
@@ -221,16 +250,17 @@ List of attributes
 			    Default value: `'csv'`.
 			    
 `tp-locate-diameter`        Odd integer giving the size of the feature in pixels which is
-                            assumed the same in each dimension. **Required attribute!**
+                            assumed the same in each dimension.
+			    **Required attribute!** |W|
 
 `tp-locate-featuresdark`    Boolean specifying if the features of interest are dark or
                             bright. Used to determine whether to invert the color scale
 			    of the video or not. Default value: `False`.
 
-`tp-locate-minmass`         Float or integer giving the minimum integrated brightness of
+`tp-locate-minmass`         Integer or float giving the minimum integrated brightness of
                             a particle. Default value: `100`.
 
-`tp-locate-maxsize`         Float or integer giving the maximum radius-of-gyration of the
+`tp-locate-maxsize`         Integer or float giving the maximum radius-of-gyration of the
                             brightness of a particle. Default value: no maximum
 			    radius-of-gyration set.
 
@@ -259,23 +289,41 @@ List of attributes
 `tp-locate-preprocess`      Boolean specifying if the video frames should be preprocessed
                             with a bandpass filter or not. Default value: `True`.
 
-`tp-link-searchrange`
+`tp-link-searchrange`       Integer or float giving the maximum distance that a feature
+                            can move between frames. **Required attribute!** |W|
 
-`tp-link-memory`
+`tp-link-memory`            Integer giving the maximum number of frames in which a feature
+                            can be unrecognized and then, once it reappears nearby, be
+			    considered the same particle again. Default value: `0`.
 
-`tp-link-predict`
+`tp-link-predict`           Boolean specifying if a predictor should be used to improve
+                            linking accuracy. Currently implements
+			    `trackpy.predict.NearestVelocityPredict`_.
+			    Default value: `False`.
 
-`tp-link-adaptivestop`
+`tp-link-adaptivestop`      Float giving the minimum value at which `tp-link-searchrange`
+                            can be reduced when using adaptive search to deal with
+			    oversized subnetworks. Default value: no adaptive search.
 
-`tp-link-adaptivestep`
+`tp-link-adaptivestep`      Float giving the multiplying factor used to reduce
+                            `tp-link-searchrange` when using adaptive search to deal with
+			    oversized subnetworks. Default value: `0.95`.
 
-`tp-filter-st-threshold`
+`tp-filter-st-threshold`    Integer giving the minimum number of frames that a particle
+                            should be recognized to be kept. Particles present in a smaller
+			    number of frames are filtered out.
+			    
+`tp-filter-cl-quantile`     Float giving the quantile of particle size above which
+                            particles are filtered out. This attribute is ignored when
+			    `tp-filter-cl-threshold` is specified.			    
 
-`tp-filter-quantile`
-
-`tp-filter-cl-threshold`
+`tp-filter-cl-threshold`    Integer giving the maximum particle size above which particles
+                            are filtered out. If specified, ignores
+			    `tp-filter-cl-quantile`.
 =========================   ==============================================================
 
+.. _trackpy.predict.NearestVelocityPredict:
+   http://soft-matter.github.io/trackpy/v0.4.1/generated/trackpy.predict.NearestVelocityPredict.html
 
 .. _sample:
 
@@ -296,8 +344,8 @@ List of attributes
 
 .. _train:
 
-Train a Behavior Classifier Model
-=================================
+Train a Behavior Classifier
+===========================
 
 .. _train-examples:
 

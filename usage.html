@@ -140,11 +140,11 @@ process only the first 5000 frames of the video.</p>
 <tr class="row-odd"><td><cite>jobs</cite></td>
 <td>Indented list of jobs where each job definition starts with a dash ‘-‘
 (see also the <a class="reference internal" href="#preliminary-examples"><span class="std std-ref">Examples</span></a> above). <strong>Required
-attribute!</strong></td>
+attribute!</strong> <a class="reference internal" href="_images/dialog-warning.png"><img alt="W" src="_images/dialog-warning.png" style="height: 14px;" /></a></td>
 </tr>
 <tr class="row-even"><td><cite>video</cite></td>
 <td>File or path to a file specifying the video to be processed in a job.
-<strong>Required attribute!</strong></td>
+<strong>Required attribute!</strong> <a class="reference internal" href="_images/dialog-warning.png"><img alt="W" src="_images/dialog-warning.png" style="height: 14px;" /></a></td>
 </tr>
 <tr class="row-odd"><td><cite>outdir</cite></td>
 <td>Directory or path to a directory where to store all output files as
@@ -214,14 +214,36 @@ extracted to create a training dataset of behaviors.</p>
 <a class="reference internal" href="#behaviors"><span class="std std-ref">track-behaviors</span></a>, and <a class="reference internal" href="#annotate"><span class="std std-ref">annotate-video</span></a>.</p>
 <div class="section" id="particles-examples">
 <span id="id2"></span><h3>Examples<a class="headerlink" href="#particles-examples" title="Permalink to this headline">¶</a></h3>
-<p>Minimal working example:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">tp-locate-diameter</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">13</span>
+<p>The <cite>track-particle</cite> command is a particularly flexible command that allows for
+complex combinations of configuration parameters. Nonetheless, the value of most
+of these parameters is set by default and only two attributes are required in
+the YAML configuration file: <cite>tp-locate-diameter</cite>, that gives the diameter of
+the tracked features, and <cite>tp-link-searchrange</cite>, that defines how far a particle
+can move between frames.</p>
+<p>A minimal working example of a YAML configuration file for the <cite>track-particle</cite>
+command is:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">tp-locate-diameter</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">13</span>
 <span class="l l-Scalar l-Scalar-Plain">tp-link-searchrange</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
 
 <span class="l l-Scalar l-Scalar-Plain">jobs</span><span class="p p-Indicator">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">video</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">~/path/to/video/file.avi</span>
 </pre></div>
 </div>
+<p>This configuration file defines a batch of one job in which particles are expected
+to have a diameter of 13 pixels and to move at most 20 pixels between frames.</p>
+<p>More complex parameter configurations can be passed to the <cite>track-particle</cite> command:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">tp-locate-diameter</span><span class="p p-Indicator">:</span>     <span class="l l-Scalar l-Scalar-Plain">13</span>
+<span class="l l-Scalar l-Scalar-Plain">tp-link-searchrange</span><span class="p p-Indicator">:</span>    <span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="l l-Scalar l-Scalar-Plain">tp-locate-featuresdark</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="l l-Scalar l-Scalar-Plain">tp-filter-st-threshold</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">100</span>
+
+<span class="l l-Scalar l-Scalar-Plain">jobs</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">video</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">~/path/to/video/file.avi</span>
+</pre></div>
+</div>
+<p>For example, the configuration file above extends the minimal working example by
+specifying that features in the video are darker than the background and that
+particles that are tracked for less than 100 frames should be filtered out.</p>
 </div>
 <div class="section" id="particles-attributes">
 <span id="id3"></span><h3>List of attributes<a class="headerlink" href="#particles-attributes" title="Permalink to this headline">¶</a></h3>
@@ -238,7 +260,8 @@ Default value: <cite>‘csv’</cite>.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-locate-diameter</cite></td>
 <td>Odd integer giving the size of the feature in pixels which is
-assumed the same in each dimension. <strong>Required attribute!</strong></td>
+assumed the same in each dimension.
+<strong>Required attribute!</strong> <a class="reference internal" href="_images/dialog-warning.png"><img alt="W" src="_images/dialog-warning.png" style="height: 14px;" /></a></td>
 </tr>
 <tr class="row-odd"><td><cite>tp-locate-featuresdark</cite></td>
 <td>Boolean specifying if the features of interest are dark or
@@ -246,11 +269,11 @@ bright. Used to determine whether to invert the color scale
 of the video or not. Default value: <cite>False</cite>.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-locate-minmass</cite></td>
-<td>Float or integer giving the minimum integrated brightness of
+<td>Integer or float giving the minimum integrated brightness of
 a particle. Default value: <cite>100</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-locate-maxsize</cite></td>
-<td>Float or integer giving the maximum radius-of-gyration of the
+<td>Integer or float giving the maximum radius-of-gyration of the
 brightness of a particle. Default value: no maximum
 radius-of-gyration set.</td>
 </tr>
@@ -287,28 +310,44 @@ features above <cite>tp-locate-minmass</cite>.</td>
 with a bandpass filter or not. Default value: <cite>True</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-link-searchrange</cite></td>
-<td>&#160;</td>
+<td>Integer or float giving the maximum distance that a feature
+can move between frames. <strong>Required attribute!</strong> <a class="reference internal" href="_images/dialog-warning.png"><img alt="W" src="_images/dialog-warning.png" style="height: 14px;" /></a></td>
 </tr>
 <tr class="row-even"><td><cite>tp-link-memory</cite></td>
-<td>&#160;</td>
+<td>Integer giving the maximum number of frames in which a feature
+can be unrecognized and then, once it reappears nearby, be
+considered the same particle again. Default value: <cite>0</cite>.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-link-predict</cite></td>
-<td>&#160;</td>
+<td>Boolean specifying if a predictor should be used to improve
+linking accuracy. Currently implements
+<a class="reference external" href="http://soft-matter.github.io/trackpy/v0.4.1/generated/trackpy.predict.NearestVelocityPredict.html">trackpy.predict.NearestVelocityPredict</a>.
+Default value: <cite>False</cite>.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-link-adaptivestop</cite></td>
-<td>&#160;</td>
+<td>Float giving the minimum value at which <cite>tp-link-searchrange</cite>
+can be reduced when using adaptive search to deal with
+oversized subnetworks. Default value: no adaptive search.</td>
 </tr>
 <tr class="row-odd"><td><cite>tp-link-adaptivestep</cite></td>
-<td>&#160;</td>
+<td>Float giving the multiplying factor used to reduce
+<cite>tp-link-searchrange</cite> when using adaptive search to deal with
+oversized subnetworks. Default value: <cite>0.95</cite>.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-filter-st-threshold</cite></td>
-<td>&#160;</td>
+<td>Integer giving the minimum number of frames that a particle
+should be recognized to be kept. Particles present in a smaller
+number of frames are filtered out.</td>
 </tr>
-<tr class="row-odd"><td><cite>tp-filter-quantile</cite></td>
-<td>&#160;</td>
+<tr class="row-odd"><td><cite>tp-filter-cl-quantile</cite></td>
+<td>Float giving the quantile of particle size above which
+particles are filtered out. This attribute is ignored when
+<cite>tp-filter-cl-threshold</cite> is specified.</td>
 </tr>
 <tr class="row-even"><td><cite>tp-filter-cl-threshold</cite></td>
-<td>&#160;</td>
+<td>Integer giving the maximum particle size above which particles
+are filtered out. If specified, ignores
+<cite>tp-filter-cl-quantile</cite>.</td>
 </tr>
 </tbody>
 </table>
@@ -323,8 +362,8 @@ with a bandpass filter or not. Default value: <cite>True</cite>.</td>
 <span id="id5"></span><h3>List of attributes<a class="headerlink" href="#sample-attributes" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="train-a-behavior-classifier-model">
-<span id="train"></span><h2>Train a Behavior Classifier Model<a class="headerlink" href="#train-a-behavior-classifier-model" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="train-a-behavior-classifier">
+<span id="train"></span><h2>Train a Behavior Classifier<a class="headerlink" href="#train-a-behavior-classifier" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="train-examples">
 <span id="id6"></span><h3>Examples<a class="headerlink" href="#train-examples" title="Permalink to this headline">¶</a></h3>
 </div>
@@ -370,41 +409,19 @@ for colloidal studies</em>. Journal of colloid and interface science,
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/betrack-logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Usage</a><ul>
-<li><a class="reference internal" href="#preliminary-concepts">Preliminary Concepts</a><ul>
-<li><a class="reference internal" href="#examples">Examples</a></li>
-<li><a class="reference internal" href="#list-of-attributes">List of attributes</a></li>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preliminary-concepts">Preliminary Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#track-the-position-of-agents">Track the Position of Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-a-database-of-behaviors">Build a Database of Behaviors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-behavior-classifier">Train a Behavior Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#track-the-behavior-of-agents">Track the Behavior of Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customize-video-annotations">Customize Video Annotations</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#track-the-position-of-agents">Track the Position of Agents</a><ul>
-<li><a class="reference internal" href="#particles-examples">Examples</a></li>
-<li><a class="reference internal" href="#particles-attributes">List of attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#build-a-database-of-behaviors">Build a Database of Behaviors</a><ul>
-<li><a class="reference internal" href="#sample-examples">Examples</a></li>
-<li><a class="reference internal" href="#sample-attributes">List of attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#train-a-behavior-classifier-model">Train a Behavior Classifier Model</a><ul>
-<li><a class="reference internal" href="#train-examples">Examples</a></li>
-<li><a class="reference internal" href="#train-attributes">List of attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#track-the-behavior-of-agents">Track the Behavior of Agents</a><ul>
-<li><a class="reference internal" href="#behaviors-examples">Examples</a></li>
-<li><a class="reference internal" href="#behaviors-attributes">List of attributes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#customize-video-annotations">Customize Video Annotations</a><ul>
-<li><a class="reference internal" href="#annotate-examples">Examples</a></li>
-<li><a class="reference internal" href="#annotate-attributes">List of attributes</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 
   <h4>Previous topic</h4>

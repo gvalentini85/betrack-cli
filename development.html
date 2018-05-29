@@ -44,7 +44,7 @@
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>In order to modify or contribute to the source code of <em>betrack</em> you
-must first install the following softwares:</p>
+must first install the following software:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://www.python.org/downloads/">Python</a></li>
 <li><a class="reference external" href="https://pip.pypa.io/en/stable/installing/">pip</a></li>
@@ -83,10 +83,6 @@ following command in a terminal:</p>
 <h2>Generate Documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h2>
 <p><em>betrack</em> is documented using <a class="reference external" href="http://www.sphinx-doc.org/">sphinx</a> and its
 documentation is hosted on <a class="reference external" href="https://gvalentini85.github.io/betrack-cli/">GitHub pages</a>.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">To generate the documentation of <em>betrack</em> you need to <a class="reference external" href="http://www.sphinx-doc.org/en/stable/install.html">install sphinx</a>!</p>
-</div>
 <p>The documentation can be generated in <em>html</em> format by navigating in the
 <cite>docs/</cite> folder and issuing the proper <cite>sphinx-build</cite> command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> docs/
@@ -181,20 +177,59 @@ betrack annotate-video</dd>
 </ul>
 <div class="section" id="module-betrack.commands.command">
 <span id="command"></span><h4>command<a class="headerlink" href="#module-betrack.commands.command" title="Permalink to this headline">¶</a></h4>
-<p>The BetrackCommand command.</p>
+<p>The module <a class="reference internal" href="#module-betrack.commands.command" title="betrack.commands.command"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command</span></code></a> define a common interface
+for all commands of <em>betrack</em> through the class 
+<a class="reference internal" href="#betrack.commands.command.BetrackCommand" title="betrack.commands.command.BetrackCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">BetrackCommand</span></code></a>.</p>
 <dl class="class">
 <dt id="betrack.commands.command.BetrackCommand">
 <em class="property">class </em><code class="descclassname">betrack.commands.command.</code><code class="descname">BetrackCommand</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.command.BetrackCommand" title="Permalink to this definition">¶</a></dt>
-<dd><p>A base command.</p>
+<dd><p>The class <a class="reference internal" href="#betrack.commands.command.BetrackCommand" title="betrack.commands.command.BetrackCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">BetrackCommand</span></code></a> defines
+a common interface that all commands of <em>betrack</em> must implement.</p>
+<p>In particular, it defines a constructor that takes as argument the command 
+line options automatically parsed by means of <code class="docutils literal notranslate"><span class="pre">docopt</span></code> and a
+<a class="reference internal" href="#betrack.commands.command.BetrackCommand.run" title="betrack.commands.command.BetrackCommand.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> method that must
+be implemented by all inheriting classes.</p>
 <dl class="method">
 <dt id="betrack.commands.command.BetrackCommand.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.command.BetrackCommand.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Constructor for the class <a class="reference internal" href="#betrack.commands.command.BetrackCommand" title="betrack.commands.command.BetrackCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">BetrackCommand</span></code></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This class is an interface and should never be explicitly instantiated!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – list of options passed by command line</li>
+<li><strong>*args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) – variable length argument list</li>
+<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) – arbitrary keyworded arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="betrack.commands.command.BetrackCommand.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.command.BetrackCommand.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines an interface method
+<a class="reference internal" href="#betrack.commands.command.BetrackCommand.run" title="betrack.commands.command.BetrackCommand.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> that must be
+implemented by an inheriting class. This method is automatically 
+called when the corresponding command is passed through the command
+line interface and represents the primary method implementing the
+command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.6)"><strong>NotImplementedError</strong></a> – if the method <code class="docutils literal notranslate"><span class="pre">run</span></code> is not implemented</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -252,46 +287,163 @@ betrack annotate-video</dd>
 </div>
 <div class="section" id="module-betrack.commands.trackparticles">
 <span id="trackparticles"></span><h4>trackparticles<a class="headerlink" href="#module-betrack.commands.trackparticles" title="Permalink to this headline">¶</a></h4>
-<p>The <cite>track-particles</cite> command.</p>
+<p>The module <a class="reference internal" href="#module-betrack.commands.trackparticles" title="betrack.commands.trackparticles"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trackparticles</span></code></a> implements the 
+particle tracking engine of <em>betrack</em> that is used in the <code class="docutils literal notranslate"><span class="pre">track-particles</span></code> 
+command. It is primary a wrapper of the 
+<a class="reference external" href="http://soft-matter.github.io/trackpy/">trackpy</a> module and is designed to
+provide a simple and efficient yet flexible interface of <code class="docutils literal notranslate"><span class="pre">trackpy</span></code> 
+through the class <a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles" title="betrack.commands.trackparticles.TrackParticles"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrackParticles</span></code></a>.</p>
 <dl class="class">
 <dt id="betrack.commands.trackparticles.TrackParticles">
 <em class="property">class </em><code class="descclassname">betrack.commands.trackparticles.</code><code class="descname">TrackParticles</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Say hello, world!</p>
+<dd><p>The class <a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles" title="betrack.commands.trackparticles.TrackParticles"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrackParticles</span></code></a> defines
+a set of functionalities that combined together implement the <code class="docutils literal notranslate"><span class="pre">track-particles</span></code>
+command of <em>betrack</em>. It allows to load videos, locate features, link and filter
+them as well as to export the results both as a data file and as an annotated 
+video.</p>
 <dl class="method">
 <dt id="betrack.commands.trackparticles.TrackParticles.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>options</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>TrackParticles constructor.</p>
+<dd><p>Constructor for the class <a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles" title="betrack.commands.trackparticles.TrackParticles"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrackParticles</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – list of options passed by command line</li>
+<li><strong>*args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) – variable length argument list</li>
+<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) – arbitrary keyworded arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="betrack.commands.trackparticles.TrackParticles.configure_tracker">
 <code class="descname">configure_tracker</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.configure_tracker" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Configures the particle tracker according to the configuration file given by
+<code class="docutils literal notranslate"><span class="pre">filename</span></code>. If a required attribute is missing from the configuration
+file or if the value of an attribute in the configuration is invalid, 
+this function prints an error message and halts the execution of <em>betrack</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the name of the configuration file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="betrack.commands.trackparticles.TrackParticles.locate_features">
 <code class="descname">locate_features</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.locate_features" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loops over each frame of the video defined by <code class="docutils literal notranslate"><span class="pre">job</span></code> and locates features
+based on the current configuration of the particle tracker. This function
+stores the results of its execution in a temporary HDF file defined by
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">betrack.utils.job.Job.h5storage</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job</strong> (<a class="reference internal" href="#betrack.utils.job.Job" title="betrack.utils.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – the job whose features need to be located</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="betrack.commands.trackparticles.TrackParticles.link_trajectories">
 <code class="descname">link_trajectories</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.link_trajectories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loops over each frame of the video defined by <code class="docutils literal notranslate"><span class="pre">job</span></code> and links features
+based on the current configuration of the particle tracker. This function
+stores the results of its execution in a temporary HDF file defined by
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">betrack.utils.job.Job.h5storage</span></code> overwriting the results of the
+execution of 
+<a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles.locate_features" title="betrack.commands.trackparticles.TrackParticles.locate_features"><code class="xref py py-func docutils literal notranslate"><span class="pre">locate_features()</span></code></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function must be called after a call to
+<a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles.locate_features" title="betrack.commands.trackparticles.TrackParticles.locate_features"><code class="xref py py-func docutils literal notranslate"><span class="pre">locate_features()</span></code></a>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job</strong> (<a class="reference internal" href="#betrack.utils.job.Job" title="betrack.utils.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – the job whose features need to be linked</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="betrack.commands.trackparticles.TrackParticles.filter_trajectories">
 <code class="descname">filter_trajectories</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.filter_trajectories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Filters the trajectories of the video defined by <code class="docutils literal notranslate"><span class="pre">job</span></code> based on the current 
+configuration of the particle tracker. This function can filter trajectories
+by length in terms of minimum number of frames and/or by clusters in terms of
+minimum feature size.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function must be called after a call to
+<a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles.link_trajectories" title="betrack.commands.trackparticles.TrackParticles.link_trajectories"><code class="xref py py-func docutils literal notranslate"><span class="pre">link_trajectories()</span></code></a>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job</strong> (<a class="reference internal" href="#betrack.utils.job.Job" title="betrack.utils.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – the job whose trajectories need to be filtered</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="betrack.commands.trackparticles.TrackParticles.export_video">
 <code class="descname">export_video</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.export_video" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Exports the tracked features defined by <code class="docutils literal notranslate"><span class="pre">job</span></code> as a video based on the current 
+configuration of the particle tracker and of the video annotator. This function 
+calls <a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.annotator" title="betrack.commands.annotatevideo.AnnotateVideo.annotator"><code class="xref py py-func docutils literal notranslate"><span class="pre">betrack.commands.annotatevideo.AnnotateVideo.annotator()</span></code></a> with a 
+minimal configuration that shows particles’ position and identity, tracked region,
+and frame number. Additional arguments to the video annotator can be given
+explicitly in the configuration file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function must be called after a call to
+<a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles.link_trajectories" title="betrack.commands.trackparticles.TrackParticles.link_trajectories"><code class="xref py py-func docutils literal notranslate"><span class="pre">link_trajectories()</span></code></a>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job</strong> (<a class="reference internal" href="#betrack.utils.job.Job" title="betrack.utils.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – the job whose features need to be exported as a video</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="betrack.commands.trackparticles.TrackParticles.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.commands.trackparticles.TrackParticles.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run the <cite>track-particle</cite> command.</p>
+<dd><p>This method implements the <code class="docutils literal notranslate"><span class="pre">track-particle</span></code> command of <em>betrack</em>. It is 
+automatically called when the corresponding command is passed through the command
+line interface.</p>
+<p>This method processes in a batch a sequence of videos with the aim to
+track the position and identity of particles. It preprocesses each video, locates
+features, links and filters their trajectories, and exports the results both
+as a data file and as an annotated video.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">os.EX_OK</span></code> on success or <code class="docutils literal notranslate"><span class="pre">os.EX_CONFIG</span></code> otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)">int</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -390,7 +542,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.crop">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>frame</em>, <em>margins</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.crop" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.crop" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -420,7 +572,7 @@ This function implements lazy evaluation.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.flip">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>frame</em>, <em>direction</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.flip" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.flip" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -446,7 +598,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.invert_colors">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>frame</em>, <em>maxval=255</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.invert_colors" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.invert_colors" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -455,7 +607,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.reverse_colors">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.reverse_colors" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.reverse_colors" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -467,7 +619,7 @@ RGB.</div></blockquote>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">as_gray</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">as_gray</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -493,7 +645,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>frame</em>, <em>margins</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -523,7 +675,7 @@ This function implements lazy evaluation.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>frame</em>, <em>direction</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -549,7 +701,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>frame</em>, <em>maxval=255</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -558,7 +710,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -580,7 +732,8 @@ to initialize a list of jobs according to a configuration file.</p>
 <dl class="class">
 <dt id="betrack.utils.job.Job">
 <em class="property">class </em><code class="descclassname">betrack.utils.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>video</em>, <em>outdir=''</em>, <em>margins=None</em>, <em>period=None</em>, <em>periodtype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>TODO: write this docstring!</p>
+<dl class="method">
 <dt id="betrack.utils.job.Job.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>video</em>, <em>outdir=''</em>, <em>margins=None</em>, <em>period=None</em>, <em>periodtype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor for the Job class.</p>
@@ -646,7 +799,8 @@ attributes <code class="docutils literal notranslate"><span class="pre">tp-perio
 <dt id="betrack.utils.job.Job.release_memory">
 <code class="descname">release_memory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.release_memory" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function attempts to release the memory allocated by the original and
-processed video frames. It also deletes the temporary storage file created by
+processed video frames and by the tracked particles data structure. 
+It also deletes the temporary storage file created by
 <a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles.locate_features" title="betrack.commands.trackparticles.TrackParticles.locate_features"><code class="xref py py-func docutils literal notranslate"><span class="pre">locate_features()</span></code></a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -1066,30 +1220,17 @@ specified by <code class="docutils literal notranslate"><span class="pre">key</s
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/betrack-logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Development</a><ul>
-<li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li><a class="reference internal" href="#editable-installation">Editable Installation</a></li>
-<li><a class="reference internal" href="#testing">Testing</a></li>
-<li><a class="reference internal" href="#generate-documentation">Generate Documentation</a></li>
-<li><a class="reference internal" href="#deploy-to-pypi">Deploy to PyPI</a></li>
-<li><a class="reference internal" href="#module-betrack.cli">API Documentation</a><ul>
-<li><a class="reference internal" href="#betrack-commands">betrack.commands</a><ul>
-<li><a class="reference internal" href="#module-betrack.commands.command">command</a></li>
-<li><a class="reference internal" href="#module-betrack.commands.annotatevideo">annotatevideo</a></li>
-<li><a class="reference internal" href="#module-betrack.commands.trackparticles">trackparticles</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#betrack-utils">betrack.utils</a><ul>
-<li><a class="reference internal" href="#module-betrack.utils.frames">frames</a></li>
-<li><a class="reference internal" href="#module-betrack.utils.job">job</a></li>
-<li><a class="reference internal" href="#module-betrack.utils.message">message</a></li>
-<li><a class="reference internal" href="#module-betrack.utils.parser">parser</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#editable-installation">Editable Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-documentation">Generate Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploy-to-pypi">Deploy to PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-betrack.cli">API Documentation</a></li>
 </ul>
 </li>
 </ul>
