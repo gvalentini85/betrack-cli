@@ -76,7 +76,7 @@ class TrackParticles(BetrackCommand):
         self.link_adaptivestep         = 0.95
 
         self.filter_stubs_threshold    = None
-        self.filter_quantile           = None
+        self.filter_clusters_quantile  = None
         self.filter_clusters_threshold = None
 
         
@@ -258,9 +258,9 @@ class TrackParticles(BetrackCommand):
                 sys.exit()
                 
         try:
-            self.filter_quantile = parse_float(config, 'tp-filter-quantile')
-            if self.filter_quantile <= 0 or self.filter_quantile >= 1.0:
-                raise ValueError('<tp-filter-quantile> must be in the interval (0.0, 1.0)')
+            self.filter_clusters_quantile = parse_float(config, 'tp-filter-cl-quantile')
+            if self.filter_clusters_quantile <= 0 or self.filter_clusters_quantile >= 1.0:
+                raise ValueError('<tp-filter-cl-quantile> must be in the interval (0.0, 1.0)')
         except ValueError as err:
             if err[0] != 'attribute not found!':
                 eprint('Invalid attribute: ', err[0], '.', sep='')
@@ -382,9 +382,10 @@ class TrackParticles(BetrackCommand):
                                               threshold=self.filter_stubs_threshold)
 
         # Filter out trajectories with a mean particle size above a quantile..
-        if self.filter_quantile is not None or self.filter_clusters_threshold is not None:
+        if (self.filter_clusters_quantile is not None or
+            self.filter_clusters_threshold is not None):
             job.dflink = trackpy.filter_clusters(job.dflink,
-                                                 quantile=self.filter_quantile,
+                                                 quantile=self.filter_clusters_quantile,
                                                  threshold=self.filter_clusters_threshold)
             
         
@@ -475,7 +476,7 @@ class TrackParticles(BetrackCommand):
 
             # Filter trajectories..
             if (self.filter_stubs_threshold is not None or
-                self.filter_quantile is not None or
+                self.filter_clusters_quantile is not None or
                 self.filter_clusters_threshold is not None):
                 mprint('...Filtering trajectories:', end='\r')
                 sys.stdout.flush()

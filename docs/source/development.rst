@@ -7,7 +7,7 @@ Requirements
 ============
 
 In order to modify or contribute to the source code of *betrack* you
-must first install the following softwares:
+must first install the following software:
 
 * `Python <https://www.python.org/downloads/>`_
   
