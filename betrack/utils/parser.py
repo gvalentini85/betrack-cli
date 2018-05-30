@@ -78,7 +78,7 @@ def parse_directory(src, key):
 
 def parse_int(src, key, nentries=1):
     """
-    Parses a dictionary ``src`` and returns a number ``nentries`` of integerss 
+    Parses a dictionary ``src`` and returns a number ``nentries`` of integers 
     specified by ``key``. This function checks that the value or values specified 
     by ``key`` are of type integer and raises a ``ValueError`` otherwise.
 
