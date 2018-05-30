@@ -44,7 +44,7 @@ def parse_file(src, key):
     :raises ValueError: if the attribute ``key`` is not found in ``src``
     """
 
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if isfile(val):
             return val
@@ -76,6 +76,7 @@ def parse_directory(src, key):
     else:
         raise ValueError('attribute not found!', key)            
 
+    
 def parse_int(src, key, nentries=1):
     """
     Parses a dictionary ``src`` and returns a number ``nentries`` of integers 
@@ -238,6 +239,7 @@ def parse_bool(src, key, nentries=1):
     else:
         raise ValueError('attribute not found!', key)            
 
+    
 def parse_str(src, key, nentries=1):
     """
     Parse a dictionary ``src`` and return a str or a list of str 

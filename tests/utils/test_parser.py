@@ -283,8 +283,6 @@ class TestParser(TestCase):
         self.assertTrue(False)
 
 
-
-
     def test_parse_str(self):
         val  = 'string'
         key  = 'test-parse-str'
