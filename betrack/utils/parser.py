@@ -67,7 +67,7 @@ def parse_directory(src, key):
     :raises ValueError: if the attribute ``key`` is not found in ``src``
     """
 
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if isdir(val):
             return val
@@ -96,7 +96,7 @@ def parse_int(src, key, nentries=1):
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == int:
             if nentries != 1:
@@ -136,7 +136,7 @@ def parse_float(src, key, nentries=1):
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == float:
             if nentries != 1:
@@ -177,7 +177,7 @@ def parse_int_or_float(src, key, nentries=1):
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == int or type(val) == float:
             if nentries != 1:
@@ -217,7 +217,7 @@ def parse_bool(src, key, nentries=1):
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == bool:
             if nentries != 1:
@@ -257,7 +257,7 @@ def parse_str(src, key, nentries=1):
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == str or type(val) == unicode:
             val = val.encode()
