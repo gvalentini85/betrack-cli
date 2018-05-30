@@ -126,13 +126,21 @@ betrack.commands
     * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.__init__`
 
     * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.configure_annotator`
+
+    * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_behaviors`
+    
+    * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number`
       
     * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_particles`
       
     * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_region`
-      
-    * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number`
-      
+
+    * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_text`      
+
+    * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_trajectories`
+
+    * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.draw_shape`
+    
     * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.annotator`
       
     * :py:func:`~betrack.commands.annotatevideo.AnnotateVideo.run`

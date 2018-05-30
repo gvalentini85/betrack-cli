@@ -26,7 +26,9 @@ from betrack.utils.frames  import as_gray, crop, invert_colors
 
 class Job:
     """
-    TODO: write this docstring!
+    The class :py:class:`betrack.utils.job.Job` defines a container for all
+    information pertinent to one specific job and a set of methods that support 
+    the execution of a job.
     """
 
     def __init__(self, video, outdir='', margins=None, period=None, periodtype=None):
@@ -120,9 +122,9 @@ class Job:
         It also deletes the temporary storage file created by
         :py:func:`~betrack.commands.trackparticles.TrackParticles.locate_features`.
 
-        .. note:: Memory is effectively released only if no additional variables have
-                  been created that point to the frames and/or to the processed frames 
-                  of the video.       
+        .. note:: Memory is effectively released only if no additional aliases have
+                  been created that point to the frames, to the processed frames, 
+                  and/or to the trajectories of the video.       
         """
 
         self.frames  = None
