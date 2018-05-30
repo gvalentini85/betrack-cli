@@ -149,9 +149,13 @@ betrack annotate-video</dd>
 <li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo" title="betrack.commands.annotatevideo.AnnotateVideo"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnotateVideo</span></code></a><ul>
 <li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.__init__" title="betrack.commands.annotatevideo.AnnotateVideo.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
 <li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.configure_annotator" title="betrack.commands.annotatevideo.AnnotateVideo.configure_annotator"><code class="xref py py-func docutils literal notranslate"><span class="pre">configure_annotator()</span></code></a></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_behaviors()</span></code></li>
+<li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number" title="betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number"><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_frame_number()</span></code></a></li>
 <li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.draw_particles" title="betrack.commands.annotatevideo.AnnotateVideo.draw_particles"><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_particles()</span></code></a></li>
 <li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.draw_region" title="betrack.commands.annotatevideo.AnnotateVideo.draw_region"><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_region()</span></code></a></li>
-<li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number" title="betrack.commands.annotatevideo.AnnotateVideo.draw_frame_number"><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_frame_number()</span></code></a></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_text()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_trajectories()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_shape()</span></code></li>
 <li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.annotator" title="betrack.commands.annotatevideo.AnnotateVideo.annotator"><code class="xref py py-func docutils literal notranslate"><span class="pre">annotator()</span></code></a></li>
 <li><a class="reference internal" href="#betrack.commands.annotatevideo.AnnotateVideo.run" title="betrack.commands.annotatevideo.AnnotateVideo.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a></li>
 </ul>
@@ -542,7 +546,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.crop">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>frame</em>, <em>margins</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.crop" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.crop" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -572,7 +576,7 @@ This function implements lazy evaluation.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.flip">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>frame</em>, <em>direction</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.flip" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.flip" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -598,7 +602,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.invert_colors">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>frame</em>, <em>maxval=255</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.invert_colors" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.invert_colors" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -607,7 +611,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt id="betrack.utils.frames.reverse_colors">
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.reverse_colors" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.frames.reverse_colors" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -619,7 +623,7 @@ RGB.</div></blockquote>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">as_gray</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">as_gray</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -645,7 +649,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>frame</em>, <em>margins</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">crop</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -675,7 +679,7 @@ This function implements lazy evaluation.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>frame</em>, <em>direction</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">flip</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -701,7 +705,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>frame</em>, <em>maxval=255</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">invert_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -710,7 +714,7 @@ any other objects, its behavior is unchanged.</p>
 
 <dl class="function">
 <dt>
-<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span></dt>
+<code class="descclassname">betrack.utils.frames.</code><code class="descname">reverse_colors</code><span class="sig-paren">(</span><em>obj</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span></dt>
 <dd><p>This function has been made lazy. When passed
 a Slicerator, it will return a 
 Pipeline of the results. When passed 
@@ -732,7 +736,9 @@ to initialize a list of jobs according to a configuration file.</p>
 <dl class="class">
 <dt id="betrack.utils.job.Job">
 <em class="property">class </em><code class="descclassname">betrack.utils.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>video</em>, <em>outdir=''</em>, <em>margins=None</em>, <em>period=None</em>, <em>periodtype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO: write this docstring!</p>
+<dd><p>The class <a class="reference internal" href="#betrack.utils.job.Job" title="betrack.utils.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">betrack.utils.job.Job</span></code></a> defines a container for all
+information pertinent to one specific job and a set of methods that support 
+the execution of a job.</p>
 <dl class="method">
 <dt id="betrack.utils.job.Job.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>video</em>, <em>outdir=''</em>, <em>margins=None</em>, <em>period=None</em>, <em>periodtype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.job.Job.__init__" title="Permalink to this definition">¶</a></dt>
@@ -804,9 +810,9 @@ It also deletes the temporary storage file created by
 <a class="reference internal" href="#betrack.commands.trackparticles.TrackParticles.locate_features" title="betrack.commands.trackparticles.TrackParticles.locate_features"><code class="xref py py-func docutils literal notranslate"><span class="pre">locate_features()</span></code></a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Memory is effectively released only if no additional variables have
-been created that point to the frames and/or to the processed frames 
-of the video.</p>
+<p class="last">Memory is effectively released only if no additional aliases have
+been created that point to the frames, to the processed frames, 
+and/or to the trajectories of the video.</p>
 </div>
 </dd></dl>
 
@@ -1052,7 +1058,7 @@ This function checks that the directory specified by <code class="docutils liter
 <dl class="function">
 <dt id="betrack.utils.parser.parse_int">
 <code class="descclassname">betrack.utils.parser.</code><code class="descname">parse_int</code><span class="sig-paren">(</span><em>src</em>, <em>key</em>, <em>nentries=1</em><span class="sig-paren">)</span><a class="headerlink" href="#betrack.utils.parser.parse_int" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and returns a number <code class="docutils literal notranslate"><span class="pre">nentries</span></code> of integerss 
+<dd><p>Parses a dictionary <code class="docutils literal notranslate"><span class="pre">src</span></code> and returns a number <code class="docutils literal notranslate"><span class="pre">nentries</span></code> of integers 
 specified by <code class="docutils literal notranslate"><span class="pre">key</span></code>. This function checks that the value or values specified 
 by <code class="docutils literal notranslate"><span class="pre">key</span></code> are of type integer and raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> otherwise.</p>
 <table class="docutils field-list" frame="void" rules="none">
