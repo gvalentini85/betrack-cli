@@ -20,7 +20,7 @@ class TestMessage(TestCase):
                       'from betrack.utils.message import mprint; mprint(\'Hello world!\')'], 
                      stdout=PIPE).communicate()[0]
         expected = Message.BOLD + Message.GREEN + 'Hello world!\n' + Message.ENDS
-        self.assertEqual(rval, expected)
+        self.assertEqual(rval, expected.encode())
 
 
     def test_wprint(self):
@@ -28,7 +28,7 @@ class TestMessage(TestCase):
                       'from betrack.utils.message import wprint; wprint(\'Hello world!\')'], 
                      stdout=PIPE).communicate()[0]
         expected = Message.BOLD + Message.YELLOW + 'Hello world!\n' + Message.ENDS
-        self.assertEqual(rval, expected)
+        self.assertEqual(rval, expected.encode())
 
 
     def test_eprint(self):
@@ -36,5 +36,5 @@ class TestMessage(TestCase):
                       'from betrack.utils.message import eprint; eprint(\'Hello world!\')'], 
                      stdout=PIPE).communicate()[0]
         expected = Message.BOLD + Message.RED + 'Hello world!\n' + Message.ENDS
-        self.assertEqual(rval, expected)
+        self.assertEqual(rval, expected.encode())
         
