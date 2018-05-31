@@ -34,12 +34,13 @@ class TestParser(TestCase):
 
             
     def test_parse_file(self):        
-        with NamedTemporaryFile(mode='w', suffix='.yml') as cf:
-            cf.write('test-parse-file: ' + cf.name)
-            cf.seek(0)
-            config = open_configuration(cf.name)
-            fname  = parse_file(config, 'test-parse-file')
-            self.assertEqual(cf.name, fname)
+        cf = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('test-parse-file: ' + cf.name)
+        cf.close()
+        config = open_configuration(cf.name)
+        fname  = parse_file(config, 'test-parse-file')
+        self.assertEqual(cf.name, fname)
+        remove(cf.name)
 
             
     def test_parse_file_IOError(self):
@@ -56,24 +57,26 @@ class TestParser(TestCase):
             fname = parse_file(config, 'missing-attribute')
 
         
-    def test_parse_directory(self):        
-        with NamedTemporaryFile(mode='w', suffix='.yml') as cf:
-            dnamew = dirname(abspath(cf.name))
-            cf.write('test-parse-directory: ' + dnamew)
-            cf.seek(0)
-            config = open_configuration(cf.name)
-            dnamer  = parse_directory(config, 'test-parse-directory')
-            self.assertEqual(dnamer, dnamew)
+    def test_parse_directory(self):
+        cf = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        dnamew = dirname(abspath(cf.name))
+        cf.write('test-parse-directory: ' + dnamew)
+        cf.close()
+        config = open_configuration(cf.name)
+        dnamer  = parse_directory(config, 'test-parse-directory')
+        self.assertEqual(dnamer, dnamew)
+        remove(cf.name)
 
-            
-    def test_parse_directory_IOError(self):        
-        with NamedTemporaryFile(mode='w', suffix='.yml') as cf:
-            dnamew = dirname(abspath(cf.name)) + cf.name
-            cf.write('test-parse-directory: ' + dnamew)
-            cf.seek(0)
-            config = open_configuration(cf.name)
-            with self.assertRaises(IOError):                    
-                dnamer = parse_directory(config, 'test-parse-directory')
+        
+    def test_parse_directory_IOError(self):
+        cf = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        dnamew = dirname(abspath(cf.name)) + cf.name
+        cf.write('test-parse-directory: ' + dnamew)
+        cf.close()
+        config = open_configuration(cf.name)
+        with self.assertRaises(IOError):                    
+            dnamer = parse_directory(config, 'test-parse-directory')
+        remove(cf.name)
 
         
     def test_parse_directory_KeyError(self):        
