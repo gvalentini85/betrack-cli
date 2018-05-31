@@ -293,10 +293,9 @@ class TestParser(TestCase):
 
     def test_parse_str(self):
         val  = 'string'
-        val  = val.encode()
         key  = 'test-parse-str'
         rval = parse_str({key: val}, key)
-        self.assertEqual(rval, val)
+        self.assertEqual(rval, val.encode())
 
         
     def test_parse_str_list(self):        
