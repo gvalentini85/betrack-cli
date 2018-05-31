@@ -1016,7 +1016,7 @@ This function checks that the file specified by <code class="docutils literal no
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IOError" title="(in Python v3.6)"><strong>IOError</strong></a> – if the file specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.6)"><strong>KeyError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
 </ul>
 </td>
 </tr>
@@ -1047,7 +1047,7 @@ This function checks that the directory specified by <code class="docutils liter
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IOError" title="(in Python v3.6)"><strong>IOError</strong></a> – if the directory specified by <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.6)"><strong>KeyError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
 </ul>
 </td>
 </tr>
@@ -1083,7 +1083,7 @@ by <code class="docutils literal notranslate"><span class="pre">key</span></code
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the parsed values are not valid</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.6)"><strong>KeyError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
 </ul>
 </td>
 </tr>
@@ -1114,7 +1114,10 @@ type float or list of float and raises a <code class="docutils literal notransla
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a> or list of float</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the parsed values are not valid</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.6)"><strong>KeyError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -1145,7 +1148,10 @@ raises a <code class="docutils literal notranslate"><span class="pre">ValueError
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a> or list of float</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the parsed values are not valid</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.6)"><strong>KeyError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -1175,7 +1181,10 @@ type bool or list of bool and raises a <code class="docutils literal notranslate
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)">bool</a> or list of bool</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the parsed values are not valid</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.6)"><strong>KeyError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -1205,7 +1214,10 @@ specified by <code class="docutils literal notranslate"><span class="pre">key</s
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)">bool</a> or list of bool</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the read value/values are not valid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the parsed values are not valid</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.6)"><strong>KeyError</strong></a> – if the attribute <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found in <code class="docutils literal notranslate"><span class="pre">src</span></code></li>
+</ul>
 </td>
 </tr>
 </tbody>
