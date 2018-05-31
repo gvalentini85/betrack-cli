@@ -293,6 +293,7 @@ class TestParser(TestCase):
 
     def test_parse_str(self):
         val  = 'string'
+        val  = val.encode()
         key  = 'test-parse-str'
         rval = parse_str({key: val}, key)
         self.assertEqual(rval, val)
