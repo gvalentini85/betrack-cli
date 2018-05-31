@@ -4,7 +4,7 @@
 #------------------------------------------------------------------------------#
 
 """
-Tests for our module `betrack.utils.message`.
+Tests for module `betrack.utils.message`.
 """
 
 

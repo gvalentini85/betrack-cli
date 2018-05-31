@@ -20,7 +20,8 @@ and to reverse the order of the frames columns giving each color channe,
           When passed any other objects, their behavior is unchanged.
 """
 
-from pims import pipeline
+from pims  import pipeline
+from numpy import iinfo
 
 @pipeline
 def as_gray(frame):
@@ -70,11 +71,12 @@ def flip(frame, direction):
     print('frames.flip not yet implemented!')
 
 @pipeline
-def invert_colors(frame, maxval=255):
+def invert_colors(frame, maxval=-1):
     """
 
     """
-        
+
+    if maxval == -1: maxval = iinfo(frame.dtype).max
     return maxval - frame[:, :]
 
 
