@@ -11,10 +11,30 @@ Tests for our module `betrack.utils.message`.
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
+from betrack.utils.message import Message
 
 class TestMessage(TestCase):
     
-    def test_mprint_returns_single_line_str(self):
-        output = popen(['betrack', 'track-particles'], stdout=PIPE).communicate()[0]
-        lines = output.split(b'\n')
-        self.assertTrue(1)
+    def test_mprint(self):
+        rval = popen(['python', '-c', 
+                      'from betrack.utils.message import mprint; mprint(\'Hello world!\')'], 
+                     stdout=PIPE).communicate()[0]
+        expected = Message.BOLD + Message.GREEN + 'Hello world!\n' + Message.ENDS
+        self.assertEqual(rval, expected)
+
+
+    def test_wprint(self):
+        rval = popen(['python', '-c', 
+                      'from betrack.utils.message import wprint; wprint(\'Hello world!\')'], 
+                     stdout=PIPE).communicate()[0]
+        expected = Message.BOLD + Message.YELLOW + 'Hello world!\n' + Message.ENDS
+        self.assertEqual(rval, expected)
+
+
+    def test_eprint(self):
+        rval = popen(['python', '-c', 
+                      'from betrack.utils.message import eprint; eprint(\'Hello world!\')'], 
+                     stdout=PIPE).communicate()[0]
+        expected = Message.BOLD + Message.RED + 'Hello world!\n' + Message.ENDS
+        self.assertEqual(rval, expected)
+        
