@@ -78,9 +78,3 @@ setup(
     },
     cmdclass = {'test': RunTests},
 )
-
-# ... inside setup(.)
-install_requires = [
-    # ... some packages
-    # ...
-],
