@@ -263,7 +263,9 @@ def parse_str(src, key, nentries=1):
     
     if key in src:
         val = src.get(key)
-        if type(val) == str or type(val) == unicode:
+        try:                     isunicode = (type(val) == unicode)
+        except NameError as err: isunicode = False        
+        if type(val) == str or isunicode:
             val = val.encode()
             if nentries != 1:
                 msg = 'attribute ' + key + ' has 1 entry, expected ' + str(nentries)
@@ -276,7 +278,9 @@ def parse_str(src, key, nentries=1):
                 msg += ' entries, expected ' + str(nentries)
                 raise ValueError(msg)
             for m in range(0, nval):
-                if type(val[m]) != str and type(val[m]) != unicode:
+                try:                     isunicode = (type(val[m]) == unicode)
+                except NameError as err: isunicode = False                        
+                if type(val[m]) != str and not isunicode:
                     raise ValueError('entry ' + str(m + 1) + ' is not str')
                 else: val[m] = val[m].encode()
             return val                            
