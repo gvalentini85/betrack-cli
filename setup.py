@@ -63,8 +63,11 @@ setup(
     ],
     keywords = 'cli',
     packages = find_packages(exclude=['docs', 'tests*']),
-    install_requires = ['docopt', 'numpy', 'pyyaml', 'pims', 'trackpy',
-                        'tqdm', 'opencv-python'],
+    install_requires = [
+        'pandas;python_version>="3.5"',
+        'pandas<0.21;python_version<"3.5"',
+        'docopt', 'numpy', 'pyyaml', 'pims', 'trackpy',
+        'tqdm', 'opencv-python'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov', 'codecov'],
     },
@@ -75,3 +78,9 @@ setup(
     },
     cmdclass = {'test': RunTests},
 )
+
+# ... inside setup(.)
+install_requires = [
+    # ... some packages
+    # ...
+],
