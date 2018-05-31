@@ -9,6 +9,11 @@ for all commands of *betrack* through the class
 :py:class:`~betrack.commands.command.BetrackCommand`.
 """
 
+try:
+    from os import EX_OK, EX_CONFIG
+except ImportError:
+    EX_OK     = 0
+    EX_CONFIG = 78
 
 class BetrackCommand(object):
     """

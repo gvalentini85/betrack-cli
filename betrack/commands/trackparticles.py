@@ -21,9 +21,9 @@ import warnings
 import pandas
 warnings.filterwarnings('ignore', category=pandas.io.pytables.PerformanceWarning)
 
-from os import remove, EX_OK, EX_CONFIG
+from os      import remove    
 from os.path import isfile
-from tqdm import tqdm
+from tqdm    import tqdm
 import sys
 import trackpy
 
