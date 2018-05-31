@@ -17,24 +17,24 @@ class TestMessage(TestCase):
     
     def test_mprint(self):
         rval = popen(['python', '-c', 
-                      'from betrack.utils.message import mprint; mprint(\'Hello world!\')'], 
+                      'from betrack.utils.message import mprint; mprint(\'Hello world!\', end=\'\')'], 
                      stdout=PIPE).communicate()[0]
-        expected = Message.BOLD + Message.GREEN + 'Hello world!\n' + Message.ENDS
+        expected = Message.BOLD + Message.GREEN + 'Hello world!' + Message.ENDS
         self.assertEqual(rval, expected.encode())
 
 
     def test_wprint(self):
         rval = popen(['python', '-c', 
-                      'from betrack.utils.message import wprint; wprint(\'Hello world!\')'], 
+                      'from betrack.utils.message import wprint; wprint(\'Hello world!\', end=\'\')'], 
                      stdout=PIPE).communicate()[0]
-        expected = Message.BOLD + Message.YELLOW + 'Hello world!\n' + Message.ENDS
+        expected = Message.BOLD + Message.YELLOW + 'Hello world!' + Message.ENDS
         self.assertEqual(rval, expected.encode())
 
 
     def test_eprint(self):
         rval = popen(['python', '-c', 
-                      'from betrack.utils.message import eprint; eprint(\'Hello world!\')'], 
+                      'from betrack.utils.message import eprint; eprint(\'Hello world!\', end=\'\')'], 
                      stdout=PIPE).communicate()[0]
-        expected = Message.BOLD + Message.RED + 'Hello world!\n' + Message.ENDS
+        expected = Message.BOLD + Message.RED + 'Hello world!' + Message.ENDS
         self.assertEqual(rval, expected.encode())
         
