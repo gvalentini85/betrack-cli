@@ -10,18 +10,20 @@ Tests for our module `betrack.utils.parser`.
 
 from unittest import TestCase, skip
 from tempfile import NamedTemporaryFile
-from os.path import dirname, abspath
+from os       import remove
+from os.path  import dirname, abspath
 
 from betrack.utils.parser import *
 
 class TestParser(TestCase):
 
     def test_open_configuration(self):
-        with NamedTemporaryFile(mode='w', suffix='.yml') as cf:
-            cf.write('test-open-configuration: True')
-            cf.seek(0)
-            config = open_configuration(cf.name)
-            self.assertDictEqual({'test-open-configuration': True}, config)
+        cf = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('test-open-configuration: True')
+        cf.close()
+        config = open_configuration(cf.name)
+        self.assertDictEqual({'test-open-configuration': True}, config)
+        remove(cf.name)
 
             
     def test_open_configuration_IOError(self):
