@@ -48,9 +48,10 @@ class TestParser(TestCase):
             fname = parse_file(config, 'test-parse-file')
 
             
-    @skip('KeyError')
     def test_parse_file_KeyError(self):        
-        self.assertTrue(False)
+        config = {'test-parse-file-KeyError': 0}
+        with self.assertRaises(KeyError):        
+            fname = parse_file(config, 'missing-attribute')
 
         
     def test_parse_directory(self):        
@@ -73,10 +74,12 @@ class TestParser(TestCase):
                 dnamer = parse_directory(config, 'test-parse-directory')
 
         
-    @skip('KeyError')
     def test_parse_directory_KeyError(self):        
-        self.assertTrue(False)
+        config = {'test-parse-directory-KeyError': 0}
+        with self.assertRaises(KeyError):        
+            fname = parse_directory(config, 'missing-attribute')
 
+            
     def test_parse_int(self):
         val  = 1
         key  = 'test-parse-int'
@@ -119,9 +122,11 @@ class TestParser(TestCase):
             val  = [1, '2']
             rval = parse_int({key: val}, key, nentries=2)            
             
-    @skip('KeyError')
+
     def test_parse_int_KeyError(self):        
-        self.assertTrue(False)
+        config = {'test-parse-int-KeyError': 0}
+        with self.assertRaises(KeyError):        
+            fname = parse_int(config, 'missing-attribute')
 
         
     def test_parse_float(self):
@@ -167,9 +172,10 @@ class TestParser(TestCase):
             rval = parse_float({key: val}, key, nentries=2)            
 
             
-    @skip('KeyError')
     def test_parse_float_KeyError(self):        
-        self.assertTrue(False)
+        config = {'test-parse-float-KeyError': 0}
+        with self.assertRaises(KeyError):        
+            fname = parse_float(config, 'missing-attribute')
 
 
     def test_parse_int_or_float(self):
@@ -230,9 +236,10 @@ class TestParser(TestCase):
             rval = parse_int_or_float({key: val}, key, nentries=2)            
 
             
-    @skip('KeyError')
     def test_parse_int_or_float_KeyError(self):        
-        self.assertTrue(False)
+        config = {'test-parse-int-or-float-KeyError': 0}
+        with self.assertRaises(KeyError):        
+            fname = parse_int_or_float(config, 'missing-attribute')
         
         
     def test_parse_bool(self):
@@ -278,10 +285,11 @@ class TestParser(TestCase):
             rval = parse_bool({key: val}, key, nentries=2)            
 
             
-    @skip('KeyError')
-    def test_parse_bool_KeyError(self):        
-        self.assertTrue(False)
-
+    def test_parse_bool_KeyError(self):
+        config = {'test-parse-bool-KeyError': 0}
+        with self.assertRaises(KeyError):        
+            fname = parse_bool(config, 'missing-attribute')
+            
 
     def test_parse_str(self):
         val  = 'string'
@@ -326,6 +334,7 @@ class TestParser(TestCase):
             rval = parse_str({key: val}, key, nentries=2)            
 
             
-    @skip('KeyError')
     def test_parse_str_KeyError(self):        
-        self.assertTrue(False)
+        config = {'test-parse-str-KeyError': 0}
+        with self.assertRaises(KeyError):        
+            fname = parse_str(config, 'missing-attribute')
