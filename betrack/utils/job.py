@@ -260,7 +260,7 @@ def configure_jobs(jobs):
         # Parse attribute <video>..
         try:
             video = parse_file(j, 'video')            
-        except ValueError:
+        except KeyError:
             wprint('...Job ', i, ': Attribute <video> not found. Skipping job.', sep='')
             continue        
         except IOError:
@@ -270,27 +270,25 @@ def configure_jobs(jobs):
         # Parse attribute <outdir>..        
         try:
             outdir = parse_directory(j, 'outdir')
-        except (ValueError, IOError):
+        except (KeyError, IOError):
             outdir = ''
 
         # Parse attribute <crop-margins>..            
         try:
             margins = parse_int(j, 'crop-margins', nentries=4)
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                wprint('...Job ', i, ': Invalid attribute (', err[0],
-                       '). Skipping job.', sep='')
-                continue
-            else:
-                margins = None
+            wprint('...Job ', i, ': Invalid attribute (', err[0],
+                   '). Skipping job.', sep='')
+            continue
+        except KeyError:
+            margins = None
 
         # Parse attribute <period-*>..                                
         period     = None
         periodtype = None
-        pf         = j.has_key('period-frame')
-        ps         = j.has_key('period-second')
-        pm         = j.has_key('period-minute')
-
+        pf         = 'period-frame'  in j
+        ps         = 'period-second' in j
+        pm         = 'period-minute' in j
         
         # Parse attribute <period-frame>..                        
         if pf and not (ps or pm):
@@ -298,30 +296,30 @@ def configure_jobs(jobs):
                 period     = parse_int(j, 'period-frame', nentries=2)
                 periodtype = 'frame'
             except ValueError as err:
-                if err[0] != 'attribute not found!':
-                    wprint('...Job ', i, ': Invalid attribute (', err[0],
-                           '). Skipping job.', sep='')
-                    continue
+                wprint('...Job ', i, ': Invalid attribute (', err[0],
+                       '). Skipping job.', sep='')
+                continue
+            except KeyError: pass                
         # Parse attribute <period-second>..                
         elif ps and not (pf or pm):
             try:
                 period = parse_int_or_float(j, 'period-second', nentries=2)
                 periodtype = 'second'
             except ValueError as err:
-                if err[0] != 'attribute not found!':
-                    wprint('...Job ', i, ': Invalid attribute (', err[0],
-                           '). Skipping job.', sep='')
-                    continue
+                wprint('...Job ', i, ': Invalid attribute (', err[0],
+                       '). Skipping job.', sep='')
+                continue
+            except KeyError: pass
         # Parse attribute <period-minute>..                        
         elif pm and not (pf or ps):
             try:
                 period = parse_int_or_float(j, 'period-minute', nentries=2)
                 periodtype = 'minute'
             except ValueError as err:
-                if err[0] != 'attribute not found!':
-                    wprint('...Job ', i, ': Invalid attribute (', err[0],
-                           '). Skipping job.', sep='')
-                    continue
+                wprint('...Job ', i, ': Invalid attribute (', err[0],
+                       '). Skipping job.', sep='')
+                continue
+            except KeyError: pass
         elif (pf and ps) or (pf and pm) or (ps and pm):
             wprint('...Job ', i, ': <period-frame>, <period-second> and <period-minute>' +
                    ' are mutually exclusive. Skipping job.', sep='')

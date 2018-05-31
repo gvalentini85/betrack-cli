@@ -41,7 +41,7 @@ def parse_file(src, key):
     :returns: a file name
     :rtype: str
     :raises IOError: if the file specified by ``key`` is not found 
-    :raises ValueError: if the attribute ``key`` is not found in ``src``
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if key in src:
@@ -51,7 +51,7 @@ def parse_file(src, key):
         else:
             raise IOError(errno.ENOENT, 'file not found', val)            
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_directory(src, key):
@@ -64,7 +64,7 @@ def parse_directory(src, key):
     :returns: a directory name
     :rtype: str
     :raises IOError: if the directory specified by ``key`` is not found 
-    :raises ValueError: if the attribute ``key`` is not found in ``src``
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if key in src:
@@ -74,7 +74,7 @@ def parse_directory(src, key):
         else:
             raise IOError(errno.ENOENT, 'directory not found', val)            
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
     
 def parse_int(src, key, nentries=1):
@@ -90,7 +90,7 @@ def parse_int(src, key, nentries=1):
     :rtype: int
     :rtype: list
     :raises ValueError: if the parsed values are not valid
-    :raises ValueError: if the attribute ``key`` is not found in ``src``
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
@@ -116,7 +116,7 @@ def parse_int(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type int or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_float(src, key, nentries=1):
@@ -130,7 +130,8 @@ def parse_float(src, key, nentries=1):
     :param int nentries: the number of floats to parse
     :returns: read float(s)
     :rtype: float or list of float
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
@@ -156,7 +157,7 @@ def parse_float(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type float or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_int_or_float(src, key, nentries=1):
@@ -171,7 +172,8 @@ def parse_int_or_float(src, key, nentries=1):
     :param int nentries: the number of floats to parse
     :returns: read float(s)
     :rtype: float or list of float
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
@@ -197,7 +199,7 @@ def parse_int_or_float(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type int or float or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_bool(src, key, nentries=1):
@@ -211,7 +213,8 @@ def parse_bool(src, key, nentries=1):
     :param int nentries: the number of booleans to parse
     :returns: read boolean(s)
     :rtype: bool or list of bool
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
@@ -237,7 +240,7 @@ def parse_bool(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type bool or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
     
 def parse_str(src, key, nentries=1):
@@ -251,7 +254,8 @@ def parse_str(src, key, nentries=1):
     :param int nentries: the number of booleans to parse
     :returns: read boolean(s)
     :rtype: bool or list of bool
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
@@ -279,5 +283,5 @@ def parse_str(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type str or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 

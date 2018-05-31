@@ -58,10 +58,11 @@ class AnnotateVideo(BetrackCommand):
                 raise ValueError('<tp-flipframes> must be either \'x\'' + 
                                  ', \'y\', \'xy\', \'yx\'')        
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
+                
     def draw_particles(self, frame, df, particles):
         """
         """

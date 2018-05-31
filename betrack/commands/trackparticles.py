@@ -102,116 +102,116 @@ class TrackParticles(BetrackCommand):
             if not self.exportas in ['hdf', 'csv', 'json']:
                 raise ValueError('<tp-exportas> must be either \'hdf\', \'csv\', or \'json\'')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
                 
         try:
             self.locate_diameter = parse_int(config, 'tp-locate-diameter')
             if self.locate_diameter % 2 == 0:
                 raise ValueError('<tp-locate-diameter> must be odd')
         except ValueError as err:
-            if err[0] == 'attribute not found!':
-                eprint('Attribute <tp-locate-diameter> is required.')
-            else:                
-                eprint('Invalid attribute: ', err[0], '.', sep='')
+            eprint('Invalid attribute: ', err[0], '.', sep='')
             sys.exit()
-
+        except KeyError:
+            eprint('Attribute <tp-locate-diameter> is required.')
+            sys.exit()
+            
         try:
             self.locate_featuresdark = parse_bool(config, 'tp-locate-featuresdark')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()                
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
         
         try:
             self.locate_minmass = parse_int_or_float(config, 'tp-locate-minmass')
             if self.locate_minmass < 0:
                 raise ValueError('<tp-locate-minmass> must be non-negative')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_maxsize = parse_int_or_float(config, 'tp-locate-maxsize')
             if self.locate_maxsize <= 0:
                 raise ValueError('<tp-locate-maxsize> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_separation = parse_float(config, 'tp-locate-separation')
             if self.locate_separation < 0:
                 raise ValueError('<tp-locate-separation> must be non-negative')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_noisesize = parse_float(config, 'tp-locate-noisesize')
             if self.locate_noisesize <= 0:
                 raise ValueError('<tp-locate-noisesize> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_smoothingsize = parse_float(config, 'tp-locate-smoothingsize')
             if self.locate_smoothingsize <= 0:
                 raise ValueError('<tp-locate-smoothingsize> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_threshold = parse_int_or_float(config, 'tp-locate-threshold')
             if self.locate_threshold <= 0:
                 raise ValueError('<tp-locate-threshold> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_percentile = parse_float(config, 'tp-locate-percentile')
             if self.locate_percentile < 0 or self.locate_percentile >= 100.0:
                 raise ValueError('<tp-locate-percentile> must be in the interval [0, 100)')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_topn = parse_int(config, 'tp-locate-topn')
             if self.locate_topn <= 0:
                 raise ValueError('<tp-locate-topn> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.locate_preprocess = parse_bool(config, 'tp-locate-preprocess')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.link_searchrange = parse_int_or_float(config, 'tp-link-searchrange')
             if self.link_searchrange <= 0:
                 raise ValueError('<tp-link-searchrange> must be positive')
         except ValueError as err:
-            if err[0] == 'attribute not found!':
-                eprint('Attribute <tp-link-searchrange> is required.')
-            else:                
-                eprint('Invalid attribute: ', err[0], '.', sep='')
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError:
+            eprint('Attribute <tp-link-searchrange> is required.')
             sys.exit()
 
         try:
@@ -219,52 +219,52 @@ class TrackParticles(BetrackCommand):
             if self.link_memory < 0:
                 raise ValueError('<tp-link-memory> must be non-negative')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.link_predict = parse_bool(config, 'tp-link-predict')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.link_adaptivestop = parse_float(config, 'tp-link-adaptivestop')
             if self.link_adaptivestop <= 0:
                 raise ValueError('<tp-link-adaptivestop> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.link_adaptivestep = parse_float(config, 'tp-link-adaptivestep')
             if self.link_adaptivestep <= 0 or self.link_adaptivestep >= 1.0:
                 raise ValueError('<tp-link-adaptivestep> must be in the interval (0.0, 1.0)')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.filter_stubs_threshold = parse_int(config, 'tp-filter-st-threshold')
             if self.filter_stubs_threshold <= 0:
                 raise ValueError('<tp-filter-st-threshold> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
                 
         try:
             self.filter_clusters_quantile = parse_float(config, 'tp-filter-cl-quantile')
             if self.filter_clusters_quantile <= 0 or self.filter_clusters_quantile >= 1.0:
                 raise ValueError('<tp-filter-cl-quantile> must be in the interval (0.0, 1.0)')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
         try:
             self.filter_clusters_threshold = parse_int(config,
@@ -272,9 +272,9 @@ class TrackParticles(BetrackCommand):
             if self.filter_clusters_threshold <= 0:
                 raise ValueError('<tp-filter-cl-threshold> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
                 
         # Parse jobs..
