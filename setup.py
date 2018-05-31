@@ -64,7 +64,7 @@ setup(
     keywords = 'cli',
     packages = find_packages(exclude=['docs', 'tests*']),
     install_requires = [
-        'pandas;python_version!="3.4"',
+        'pandas>=0.21;python_version!="3.4"',
         'pandas<0.21;python_version=="3.4"',
         'docopt', 'numpy', 'pyyaml', 'pims', 'trackpy',
         'tqdm', 'opencv-python'],
