@@ -10,7 +10,6 @@ preprocess video frames.
 These utilities include functions to convert color frames to gray scale, 
 :py:func:`~betrack.utils.frames.as_gray`, 
 to crop frames, :py:func:`~betrack.utils.frames.crop`, 
-to flip frames around one or two axis, :py:func:`~betrack.utils.frames.flip`, 
 to invert the colors of frames, :py:func:`~betrack.utils.frames.invert_colors`, 
 and to reverse the order of the frames columns giving each color channe,
 :py:func:`~betrack.utils.frames.reverse_colors`.
@@ -57,18 +56,6 @@ def crop(frame, margins):
 
     return frame[margins[2]:margins[3], margins[0]:margins[1]]
 
-@pipeline
-def flip(frame, direction):
-    """
-    Convert a frame to gray scale. This function implements lazy evaluation.
-
-    :param frame: the frame to be converted
-    :type frame: ``pims.frame.Frame`` or ``numpy.ndarray``
-    :returns: the frame in gray scale
-    :rtype: ``pims.frame.Frame`` or ``numpy.ndarray``
-    """
-    
-    print('frames.flip not yet implemented!')
 
 @pipeline
 def invert_colors(frame, maxval=-1):

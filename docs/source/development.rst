@@ -34,6 +34,7 @@ in a terminal:
 .. code-block:: bash
 
    $ git clone https://github.com/gvalentini85/betrack-cli.git
+   $ cd betrack-cli/
    $ pip install -e .[test]
    
 
@@ -239,8 +240,6 @@ These modules and their classes/functions are:
   * :py:func:`~betrack.utils.frames.as_gray`
     
   * :py:func:`~betrack.utils.frames.crop`
-
-  * :py:func:`~betrack.utils.frames.flip`
     
   * :py:func:`~betrack.utils.frames.invert_colors`
     
@@ -304,9 +303,7 @@ frames
     .. autofunction:: betrack.utils.frames.as_gray(frame)
 		
     .. autofunction:: betrack.utils.frames.crop
-		
-    .. autofunction:: betrack.utils.frames.flip
-		
+				
     .. autofunction:: betrack.utils.frames.invert_colors
 		
     .. autofunction:: betrack.utils.frames.reverse_colors
