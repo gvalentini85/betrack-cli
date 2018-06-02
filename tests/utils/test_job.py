@@ -50,7 +50,7 @@ class TestJob(TestCase):
     def test_job_str(self):
         job             = Job('dummy.avi')        
         output          = job.str() 
-        nlines          = len(output.split(b'\n'))
+        nlines          = len(output.split('\n'))
         self.assertEqual(nlines, 2)
 
         job.margins     = [0, 100, 0, 100]        
