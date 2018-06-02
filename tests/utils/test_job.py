@@ -182,7 +182,6 @@ class TestJob(TestCase):
         self.assertTrue(job.valid_margins())
         
 
-    @skip("Debug")        
     def test_job_valid_margins_TypeError(self):
         job = Job('dummy.avi')
         with self.assertRaises(TypeError):
