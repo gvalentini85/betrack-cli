@@ -71,28 +71,32 @@ class TestJob(TestCase):
         job.load_frames()        
         self.assertEqual(job.framerate,   self._framerate)
         self.assertEqual(job.frameshape,  self._frameshape)
-        self.assertEqual(len(job.frames), self._nframes)
+        self.assertEqual(job.nframes, self._nframes)
+        job.release_memory()
 
         job.period     = [0, 5]
         job.periodtype = 'frame'
         job.load_frames()        
         self.assertEqual(job.framerate,   self._framerate)
         self.assertEqual(job.frameshape,  self._frameshape)
-        self.assertEqual(len(job.frames), 5)
+        self.assertEqual(job.nframes, 5)
+        job.release_memory()
 
         job.period     = [0, 0.5]
         job.periodtype = 'second'
         job.load_frames()        
         self.assertEqual(job.framerate,   self._framerate)
         self.assertEqual(job.frameshape,  self._frameshape)
-        self.assertEqual(len(job.frames), 5)
+        self.assertEqual(job.nframes, 5)
+        job.release_memory()
         
         job.period     = [0, 0.0083]
         job.periodtype = 'minute'
         job.load_frames()        
         self.assertEqual(job.framerate,   self._framerate)
         self.assertEqual(job.frameshape,  self._frameshape)
-        self.assertEqual(len(job.frames), 5)
+        self.assertEqual(job.nframes, 5)
+        job.release_memory()
 
         
     def test_job_load_frames_IOError(self):
@@ -102,10 +106,8 @@ class TestJob(TestCase):
 
 
     def test_job_release_memory(self):
-        vf          = NamedTemporaryFile(mode='w', suffix='.avi')
-        vf.close()        
-        job         = Job(vf.name)                    
-        job.frames  = 'memory allocated'
+        job         = Job(self._vf.name)
+        job.load_frames()        
         job.pframes = 'memory allocated'
         job.dflink  = 'memory allocated'
         with open(job.h5storage, 'w'): pass

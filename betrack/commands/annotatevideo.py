@@ -160,6 +160,10 @@ class AnnotateVideo(BetrackCommand):
         nframes = len(job.pframes)
         for i in tqdm(arange(0, nframes), desc=d, unit=ut, total=nframes):
 
+#TODO: convert this not to select period!        
+#TODO: convert this not to select period!        
+#TODO: convert this not to select period!        
+            
             # Get frame, subset tracks..
             f  = array(job.pframes[i])
             df = job.dflink[job.dflink['frame'] == i]

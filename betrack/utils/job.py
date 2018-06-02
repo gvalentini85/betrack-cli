@@ -56,6 +56,7 @@ class Job:
         self.framerate     = None         # Original video frame rate
         self.frameshape    = None         # Original video frame shape
         self.pframes       = None         # Preprocessed video frames
+        self.nframes       = None         # Number of selected frames (see self.period)
         self.period        = period       # Initial and final frame indexes (2-tuple)
         self.periodtype    = periodtype   # Period type: 'frame', 'second', 'minute'
         self.dflink        = None         # Dataframe of the linked trajectories
@@ -121,8 +122,10 @@ class Job:
             if self.periodtype == 'minute':
                 self.period = [int(round(p*60*self.framerate)) for p in self.period]
                 self.periodtype = 'frame'
-            if self.periodtype == 'frame':
-                self.frames = self.frames[range(self.period[0], self.period[1])]
+        else:
+            self.period = [0, self.frames.get_metadata()['nframes']]
+            self.periodtype = 'frame'
+        self.nframes = self.period[1] - self.period[0]
 
         
     def release_memory(self):
@@ -137,6 +140,7 @@ class Job:
                   and/or to the trajectories of the video.       
         """
 
+        self.frames.close()
         self.frames  = None
         self.pframes = None
         self.dflink  = None
@@ -230,6 +234,9 @@ class Job:
         else: raise ValueError('crop margins are not valid')
             
         # If RGB, convert to gray scale..
+#TODO: convert this not to use pframes yet!        
+#TODO: convert this not to use pframes yet!        
+#TODO: convert this not to use pframes yet!        
         if len(self.pframes[0].shape) == 3 and self.pframes[0].shape[2] == 3:
             self.pframes = as_gray(self.pframes)
 

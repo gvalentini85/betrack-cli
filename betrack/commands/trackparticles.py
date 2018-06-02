@@ -305,6 +305,11 @@ class TrackParticles(BetrackCommand):
         pf = [dict(features=0)]
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(job.pframes, desc=d, unit=ut) as t:       
             for i, frame in enumerate(t):
+
+#TODO: convert this to select period!        
+#TODO: convert this to select period!        
+#TODO: convert this to select period!        
+                
                 features = trackpy.locate(frame, diameter=self.locate_diameter,
                                           minmass=self.locate_minmass,
                                           maxsize=self.locate_maxsize,
