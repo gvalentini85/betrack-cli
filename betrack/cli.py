@@ -39,8 +39,6 @@ def main():
     import betrack.commands
     options = docopt(__doc__, version=CLI + ' ' + VERSION)
 
-    # Here we'll try to dynamically match the command the user is trying to run
-    # with a pre-defined command class we've already created.
     for (k, v) in options.items():
         if hasattr(betrack.commands, k.replace('-', '')) and v:
             module = getattr(betrack.commands, k.replace('-', ''))

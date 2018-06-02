@@ -14,10 +14,11 @@ to initialize a list of jobs according to a configuration file.
 """
 
 
-from os import remove
+from os      import remove
 from os.path import dirname, realpath, isfile, splitext, basename
-from pandas import HDFStore
-from pims import Video
+from pandas  import HDFStore
+from pims    import Video
+from errno   import ENOENT
 
 from betrack.utils.message import wprint
 from betrack.utils.parser  import (parse_file, parse_directory, parse_int, parse_float,
@@ -101,15 +102,15 @@ class Job:
             self.framerate  = self.frames.frame_rate
             self.frameshape = self.frames.frame_shape
         else:
-            raise IOError(errno.ENOENT, 'file not found', self.video)
+            raise IOError(ENOENT, 'file not found', self.video)
 
         # Select period..
         if self.period is not None and self.periodtype is not None:
             if self.periodtype == 'second':
-                self.period = [int(round(p*self.frames.frame_rate)) for p in self.period]
+                self.period = [int(round(p*self.framerate)) for p in self.period]
                 self.periodtype = 'frame'
             if self.periodtype == 'minute':
-                self.period = [int(round(p*60*self.frames.frame_rate)) for p in self.period]
+                self.period = [int(round(p*60*self.framerate)) for p in self.period]
                 self.periodtype = 'frame'
             if self.periodtype == 'frame':
                 self.frames = self.frames[range(self.period[0], self.period[1])]
@@ -186,13 +187,13 @@ class Job:
                 ymin = self.margins[2]
                 ymax = self.margins[3]
                 
-                if xmin < 0 or xmin >= xmax or xmin > self.frames.frame_shape[1]:
+                if xmin < 0 or xmin >= xmax or xmin > self.frameshape[1]:
                     return False
-                if xmax < 1 or xmax <= xmin or xmax > self.frames.frame_shape[1]:
+                if xmax < 2 or xmax <= xmin or xmax > self.frameshape[1]:
                     return False                
-                if ymin < 0 or ymin >= ymax or ymin > self.frames.frame_shape[0]:
+                if ymin < 0 or ymin >= ymax or ymin > self.frameshape[0]:
                     return False
-                if ymax < 1 or ymax <= ymin or ymax > self.frames.frame_shape[0]:
+                if ymax < 2 or ymax <= ymin or ymax > self.frameshape[0]:
                     return False
                 return True 
         return False
@@ -207,8 +208,6 @@ class Job:
         :param bool invert: whether to invert the colors of the frame of not
         :raise TypeError: if the video frames are not loaded
         :raise ValueError: if the margins are not valid
-        :raise ValueError: if the color format is not recognized (number of channels)
-        :raise ValueError: if the color dtype is not supported
         """
         
         # Initialize pframes..
@@ -222,22 +221,11 @@ class Job:
         else: raise ValueError('crop margins are not valid')
             
         # If RGB, convert to gray scale..
-        if len(self.pframes[0].shape) == 3:
+        if len(self.pframes[0].shape) == 3 and self.pframes[0].shape[2] == 3:
             self.pframes = as_gray(self.pframes)
-        elif len(self.pframes[0].shape) != 1:
-            raise ValueError('video color format not recognized')
 
         # Invert video..
-        if invert:
-            if self.frames.pixel_type == 'uint8':
-                self.pframes = invert_colors(self.pframes, 255)
-            elif self.frames.pixel_type == 'uint16':
-                self.pframes = invert_colors(self.pframes, 65535)
-            elif self.frames.pixel_type == 'uint32':
-                self.pframes = invert_colors(self.pframes, 2**32)
-            else:
-                ValueError('cannot invert colors for dtype' + str(self.frames.pixel_type))
-        
+        if invert: self.pframes = invert_colors(self.pframes)        
 
 
 def configure_jobs(jobs):
@@ -299,7 +287,6 @@ def configure_jobs(jobs):
                 wprint('...Job ', i, ': Invalid attribute (', err[0],
                        '). Skipping job.', sep='')
                 continue
-            except KeyError: pass                
         # Parse attribute <period-second>..                
         elif ps and not (pf or pm):
             try:
@@ -309,7 +296,6 @@ def configure_jobs(jobs):
                 wprint('...Job ', i, ': Invalid attribute (', err[0],
                        '). Skipping job.', sep='')
                 continue
-            except KeyError: pass
         # Parse attribute <period-minute>..                        
         elif pm and not (pf or ps):
             try:
@@ -319,7 +305,6 @@ def configure_jobs(jobs):
                 wprint('...Job ', i, ': Invalid attribute (', err[0],
                        '). Skipping job.', sep='')
                 continue
-            except KeyError: pass
         elif (pf and ps) or (pf and pm) or (ps and pm):
             wprint('...Job ', i, ': <period-frame>, <period-second> and <period-minute>' +
                    ' are mutually exclusive. Skipping job.', sep='')
