@@ -101,7 +101,6 @@ class TestJob(TestCase):
             job.load_frames()
 
 
-    @skip("Debug")            
     def test_job_release_memory(self):
         vf          = NamedTemporaryFile(mode='w', suffix='.avi')
         vf.close()        
