@@ -44,7 +44,6 @@ class TestJob(TestCase):
     @classmethod
     def tearDownClass(cls):
         # Remove temporary file..
-        cls._vf.close()
         remove(cls._vf.name)
 
         
@@ -64,8 +63,9 @@ class TestJob(TestCase):
         output          = job.str() 
         nlines          = len(output.split('\n'))
         self.assertEqual(nlines, 4)
-        
 
+        
+    @skip("debug")
     def test_job_load_frames(self):
         job = Job(self._vf.name)
         job.load_frames()        
