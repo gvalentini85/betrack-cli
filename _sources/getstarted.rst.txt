@@ -4,6 +4,8 @@ Getting Started
 Requirements
 ------------
 
+* `ffmmpeg` to read videos!
+
 Suggested
 ---------
 
