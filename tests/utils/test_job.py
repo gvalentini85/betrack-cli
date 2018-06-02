@@ -202,7 +202,6 @@ class TestJob(TestCase):
         self.assertNotEqual(job.pframes[0][0, 0], unexpected)        
 
         
-    @skip("Debug")
     def test_job_preprocess_video_TypeError(self):
         job = Job('dummy.avi')
         with self.assertRaises(TypeError):
