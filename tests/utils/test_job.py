@@ -117,6 +117,7 @@ class TestJob(TestCase):
         self.assertFalse(isfile(job.h5storage))
 
         
+    @skip("Debug")
     def test_job_export_trajectories(self):
         job         = Job(self._vf.name)
         job.margins = [10, 100, 10, 100]
@@ -138,7 +139,6 @@ class TestJob(TestCase):
         job.release_memory()
 
 
-    @skip("Debug")        
     def test_job_valid_margins(self):
         job = Job(self._vf.name)
         job.load_frames()
@@ -181,7 +181,8 @@ class TestJob(TestCase):
         self.assertTrue(job.valid_margins())
         job.margins = [10, 90, 10, 90]
         self.assertTrue(job.valid_margins())
-        
+        job.release_memory()
+       
 
     def test_job_valid_margins_TypeError(self):
         job = Job('dummy.avi')
