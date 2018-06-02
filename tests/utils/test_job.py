@@ -218,7 +218,6 @@ class TestJob(TestCase):
             job.preprocess_video()
 
             
-    @skip("Debug")
     def test_configure_jobs(self):
         cf = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
         cf.write('test-configure-jobs: None')
