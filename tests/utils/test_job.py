@@ -13,7 +13,7 @@ from tempfile             import NamedTemporaryFile
 from numpy                import arange, array, zeros, uint8, float64
 from pandas               import DataFrame
 from cv2                  import VideoWriter, VideoWriter_fourcc
-from os                   import remove
+from os                   import remove, name
 from os.path              import isfile
 from betrack.utils.job    import *
 from betrack.utils.parser import open_configuration
@@ -44,7 +44,7 @@ class TestJob(TestCase):
     @classmethod
     def tearDownClass(cls):
         # Remove temporary file..
-        remove(cls._vf.name)
+        if name != 'nt': remove(cls._vf.name)
 
         
     def test_job_str(self):
