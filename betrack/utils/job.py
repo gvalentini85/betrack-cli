@@ -20,6 +20,9 @@ from pandas  import HDFStore
 from pims    import Video
 from errno   import ENOENT
 
+from imageio.core import NeedDownloadError
+import imageio
+
 from betrack.utils.message import wprint
 from betrack.utils.parser  import (parse_file, parse_directory, parse_int, parse_float,
                                    parse_int_or_float)
@@ -98,9 +101,15 @@ class Job:
 
         # Load video..
         if isfile(self.video):
-            self.frames     = Video(self.video)
-            self.framerate  = self.frames.frame_rate
-            self.frameshape = self.frames.frame_shape
+            try:
+                self.frames     = Video(self.video)
+                self.framerate  = self.frames.frame_rate
+                self.frameshape = self.frames.frame_shape
+            except NeedDownloadError:
+                imageio.plugins.ffmpeg.download()
+                self.frames     = Video(self.video)
+                self.framerate  = self.frames.frame_rate
+                self.frameshape = self.frames.frame_shape
         else:
             raise IOError(ENOENT, 'file not found', self.video)
 
