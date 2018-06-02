@@ -293,7 +293,7 @@ def configure_jobs(jobs):
                 period     = parse_int(j, 'period-frame', nentries=2)
                 periodtype = 'frame'
             except ValueError as err:
-                wprint('...Job ', i, ': Invalid attribute (', err[0],
+                wprint('...Job ', i, ': Invalid attribute (', str(err),
                        '). Skipping job.', sep='')
                 continue
         # Parse attribute <period-second>..                
@@ -302,7 +302,7 @@ def configure_jobs(jobs):
                 period = parse_int_or_float(j, 'period-second', nentries=2)
                 periodtype = 'second'
             except ValueError as err:
-                wprint('...Job ', i, ': Invalid attribute (', err[0],
+                wprint('...Job ', i, ': Invalid attribute (', str(err),
                        '). Skipping job.', sep='')
                 continue
         # Parse attribute <period-minute>..                        
@@ -311,7 +311,7 @@ def configure_jobs(jobs):
                 period = parse_int_or_float(j, 'period-minute', nentries=2)
                 periodtype = 'minute'
             except ValueError as err:
-                wprint('...Job ', i, ': Invalid attribute (', err[0],
+                wprint('...Job ', i, ': Invalid attribute (', str(err),
                        '). Skipping job.', sep='')
                 continue
         elif (pf and ps) or (pf and pm) or (ps and pm):
