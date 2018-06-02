@@ -26,7 +26,7 @@ class TestJob(TestCase):
         cls._vf         = NamedTemporaryFile(mode='w', suffix='.avi', delete=False)
         cls._vf.close()
         cls._nframes    = 10
-        codec           = VideoWriter_fourcc(b'M', b'J', b'P', b'G')
+        codec           = VideoWriter_fourcc('M', 'J', 'P', 'G')
         cls._framerate  = cls._nframes
         cls._frameshape = (100, 100, 3)
         oshape          = cls._frameshape[0:2][::-1]
