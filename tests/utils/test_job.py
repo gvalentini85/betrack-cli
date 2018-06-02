@@ -95,7 +95,6 @@ class TestJob(TestCase):
         self.assertEqual(len(job.frames), 5)
 
         
-    @skip("Debug")
     def test_job_load_frames_IOError(self):
         job = Job('dummy.avi')        
         with self.assertRaises(IOError):
