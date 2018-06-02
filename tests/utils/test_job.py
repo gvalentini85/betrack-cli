@@ -44,6 +44,7 @@ class TestJob(TestCase):
     @classmethod
     def tearDownClass(cls):
         # Remove temporary file..
+        cls._vf.close()
         remove(cls._vf.name)
 
         
