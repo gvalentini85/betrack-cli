@@ -65,7 +65,6 @@ class TestJob(TestCase):
         self.assertEqual(nlines, 4)
         
 
-    @skip("Debug")
     def test_job_load_frames(self):
         job = Job(self._vf.name)
         job.load_frames()        
