@@ -55,13 +55,13 @@ class TestJob(TestCase):
 
         job.margins     = [0, 100, 0, 100]        
         output          = job.str() 
-        nlines          = len(output.split(b'\n'))
+        nlines          = len(output.split('\n'))
         self.assertEqual(nlines, 3)
 
         job.period      = [0, 100]        
         job.periodtype  = 'frame'
         output          = job.str() 
-        nlines          = len(output.split(b'\n'))
+        nlines          = len(output.split('\n'))
         self.assertEqual(nlines, 4)
         
 
