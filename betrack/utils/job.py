@@ -274,7 +274,7 @@ def configure_jobs(jobs):
         try:
             margins = parse_int(j, 'crop-margins', nentries=4)
         except ValueError as err:
-            wprint('...Job ', i, ': Invalid attribute (', err[0],
+            wprint('...Job ', i, ': Invalid attribute (', str(err),
                    '). Skipping job.', sep='')
             continue
         except KeyError:

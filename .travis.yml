@@ -18,7 +18,6 @@ script:
   - python setup.py test
   
 after_success:
-  - cd tests/
   - codecov
 
 before_deploy:
