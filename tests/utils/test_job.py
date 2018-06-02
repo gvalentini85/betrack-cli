@@ -65,6 +65,7 @@ class TestJob(TestCase):
         self.assertEqual(nlines, 4)
         
 
+    @skip("Debug")
     def test_job_load_frames(self):
         job = Job(self._vf.name)
         job.load_frames()        
@@ -92,14 +93,16 @@ class TestJob(TestCase):
         self.assertEqual(job.framerate,   self._framerate)
         self.assertEqual(job.frameshape,  self._frameshape)
         self.assertEqual(len(job.frames), 5)
-        
 
+        
+    @skip("Debug")
     def test_job_load_frames_IOError(self):
         job = Job('dummy.avi')        
         with self.assertRaises(IOError):
             job.load_frames()
 
 
+    @skip("Debug")            
     def test_job_release_memory(self):
         vf          = NamedTemporaryFile(mode='w', suffix='.avi')
         vf.close()        
@@ -114,7 +117,8 @@ class TestJob(TestCase):
         self.assertEqual(job.dflink,  None)
         self.assertFalse(isfile(job.h5storage))
 
-
+        
+    @skip("Debug")
     def test_job_export_trajectories(self):
         job         = Job(self._vf.name)
         job.margins = [10, 100, 10, 100]
@@ -135,6 +139,7 @@ class TestJob(TestCase):
         remove(job.jsontracks)
 
 
+    @skip("Debug")        
     def test_job_valid_margins(self):
         job = Job(self._vf.name)
         job.load_frames()
@@ -179,12 +184,14 @@ class TestJob(TestCase):
         self.assertTrue(job.valid_margins())
         
 
+    @skip("Debug")        
     def test_job_valid_margins_TypeError(self):
         job = Job('dummy.avi')
         with self.assertRaises(TypeError):
             job.valid_margins()
         
-        
+
+    @skip("Debug")            
     def test_job_preprocess_video(self):
         job         = Job(self._vf.name)
         job.margins = [10, 90, 10, 90]        
@@ -197,13 +204,15 @@ class TestJob(TestCase):
         job.preprocess_video(invert=True)
         self.assertNotEqual(job.pframes[0][0, 0], unexpected)        
 
-
+        
+    @skip("Debug")
     def test_job_preprocess_video_TypeError(self):
         job = Job('dummy.avi')
         with self.assertRaises(TypeError):
             job.preprocess_video()
-        
 
+            
+    @skip("Debug")
     def test_job_preprocess_video_ValueError(self):
         job         = Job(self._vf.name)
         job.margins = [0, 100, 0, 100.0]
@@ -212,6 +221,7 @@ class TestJob(TestCase):
             job.preprocess_video()
 
             
+    @skip("Debug")
     def test_configure_jobs(self):
         cf = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
         cf.write('test-configure-jobs: None')
