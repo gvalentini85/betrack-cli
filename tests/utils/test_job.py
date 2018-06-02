@@ -210,13 +210,13 @@ class TestJob(TestCase):
             job.preprocess_video()
 
             
-    @skip("Debug")
     def test_job_preprocess_video_ValueError(self):
         job         = Job(self._vf.name)
         job.margins = [0, 100, 0, 100.0]
         job.load_frames()
         with self.assertRaises(ValueError):
             job.preprocess_video()
+        job.release_memory()
 
             
     def test_configure_jobs(self):
