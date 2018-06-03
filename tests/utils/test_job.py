@@ -201,6 +201,7 @@ class TestJob(TestCase):
         unexpected = job.pframes[0][0, 0]
         job.preprocess_video(invert=True)
         self.assertNotEqual(job.pframes[0][0, 0], unexpected)        
+        job.release_memory()
 
         
     def test_job_preprocess_video_TypeError(self):
