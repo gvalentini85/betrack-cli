@@ -117,7 +117,6 @@ class TestJob(TestCase):
         self.assertFalse(isfile(job.h5storage))
 
         
-    @skip("Debug")
     def test_job_export_trajectories(self):
         job         = Job(self._vf.name)
         job.margins = [10, 100, 10, 100]
