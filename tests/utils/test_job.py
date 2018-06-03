@@ -190,7 +190,6 @@ class TestJob(TestCase):
             job.valid_margins()
         
 
-    @skip("Debug")            
     def test_job_preprocess_video(self):
         job         = Job(self._vf.name)
         job.margins = [10, 90, 10, 90]        
