@@ -67,7 +67,7 @@ setup(
         'pandas;python_version!="3.4"',
         'pandas<0.21;python_version=="3.4"',
         'docopt', 'numpy', 'pyyaml', 'pims', 'trackpy',
-        'tqdm', 'opencv-python', 'imageio'],
+        'tqdm', 'tables', 'opencv-python', 'imageio'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov', 'codecov'],
     },
