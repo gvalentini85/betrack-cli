@@ -22,7 +22,6 @@ install:
       7z x -y ffmpeg-4.0.tar > NUL
     )
   - cmd: "pip install requests"
-  - cmd: "pip install subprocess"
   - cmd: "cd C:\\projects\\betrack-cli"
   - cmd: "echo %HDF5_DIR%"
   - cmd: "python resources\\ci\\get_hdf5.py"
