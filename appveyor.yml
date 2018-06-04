@@ -26,10 +26,8 @@ install:
       7z x -y ffmpeg-4.0.tar > NUL
     )
   - cmd: "cd C:\\projects\\betrack-cli"
-  - if %PYTHON%=="C:\\Python34-x64" (
-      "echo %HDF5_DIR%" &&
-      "python resources\\ci\\get_hdf5.py"
-    )
+  - cmd: "echo %HDF5_DIR%"
+  - cmd: "python resources\\ci\\get_hdf5.py"
   - cmd: "pip install -e .[test]"
 
 build: off
