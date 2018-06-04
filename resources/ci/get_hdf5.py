@@ -135,9 +135,8 @@ def main():
     if install_path is not None:
         if not exists(install_path):
             makedirs(install_path)
-    if vs_version is not None:
-        cmake_generator = VSVERSION_TO_GENERATOR[vs_version]
 
+    cmake_generator = VSVERSION_TO_GENERATOR[vs_version
     with TemporaryFile() as f:
         download_hdf5(version, f)
         build_hdf5(version, f, install_path, cmake_generator, use_prefix)
