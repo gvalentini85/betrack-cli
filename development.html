@@ -53,7 +53,7 @@ must first install the following software:</p>
 </ul>
 </div>
 <div class="section" id="editable-installation">
-<h2>Editable Installation<a class="headerlink" href="#editable-installation" title="Permalink to this headline">¶</a></h2>
+<span id="editable-install"></span><h2>Editable Installation<a class="headerlink" href="#editable-installation" title="Permalink to this headline">¶</a></h2>
 <p>If you are planning to modify or contribute to the development of <em>betrack</em>,
 you want to clone the <a class="reference external" href="https://github.com/gvalentini85/betrack-cli">GitHub repository</a>
 and install <em>betrack</em> (<em>and all development dependencies</em>) from source in
@@ -742,7 +742,11 @@ attributes <code class="docutils literal notranslate"><span class="pre">tp-perio
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IOError" title="(in Python v3.6)"><strong>IOError</strong></a> – if the video file is not found</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IOError" title="(in Python v3.6)"><strong>IOError</strong></a> – if the video file is not found</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><strong>ValueError</strong></a> – if the selected period is out of range for the video</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

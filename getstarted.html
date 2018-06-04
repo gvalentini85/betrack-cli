@@ -45,24 +45,62 @@
             
   <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><cite>ffmmpeg</cite> to read videos!</li>
-</ul>
+<div class="section" id="requirements-and-suggestions">
+<h2>Requirements and Suggestions<a class="headerlink" href="#requirements-and-suggestions" title="Permalink to this headline">¶</a></h2>
+<p><em>betrack</em> requires a few Python modules and other resources to
+correctly process video files. All required Python modules are listed as
+dependencies of the package and are automatically installed during the
+<em>betrack</em> installation. Other external dependencies include:</p>
+<ol class="arabic">
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">FFmpeg</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if <code class="docutils literal notranslate"><span class="pre">FFmpeg</span></code> is not present on your system, <em>betrack</em> will
+attempt to download and install it. In some cases, notably on
+Windows using Python 3.4, this process may fail and <code class="docutils literal notranslate"><span class="pre">FFmpeg</span></code>
+should be installed instead <a class="reference external" href="http://ffmpeg.org/">manually</a>
+before <em>betrack</em>.</p>
 </div>
-<div class="section" id="suggested">
-<h2>Suggested<a class="headerlink" href="#suggested" title="Permalink to this headline">¶</a></h2>
+</li>
+</ol>
+<p>Other Python packages that may enhance the performance of <em>betrack</em> are
+instead nott required and listed here as suggestions. If present, <em>betrack</em>
+will attempt to exploit their functionalities to boost performance. Suggested
+packages include:</p>
 <ul class="simple">
-<li><cite>numba</cite> to speed up trackpy!</li>
+<li><code class="docutils literal notranslate"><span class="pre">numba</span></code> (see <a class="reference external" href="https://numba.pydata.org/">https://numba.pydata.org/</a>)</li>
 </ul>
 </div>
 <div class="section" id="installation-using-pip">
 <h2>Installation using Pip<a class="headerlink" href="#installation-using-pip" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><em>betrack</em> is currently under heavy development and is not yet on PyPI.</p>
+</div>
 </div>
 <div class="section" id="installation-from-source">
 <h2>Installation from Source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h2>
-<p>Refer to development section for editable installation!</p>
+<p>If you are want to install <em>betrack</em> from source directly, we
+recommend closing the <a class="reference external" href="https://github.com/gvalentini85/betrack-cli">repository</a>
+and installing the package using pip. You can do so by issuing the
+following commands in a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/gvalentini85/betrack-cli.git
+$ <span class="nb">cd</span> betrack-cli/
+$ pip install .
+</pre></div>
+</div>
+<p>If you want to install <em>betrack</em> system-wise you might need to use <code class="docutils literal notranslate"><span class="pre">sudo</span></code> privileges
+depending on your environment. If you want to install <em>betrack</em> for your account only, or
+if you don’t have <code class="docutils literal notranslate"><span class="pre">sudo</span></code> privileges on your machine you can use the <code class="docutils literal notranslate"><span class="pre">--user</span></code>
+option:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/gvalentini85/betrack-cli.git
+$ <span class="nb">cd</span> betrack-cli/
+$ pip install --user .
+</pre></div>
+</div>
+<p>If you are planning to modify or contribute to the <em>betrack</em> package
+you may want to follow the instructions to install <em>betrack</em> in editable
+mode included in <a class="reference internal" href="development.html#editable-install"><span class="std std-ref">Editable Installation</span></a>.</p>
 </div>
 </div>
 
@@ -78,8 +116,7 @@
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#suggested">Suggested</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements-and-suggestions">Requirements and Suggestions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-using-pip">Installation using Pip</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-from-source">Installation from Source</a></li>
 </ul>
