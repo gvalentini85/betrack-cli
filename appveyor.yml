@@ -3,7 +3,7 @@ version: 0.1.0.{build}
 environment:
   matrix:
     - PYTHON: "C:\\Python27-x64"
-    - PYTHON: "C:\\Python34-x64"
+    - PYTHON: "C:\\Python34"
     - PYTHON: "C:\\Python35-x64"
     - PYTHON: "C:\\Python36-x64"
 
@@ -13,7 +13,7 @@ install:
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""  
   - cmd: "python -m pip install --upgrade pip"
   - cmd: "pip install --upgrade setuptools"
-  - if %PYTHON%=="C:\\Python34-x64" (
+  - if %PYTHON%=="C:\\Python34" (
       appveyor DownloadFile "http://ffmpeg.org/releases/ffmpeg-4.0.tar.xz" &&
       7z x -y ffmpeg-4.0.tar.xz &&
       7z x -y ffmpeg-4.0.tar > NUL
