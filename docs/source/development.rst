@@ -17,7 +17,9 @@ must first install the following software:
 
 * `sphinx <http://www.sphinx-doc.org/en/stable/install.html>`_
 
+
   
+.. _editable-install:
 
 Editable Installation
 =====================

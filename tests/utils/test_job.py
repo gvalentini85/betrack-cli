@@ -103,6 +103,14 @@ class TestJob(TestCase):
         with self.assertRaises(IOError):
             job.load_frames()
 
+    def test_job_load_frames_IndexError(self):
+        job         = Job(self._vf.name)
+        job.period = [0, 100]
+        job.periodtype = 'frame'        
+        with self.assertRaises(IndexError):
+            job.load_frames()        
+        job.release_memory()
+            
 
     def test_job_release_memory(self):
         job         = Job(self._vf.name)

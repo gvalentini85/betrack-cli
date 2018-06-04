@@ -98,6 +98,7 @@ class Job:
         attributes ``tp-period-frame``, ``tp-period-second``, or ``tp-period-minute``.
 
         :raises IOError: if the video file is not found
+        :raises ValueError: if the selected period is out of range for the video
         """
 
         # Load video..
@@ -115,15 +116,22 @@ class Job:
             raise IOError(ENOENT, 'file not found', self.video)
 
         # Select period..
+        nframes = self.frames.get_metadata()['nframes']
         if self.period is not None and self.periodtype is not None:
             if self.periodtype == 'second':
                 self.period = [int(round(p*self.framerate)) for p in self.period]
                 self.periodtype = 'frame'
-            if self.periodtype == 'minute':
+            elif self.periodtype == 'minute':
                 self.period = [int(round(p*60*self.framerate)) for p in self.period]
                 self.periodtype = 'frame'
+
+            if (self.period[0] < 0 or
+                self.period[0] > nframes - 1 or
+                self.period[1] < 1 or
+                self.period[1] > nframes):
+                raise IndexError("selected period is out of range for the video")            
         else:
-            self.period = [0, self.frames.get_metadata()['nframes']]
+            self.period = [0, nframes]
             self.periodtype = 'frame'
         self.nframes = self.period[1] - self.period[0]
 
@@ -234,10 +242,7 @@ class Job:
         else: raise ValueError('crop margins are not valid')
             
         # If RGB, convert to gray scale..
-#TODO: convert this not to use pframes yet!        
-#TODO: convert this not to use pframes yet!        
-#TODO: convert this not to use pframes yet!        
-        if len(self.pframes[0].shape) == 3 and self.pframes[0].shape[2] == 3:
+        if len(self.frameshape) == 3 and self.frameshape[2] == 3:
             self.pframes = as_gray(self.pframes)
 
         # Invert video..
