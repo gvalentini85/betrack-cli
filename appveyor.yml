@@ -3,10 +3,12 @@ version: 0.1.0.{build}
 environment:
   matrix:
     - PYTHON: "C:\\Python27-x64"
-    - PYTHON: "C:\\Python34-x64"
-      HDF5_VERSION: "1.8.17"
-      HDF5_VSVERSION: "10-64"
-      HDF5_DIR: "C:\\hdf5\\%HDF5_VERSION%\\%HDF5_VSVERSION%"    
+
+# Python 3.4 support temporarily disabled.
+#    - PYTHON: "C:\\Python34-x64"
+#      HDF5_VERSION: "1.8.17"
+#      HDF5_VSVERSION: "10-64"
+#      HDF5_DIR: "C:\\hdf5\\%HDF5_VERSION%\\%HDF5_VSVERSION%"    
     - PYTHON: "C:\\Python35-x64"
     - PYTHON: "C:\\Python36-x64"
 
@@ -21,10 +23,7 @@ install:
       7z x -y ffmpeg-4.0.tar.xz &&
       7z x -y ffmpeg-4.0.tar > NUL
     )
-  - cmd: "pip install requests"
   - cmd: "cd C:\\projects\\betrack-cli"
-  - cmd: "echo %HDF5_DIR%"
-  - cmd: "python resources\\ci\\get_hdf5.py"
   - cmd: "pip install -e .[test]"
 
 build: off
