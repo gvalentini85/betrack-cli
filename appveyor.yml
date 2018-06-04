@@ -27,8 +27,8 @@ install:
     )
   - cmd: "cd C:\\projects\\betrack-cli"
   - if %PYTHON%=="C:\\Python34-x64" (
-      echo %HDF5_DIR% &&
-      python resources\\ci\\get_hdf5.py
+      "echo %HDF5_DIR%" &&
+      "python resources\\ci\\get_hdf5.py"
     )
   - cmd: "pip install -e .[test]"
 
@@ -39,4 +39,3 @@ test_script:
 
 cache:
   - "%LOCALAPPDATA%\\pip\\Cache"
-#  - if %PYTHON%=="C:\\Python34-x64" ( "C:\\hdf5" )
