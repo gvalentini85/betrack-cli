@@ -24,7 +24,7 @@ install:
   - cmd: "pip install requests"
   - cmd: "cd C:\\projects\\betrack-cli"
   - cmd: "echo %HDF5_DIR%"
-  - cmd: "python resources\\ci\\get_hdf5.py"
+  - cmd: "python -c resources\\ci\\get_hdf5.py"
   - cmd: "pip install -e .[test]"
 
 build: off
