@@ -15,6 +15,7 @@ except ImportError:
 
 from unittest import TestCase, skip
 from tempfile import NamedTemporaryFile
+from os       import remove
 
 from betrack.commands.trackparticles import *
 
@@ -28,4 +29,45 @@ class TestTrackParticles(TestCase):
         with self.assertRaises(SystemExit) as cm:
             tp.configure_tracker(opt['--configuration'])
         self.assertEqual(cm.exception.code, EX_CONFIG)
+        
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-exportas: excel')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 12')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('jobs:')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+        
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-featuresdark: 11\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
         

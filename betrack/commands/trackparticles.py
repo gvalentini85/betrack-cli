@@ -108,7 +108,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-exportas> must be either \'hdf\', \'csv\', or \'json\'')
         except ValueError as err:
             eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            exit(EX_CONFIG)
         except KeyError: pass
                 
         try:
@@ -117,16 +117,16 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-diameter> must be odd')
         except ValueError as err:
             eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            exit(EX_CONFIG)
         except KeyError:
             eprint('Attribute <tp-locate-diameter> is required.')
-            sys.exit()
+            exit(EX_CONFIG)
             
         try:
             self.locate_featuresdark = parse_bool(config, 'tp-locate-featuresdark')
         except ValueError as err:
             eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            exit(EX_CONFIG)
         except KeyError: pass
         
         try:
