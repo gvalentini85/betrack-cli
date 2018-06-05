@@ -140,6 +140,9 @@ class AnnotateVideo(BetrackCommand):
         fps         = job.framerate
         oshape      = job.frameshape[0:2][::-1]
         oldmargins  = job.margins
+
+        if oldmargins is None:
+            oldmargins = [0, job.frameshape[1], 0, job.frameshape[0]]
         
         if job.valid_margins() and self.drawregion:
             job.margins = [a - b for a, b in zip(job.margins,
@@ -157,12 +160,7 @@ class AnnotateVideo(BetrackCommand):
         # Loop over frames, annotate, crop and save each of them..
         d       = '\033[01m' + '...Exporting video:'
         ut      = ' frame'
-        nframes = len(job.pframes)
-        for i in tqdm(arange(0, nframes), desc=d, unit=ut, total=nframes):
-
-#TODO: convert this not to select period!        
-#TODO: convert this not to select period!        
-#TODO: convert this not to select period!        
+        for i in tqdm(arange(job.period[0], job.period[1]), desc=d, unit=ut, total=job.nframes):
             
             # Get frame, subset tracks..
             f  = array(job.pframes[i])
