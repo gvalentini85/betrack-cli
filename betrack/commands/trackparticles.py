@@ -107,7 +107,7 @@ class TrackParticles(BetrackCommand):
             if not self.exportas in ['hdf', 'csv', 'json']:
                 raise ValueError('<tp-exportas> must be either \'hdf\', \'csv\', or \'json\'')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
+            eprint('Invalid attribute: ', str(err), '.', sep='')
             exit(EX_CONFIG)
         except KeyError: pass
                 
@@ -116,7 +116,7 @@ class TrackParticles(BetrackCommand):
             if self.locate_diameter % 2 == 0:
                 raise ValueError('<tp-locate-diameter> must be odd')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
+            eprint('Invalid attribute: ', str(err), '.', sep='')
             exit(EX_CONFIG)
         except KeyError:
             eprint('Attribute <tp-locate-diameter> is required.')
@@ -125,7 +125,7 @@ class TrackParticles(BetrackCommand):
         try:
             self.locate_featuresdark = parse_bool(config, 'tp-locate-featuresdark')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
+            eprint('Invalid attribute: ', str(err), '.', sep='')
             exit(EX_CONFIG)
         except KeyError: pass
         
@@ -134,8 +134,8 @@ class TrackParticles(BetrackCommand):
             if self.locate_minmass < 0:
                 raise ValueError('<tp-locate-minmass> must be non-negative')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -143,8 +143,8 @@ class TrackParticles(BetrackCommand):
             if self.locate_maxsize <= 0:
                 raise ValueError('<tp-locate-maxsize> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -152,8 +152,8 @@ class TrackParticles(BetrackCommand):
             if self.locate_separation < 0:
                 raise ValueError('<tp-locate-separation> must be non-negative')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -161,8 +161,8 @@ class TrackParticles(BetrackCommand):
             if self.locate_noisesize <= 0:
                 raise ValueError('<tp-locate-noisesize> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -170,8 +170,8 @@ class TrackParticles(BetrackCommand):
             if self.locate_smoothingsize <= 0:
                 raise ValueError('<tp-locate-smoothingsize> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -179,8 +179,8 @@ class TrackParticles(BetrackCommand):
             if self.locate_threshold <= 0:
                 raise ValueError('<tp-locate-threshold> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -188,8 +188,8 @@ class TrackParticles(BetrackCommand):
             if self.locate_percentile < 0 or self.locate_percentile >= 100.0:
                 raise ValueError('<tp-locate-percentile> must be in the interval [0, 100)')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -197,15 +197,15 @@ class TrackParticles(BetrackCommand):
             if self.locate_topn <= 0:
                 raise ValueError('<tp-locate-topn> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
             self.locate_preprocess = parse_bool(config, 'tp-locate-preprocess')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -213,26 +213,26 @@ class TrackParticles(BetrackCommand):
             if self.link_searchrange <= 0:
                 raise ValueError('<tp-link-searchrange> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError:
             eprint('Attribute <tp-link-searchrange> is required.')
-            sys.exit()
+            exit(EX_CONFIG)
 
         try:
             self.link_memory = parse_int(config, 'tp-link-memory')
             if self.link_memory < 0:
                 raise ValueError('<tp-link-memory> must be non-negative')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
             self.link_predict = parse_bool(config, 'tp-link-predict')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -240,8 +240,8 @@ class TrackParticles(BetrackCommand):
             if self.link_adaptivestop <= 0:
                 raise ValueError('<tp-link-adaptivestop> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -249,8 +249,8 @@ class TrackParticles(BetrackCommand):
             if self.link_adaptivestep <= 0 or self.link_adaptivestep >= 1.0:
                 raise ValueError('<tp-link-adaptivestep> must be in the interval (0.0, 1.0)')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -258,8 +258,8 @@ class TrackParticles(BetrackCommand):
             if self.filter_stubs_threshold <= 0:
                 raise ValueError('<tp-filter-st-threshold> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
                 
         try:
@@ -267,8 +267,8 @@ class TrackParticles(BetrackCommand):
             if self.filter_clusters_quantile <= 0 or self.filter_clusters_quantile >= 1.0:
                 raise ValueError('<tp-filter-cl-quantile> must be in the interval (0.0, 1.0)')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -277,16 +277,15 @@ class TrackParticles(BetrackCommand):
             if self.filter_clusters_threshold <= 0:
                 raise ValueError('<tp-filter-cl-threshold> must be positive')
         except ValueError as err:
-            eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
         except KeyError: pass
-
                 
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
         if len(self.jobs) == 0:
             eprint('No job specified!')
-            sys.exit()                
+            exit(EX_CONFIG)                
 
 
     def locate_features(self, job):

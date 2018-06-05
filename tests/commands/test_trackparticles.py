@@ -70,4 +70,125 @@ class TestTrackParticles(TestCase):
             tp.configure_tracker(opt['--configuration'])
         self.assertEqual(cm.exception.code, EX_CONFIG)
         remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-minmass: -1.5\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-maxsize: -1.5\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-separation: -1.5\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-noisesize: -1.5\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-smoothingsize: -1.5\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-threshold: -1.5\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-percentile: -1.5\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-topn: -1\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-locate-preprocess: -1\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: -1\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+        
         
