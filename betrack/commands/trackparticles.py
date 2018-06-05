@@ -347,8 +347,6 @@ class TrackParticles(BetrackCommand):
         :type job: :py:class:`~betrack.utils.job.Job`
         """
         
-        # Link trajectories in all frames..
-        nframes = len(job.pframes) 
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
             d  = '\033[01m' + '...Linking trajectories'
             ut = ' frame'
@@ -359,7 +357,7 @@ class TrackParticles(BetrackCommand):
                                                memory=self.link_memory,
                                                adaptive_stop=self.link_adaptivestop,
                                                adaptive_step=self.link_adaptivestep),
-                               desc=d, unit=ut, total=nframes):
+                               desc=d, unit=ut, total=job.nframes):
                 sf.put(linked)
             job.dflink = sf.dump()
                 
