@@ -15,11 +15,39 @@ except ImportError:
 
 from unittest import TestCase, skip
 from tempfile import NamedTemporaryFile
-from os       import remove
+from os       import remove, name
+from cv2      import VideoWriter, VideoWriter_fourcc
+from numpy    import arange, array, zeros, uint8
 
 from betrack.commands.trackparticles import *
 
 class TestTrackParticles(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Create temporary video file..
+        cls._vf         = NamedTemporaryFile(mode='w', suffix='.avi', delete=False)
+        cls._vf.close()
+        cls._nframes    = 10
+        codec           = VideoWriter_fourcc('M', 'J', 'P', 'G')
+        cls._framerate  = cls._nframes
+        cls._frameshape = (100, 100, 3)
+        oshape          = cls._frameshape[0:2][::-1]
+        writer          = VideoWriter(cls._vf.name, codec, cls._framerate, oshape)
+        
+        for i in arange(0, cls._nframes):
+            f          = zeros(cls._frameshape, dtype=uint8)
+            f[:, :, 1] = 100
+            f[:, :, 2] = 200
+            f          = array(f)
+            writer.write(f)
+        writer.release()        
+        
+        
+    @classmethod
+    def tearDownClass(cls):
+        # Remove temporary file..
+        if name != 'nt': remove(cls._vf.name)
     
     def test_configure_tracker(self):        
         cf  = NamedTemporaryFile(mode='w', suffix='.yml')
@@ -287,4 +315,25 @@ class TestTrackParticles(TestCase):
             tp.configure_tracker(opt['--configuration'])
         self.assertEqual(cm.exception.code, EX_CONFIG)
         remove(cf.name)
+
+
+    @skip("TODO")
+    def test_locate_features(self):
+        ''
+        
+    @skip("TODO")
+    def test_link_trajectories(self):
+        ''
+        
+    @skip("TODO")
+    def test_filter_trajectories(self):
+        ''
+        
+    @skip("TODO")
+    def test_export_video(self):
+        ''
+        
+    @skip("TODO")
+    def test_run(self):
+        ''
         

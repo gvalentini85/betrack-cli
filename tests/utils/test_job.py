@@ -10,7 +10,7 @@ Tests for our module `betrack.utils.job`.
 
 from unittest             import TestCase
 from tempfile             import NamedTemporaryFile
-from numpy                import arange, array, zeros, uint8, float64
+from numpy                import arange, array, zeros, uint8
 from pandas               import DataFrame
 from cv2                  import VideoWriter, VideoWriter_fourcc
 from os                   import remove, name
