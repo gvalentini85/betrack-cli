@@ -136,7 +136,7 @@ class AnnotateVideo(BetrackCommand):
 
         # Init annotator..
         job.pframes = reverse_colors(job.frames)
-        codec       = VideoWriter_fourcc(b'M', b'J', b'P', b'G')
+        codec       = VideoWriter_fourcc('M', 'J', 'P', 'G')
         fps         = job.framerate
         oshape      = job.frameshape[0:2][::-1]
         oldmargins  = job.margins

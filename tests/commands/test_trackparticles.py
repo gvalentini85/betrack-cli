@@ -424,8 +424,40 @@ class TestTrackParticles(TestCase):
         tp.jobs[0].release_memory()
         remove(tp.jobs[0].avitracked)
         remove(cf.name)
+
         
-    @skip("TODO")
     def test_run(self):
-        ''
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: '     + str(self._pdiameter) + '\n')
+        cf.write('tp-link-searchrange: '    + str(self._hoffset * 2) + '\n')
+        cf.write('tp-filter-st-threshold: ' + str(int(self._nframes / 2)) + '\n')
+        cf.write('jobs:\n')
+        cf.write('  - video: ' + self._vf.name + '\n')
+        cf.write('  - video: ' + self._vf.name + '\n')
+        cf.write('    period-frame: [0, 100]\n')
+        cf.write('  - video: ' + self._vf.name + '\n')
+        cf.write('    crop-margins: [0, 2000, 0, 2000]\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        tp.configure_tracker(opt['--configuration'])
+        rval = tp.run()
+        self.assertEqual(rval, EX_OK)
+        remove(cf.name)
+        remove(tp.jobs[0].avitracked)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: '     + str(self._pdiameter) + '\n')
+        cf.write('tp-link-searchrange: '    + str(self._hoffset * 2) + '\n')
+        cf.write('tp-filter-st-threshold: ' + str(int(self._nframes / 2)) + '\n')
+        cf.write('jobs:\n')
+        cf.write('  - video: ' + self._vf.name + '\n')
+        cf.write('    crop-margins: [0, 2000, 0, 2000]\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        tp.configure_tracker(opt['--configuration'])
+        rval = tp.run()        
+        self.assertEqual(rval, EX_CONFIG)
+        remove(cf.name)
         

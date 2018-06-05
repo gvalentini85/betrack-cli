@@ -452,7 +452,7 @@ class TrackParticles(BetrackCommand):
             # Open video..
             try:
                 job.load_frames()
-                mprint('...Number of frames: ', len(job.frames))
+                mprint('...Number of frames: ', job.nframes)
             except IOError:
                 wprint('...Unable to load video. Skipping job.')
                 continue
@@ -480,13 +480,13 @@ class TrackParticles(BetrackCommand):
                 self.filter_clusters_quantile is not None or
                 self.filter_clusters_threshold is not None):
                 mprint('...Filtering trajectories:', end='\r')
-                sys.stdout.flush()
+                stdout.flush()
                 self.filter_trajectories(job)
                 mprint('...Filtering trajectories: Done')            
 
             # Export trajectories..
             mprint('...Exporting trajectories (', self.exportas, '):', sep='', end='\r')
-            sys.stdout.flush()
+            stdout.flush()
             job.export_trajectories(self.exportas)
             mprint('...Exporting trajectories (', self.exportas, '): Done', sep='')
 
