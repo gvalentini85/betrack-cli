@@ -26,8 +26,9 @@ Help:
 """
 
 
+from sys     import exit
 from inspect import getmembers, isclass
-from docopt import docopt
+from docopt  import docopt
 
 from . import __cli__ as CLI
 from . import __version__ as VERSION
@@ -38,12 +39,11 @@ def main():
     import betrack.commands
     options = docopt(__doc__, version=CLI + ' ' + VERSION)
 
-    # Here we'll try to dynamically match the command the user is trying to run
-    # with a pre-defined command class we've already created.
     for (k, v) in options.items():
         if hasattr(betrack.commands, k.replace('-', '')) and v:
             module = getattr(betrack.commands, k.replace('-', ''))
             betrack.commands = getmembers(module, isclass)
             command = [command[1] for command in betrack.commands if command[0] != 'BetrackCommand'][0]
             command = command(options)
-            command.run()
+            errcode = command.run()
+            exit(errcode)

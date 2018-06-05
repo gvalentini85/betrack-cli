@@ -5,21 +5,29 @@
 #------------------------------------------------------------------------------#
 
 """
-The `track-particles` command.
+The module :py:mod:`~betrack.commands.trackparticles` implements the 
+particle tracking engine of *betrack* that is used in the ``track-particles`` 
+command. It is primary a wrapper of the 
+`trackpy <http://soft-matter.github.io/trackpy/>`_ module and is designed to
+provide a simple and efficient yet flexible interface of ``trackpy`` 
+through the class :py:class:`~betrack.commands.trackparticles.TrackParticles`.
 """
 
-
-from json import dumps
+try:
+    from os import EX_OK, EX_CONFIG
+except ImportError:
+    EX_OK     = 0
+    EX_CONFIG = 78
 
 # Needed to turn off 'PyTables will pickle object' warnings..
 import warnings
 import pandas
 warnings.filterwarnings('ignore', category=pandas.io.pytables.PerformanceWarning)
 
-from os import remove
+from os      import remove    
 from os.path import isfile
-from tqdm import tqdm
-import sys
+from tqdm    import tqdm
+from sys     import exit, stdout
 import trackpy
 
 from betrack.commands.command import BetrackCommand
@@ -30,19 +38,29 @@ from betrack.utils.job        import configure_jobs
 
 
 class TrackParticles(BetrackCommand):
-    """Say hello, world!"""
+    """
+    The class :py:class:`~betrack.commands.trackparticles.TrackParticles` defines
+    a set of functionalities that combined together implement the ``track-particles``
+    command of *betrack*. It allows to load videos, locate features, link and filter
+    them as well as to export the results both as a data file and as an annotated 
+    video.
+    """
 
     def __init__(self, options, *args, **kwargs):
         """
-        TrackParticles constructor. 
+        Constructor for the class :py:class:`~betrack.commands.trackparticles.TrackParticles`.
+
+        :param dict options: list of options passed by command line
+        :param list \*args: variable length argument list
+        :param list \*\*kwargs: arbitrary keyworded arguments
         """
         
         super(TrackParticles, self).__init__(options, *args, **kwargs)
         
         self.jobs                      = []      # List of jobs to process
-        self.featuresdark              = False   # True if features in the video are dark
-        self.exportas                  = 'hdf'
+        self.exportas                  = 'csv'
 
+        self.locate_featuresdark       = False   # True if features in the video are dark
         self.locate_diameter           = None
         self.locate_minmass            = 100
         self.locate_maxsize            = None
@@ -50,7 +68,7 @@ class TrackParticles(BetrackCommand):
         self.locate_noisesize          = 1
         self.locate_smoothingsize      = None
         self.locate_threshold          = None
-        self.locate_percentile         = 64
+        self.locate_percentile         = 64.0
         self.locate_topn               = None
         self.locate_preprocess         = True
 
@@ -61,211 +79,222 @@ class TrackParticles(BetrackCommand):
         self.link_adaptivestep         = 0.95
 
         self.filter_stubs_threshold    = None
-        self.filter_quantile           = None
+        self.filter_clusters_quantile  = None
         self.filter_clusters_threshold = None
 
         
     def configure_tracker(self, filename):
         """
+        Configures the particle tracker according to the configuration file given by
+        ``filename``. If a required attribute is missing from the configuration
+        file or if the value of an attribute in the configuration is invalid, 
+        this function prints an error message and halts the execution of *betrack*.
+
+        :param str filename: the name of the configuration file
         """
 
         try:
             config = open_configuration(filename)            
         except IOError:
             eprint('File not found:', filename)
-            sys.exit()
+            exit(EX_CONFIG)
 
         # Parse tracker configuration..
-        try:
-            self.featuresdark = parse_bool(config, 'tp-featuresdark')
-        except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
-
         try:
             self.exportas = parse_str(config, 'tp-exportas')
             if not self.exportas in ['hdf', 'csv', 'json']:
                 raise ValueError('<tp-exportas> must be either \'hdf\', \'csv\', or \'json\'')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
                 
         try:
             self.locate_diameter = parse_int(config, 'tp-locate-diameter')
             if self.locate_diameter % 2 == 0:
                 raise ValueError('<tp-locate-diameter> must be odd')
         except ValueError as err:
-            if err[0] == 'attribute not found!':
-                eprint('Attribute <tp-locate-diameter> is required.')
-            else:                
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
-
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError:
+            eprint('Attribute <tp-locate-diameter> is required.')
+            exit(EX_CONFIG)
+            
         try:
-            self.locate_minmass = parse_float(config, 'tp-locate-minmass')
+            self.locate_featuresdark = parse_bool(config, 'tp-locate-featuresdark')
+        except ValueError as err:
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
+        
+        try:
+            self.locate_minmass = parse_int_or_float(config, 'tp-locate-minmass')
             if self.locate_minmass < 0:
                 raise ValueError('<tp-locate-minmass> must be non-negative')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
-            self.locate_maxsize = parse_float(config, 'tp-locate-maxsize')
+            self.locate_maxsize = parse_int_or_float(config, 'tp-locate-maxsize')
             if self.locate_maxsize <= 0:
                 raise ValueError('<tp-locate-maxsize> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.locate_separation = parse_float(config, 'tp-locate-separation')
             if self.locate_separation < 0:
                 raise ValueError('<tp-locate-separation> must be non-negative')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.locate_noisesize = parse_float(config, 'tp-locate-noisesize')
             if self.locate_noisesize <= 0:
                 raise ValueError('<tp-locate-noisesize> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.locate_smoothingsize = parse_float(config, 'tp-locate-smoothingsize')
             if self.locate_smoothingsize <= 0:
                 raise ValueError('<tp-locate-smoothingsize> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
-            self.locate_threshold = parse_float(config, 'tp-locate-threshold')
+            self.locate_threshold = parse_int_or_float(config, 'tp-locate-threshold')
             if self.locate_threshold <= 0:
                 raise ValueError('<tp-locate-threshold> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.locate_percentile = parse_float(config, 'tp-locate-percentile')
             if self.locate_percentile < 0 or self.locate_percentile >= 100.0:
                 raise ValueError('<tp-locate-percentile> must be in the interval [0, 100)')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.locate_topn = parse_int(config, 'tp-locate-topn')
             if self.locate_topn <= 0:
                 raise ValueError('<tp-locate-topn> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.locate_preprocess = parse_bool(config, 'tp-locate-preprocess')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.link_searchrange = parse_int_or_float(config, 'tp-link-searchrange')
             if self.link_searchrange <= 0:
                 raise ValueError('<tp-link-searchrange> must be positive')
         except ValueError as err:
-            if err[0] == 'attribute not found!':
-                eprint('Attribute <tp-link-searchrange> is required.')
-            else:                
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-            sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError:
+            eprint('Attribute <tp-link-searchrange> is required.')
+            exit(EX_CONFIG)
 
         try:
             self.link_memory = parse_int(config, 'tp-link-memory')
             if self.link_memory < 0:
                 raise ValueError('<tp-link-memory> must be non-negative')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.link_predict = parse_bool(config, 'tp-link-predict')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.link_adaptivestop = parse_float(config, 'tp-link-adaptivestop')
             if self.link_adaptivestop <= 0:
                 raise ValueError('<tp-link-adaptivestop> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.link_adaptivestep = parse_float(config, 'tp-link-adaptivestep')
             if self.link_adaptivestep <= 0 or self.link_adaptivestep >= 1.0:
                 raise ValueError('<tp-link-adaptivestep> must be in the interval (0.0, 1.0)')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
-            self.filter_stubs_threshold = parse_int(config, 'tp-filter-stubs-threshold')
+            self.filter_stubs_threshold = parse_int(config, 'tp-filter-st-threshold')
             if self.filter_stubs_threshold <= 0:
-                raise ValueError('<tp-filter-stubs-threshold> must be positive')
+                raise ValueError('<tp-filter-st-threshold> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
                 
         try:
-            self.filter_quantile = parse_float(config, 'tp-filter-quantile')
-            if self.filter_quantile <= 0 or self.filter_quantile >= 1.0:
-                raise ValueError('<tp-filter-quantile> must be in the interval (0.0, 1.0)')
+            self.filter_clusters_quantile = parse_float(config, 'tp-filter-cl-quantile')
+            if self.filter_clusters_quantile <= 0 or self.filter_clusters_quantile >= 1.0:
+                raise ValueError('<tp-filter-cl-quantile> must be in the interval (0.0, 1.0)')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
 
         try:
             self.filter_clusters_threshold = parse_int(config,
-                                                       'tp-filter-clusters-threshold')
+                                                       'tp-filter-cl-threshold')
             if self.filter_clusters_threshold <= 0:
-                raise ValueError('<tp-filter-clusters-threshold> must be positive')
+                raise ValueError('<tp-filter-cl-threshold> must be positive')
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
-
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(EX_CONFIG)
+        except KeyError: pass
                 
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
         if len(self.jobs) == 0:
             eprint('No job specified!')
-            sys.exit()                
+            exit(EX_CONFIG)                
 
 
     def locate_features(self, job):
         """
-
+        Loops over each frame of the video defined by ``job`` and locates features
+        based on the current configuration of the particle tracker. This function
+        stores the results of its execution in a temporary HDF file defined by
+        :py:attr:`betrack.utils.job.Job.h5storage`.
+        
+        :param job: the job whose features need to be located
+        :type job: :py:class:`~betrack.utils.job.Job`
         """
 
         # Initalize storage file..        
@@ -276,9 +305,10 @@ class TrackParticles(BetrackCommand):
         d  = '\033[01m' + '...Locating features'
         ut = ' frame'
         pf = [dict(features=0)]
-        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(job.pframes, desc=d, unit=ut) as t:       
-            for i, frame in enumerate(t):
-                features = trackpy.locate(frame, diameter=self.locate_diameter,
+
+        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(range(job.period[0], job.period[1]), desc=d, unit=ut, total=job.nframes) as t:
+            for fn in t:
+                features = trackpy.locate(job.pframes[fn], diameter=self.locate_diameter,
                                           minmass=self.locate_minmass,
                                           maxsize=self.locate_maxsize,
                                           separation=self.locate_separation,
@@ -289,11 +319,11 @@ class TrackParticles(BetrackCommand):
                                           preprocess=self.locate_preprocess,
                                           threshold=self.locate_threshold)
                 
-                if hasattr(frame, 'frame_no') and frame.frame_no is not None:
-                    frame_no = frame.frame_no
+                if hasattr(job.pframes[fn], 'frame_no') and job.pframes[fn].frame_no is not None:
+                    frame_no = job.pframes[fn].frame_no
                 else:
-                    frame_no = i
-                    features['frame'] = i
+                    frame_no          = fn
+                    features['frame'] = fn
                     
                 t.set_postfix(nfeatures=len(features))
                 if len(features) == 0:
@@ -303,10 +333,20 @@ class TrackParticles(BetrackCommand):
         
     def link_trajectories(self, job):
         """
+        Loops over each frame of the video defined by ``job`` and links features
+        based on the current configuration of the particle tracker. This function
+        stores the results of its execution in a temporary HDF file defined by
+        :py:attr:`betrack.utils.job.Job.h5storage` overwriting the results of the
+        execution of 
+        :py:func:`~betrack.commands.trackparticles.TrackParticles.locate_features`.
+
+        .. note:: This function must be called after a call to
+                  :py:func:`~betrack.commands.trackparticles.TrackParticles.locate_features`.
+        
+        :param job: the job whose features need to be linked
+        :type job: :py:class:`~betrack.utils.job.Job`
         """
         
-        # Link trajectories in all frames..
-        nframes = len(job.pframes) 
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
             d  = '\033[01m' + '...Linking trajectories'
             ut = ' frame'
@@ -317,17 +357,25 @@ class TrackParticles(BetrackCommand):
                                                memory=self.link_memory,
                                                adaptive_stop=self.link_adaptivestop,
                                                adaptive_step=self.link_adaptivestep),
-                               desc=d, unit=ut, total=nframes):
+                               desc=d, unit=ut, total=job.nframes):
                 sf.put(linked)
+            job.dflink = sf.dump()
+                
                 
         
     def filter_trajectories(self, job):
         """
-        """
+        Filters the trajectories of the video defined by ``job`` based on the current 
+        configuration of the particle tracker. This function can filter trajectories
+        by length in terms of minimum number of frames and/or by clusters in terms of
+        minimum feature size.
 
-        # Read dataframe from h5 storage file..
-        with trackpy.PandasHDFStoreBig(job.h5storage) as sf:
-            job.dflink = sf.dump()
+        .. note:: This function must be called after a call to
+                  :py:func:`~betrack.commands.trackparticles.TrackParticles.link_trajectories`.
+        
+        :param job: the job whose trajectories need to be filtered
+        :type job: :py:class:`~betrack.utils.job.Job`
+        """
 
         # Filter out trajectories with few points..
         if self.filter_stubs_threshold is not None:
@@ -335,14 +383,27 @@ class TrackParticles(BetrackCommand):
                                               threshold=self.filter_stubs_threshold)
 
         # Filter out trajectories with a mean particle size above a quantile..
-        if self.filter_quantile is not None or self.filter_clusters_threshold is not None:
+        if (self.filter_clusters_quantile is not None or
+            self.filter_clusters_threshold is not None):
             job.dflink = trackpy.filter_clusters(job.dflink,
-                                                 quantile=self.filter_quantile,
+                                                 quantile=self.filter_clusters_quantile,
                                                  threshold=self.filter_clusters_threshold)
             
         
     def export_video(self, job):
         """
+        Exports the tracked features defined by ``job`` as a video based on the current 
+        configuration of the particle tracker and of the video annotator. This function 
+        calls :py:func:`betrack.commands.annotatevideo.AnnotateVideo.annotator` with a 
+        minimal configuration that shows particles' position and identity, tracked region,
+        and frame number. Additional arguments to the video annotator can be given
+        explicitly in the configuration file.
+
+        .. note:: This function must be called after a call to
+                  :py:func:`~betrack.commands.trackparticles.TrackParticles.link_trajectories`.
+        
+        :param job: the job whose features need to be exported as a video
+        :type job: :py:class:`~betrack.utils.job.Job`
         """
 
         from betrack.commands.annotatevideo import AnnotateVideo
@@ -361,21 +422,17 @@ class TrackParticles(BetrackCommand):
         
     def run(self):
         """
-        Run the `track-particle` command.
-#    Compute the range of a continuously-valued time series.
-#    
-#    Examples: ::
-#    
-#        >>> from pyinform import utils
-#        >>> utils.series_range([0,1,2,3,4,5])
-#        (5, 0, 5)
-#        >>> utils.series_range([-0.1, 8.5, 0.02, -6.3])
-#        (14.8, -6.3, 8.5)
-#    :param sequence series: the time series
-#    :returns: the range and the minimum/maximum values
-#    :rtype: 3-tuple (float, float, float)
-#    :raises InformError: if an error occurs within the ``inform`` C call
+        This method implements the ``track-particle`` command of *betrack*. It is 
+        automatically called when the corresponding command is passed through the command
+        line interface.
 
+        This method processes in a batch a sequence of videos with the aim to
+        track the position and identity of particles. It preprocesses each video, locates
+        features, links and filters their trajectories, and exports the results both
+        as a data file and as an annotated video. 
+
+        :returns: ``os.EX_OK`` on success or ``os.EX_CONFIG`` otherwise
+        :rtype: int
         """
         
         trackpy.quiet()
@@ -395,7 +452,7 @@ class TrackParticles(BetrackCommand):
             # Open video..
             try:
                 job.load_frames()
-                mprint('...Number of frames: ', len(job.frames))
+                mprint('...Number of frames: ', job.nframes)
             except IOError:
                 wprint('...Unable to load video. Skipping job.')
                 continue
@@ -406,9 +463,9 @@ class TrackParticles(BetrackCommand):
             # Preprocess video..
             mprint('...Preprocessing video..', end='\r')
             try:
-                job.preprocess_video(invert=self.featuresdark)
+                job.preprocess_video(invert=self.locate_featuresdark)
             except ValueError as err:                
-                wprint('Preprocessing video: ', err[0], '. Skipping job.', sep='')
+                wprint('Preprocessing video: ', str(err), '. Skipping job.', sep='')
                 continue            
             mprint('...Preprocessing video: Done')
 
@@ -420,16 +477,16 @@ class TrackParticles(BetrackCommand):
 
             # Filter trajectories..
             if (self.filter_stubs_threshold is not None or
-                self.filter_quantile is not None or
+                self.filter_clusters_quantile is not None or
                 self.filter_clusters_threshold is not None):
                 mprint('...Filtering trajectories:', end='\r')
-                sys.stdout.flush()
+                stdout.flush()
                 self.filter_trajectories(job)
                 mprint('...Filtering trajectories: Done')            
 
             # Export trajectories..
             mprint('...Exporting trajectories (', self.exportas, '):', sep='', end='\r')
-            sys.stdout.flush()
+            stdout.flush()
             job.export_trajectories(self.exportas)
             mprint('...Exporting trajectories (', self.exportas, '): Done', sep='')
 
@@ -448,6 +505,8 @@ class TrackParticles(BetrackCommand):
         if completed > 0:
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     \(^-^)/', sep='')
+            return EX_OK
         else:
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     ¯\_(ツ)_/¯ ', sep='')
+            return EX_CONFIG

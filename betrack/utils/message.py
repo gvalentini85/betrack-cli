@@ -4,7 +4,14 @@
 #------------------------------------------------------------------------------#
 
 """
-Description of the message module..
+The module :py:mod:`~betrack.utils.message` defines a set of wrappers for the
+``print`` function that decorate printed text according to the context of the
+message.
+
+This module formats and prints status messages 
+with :py:func:`~betrack.utils.message.mprint`, warning messages
+with :py:func:`~betrack.utils.message.wprint`, and error messages
+with :py:func:`~betrack.utils.message.eprint`.
 """
 
 
@@ -13,36 +20,37 @@ from __future__ import print_function
 import sys
 
 class Message:
+    """
+    The class :py:class:`~betrack.utils.message.Message` defines a set of
+    constant variables useful to format printed text.
+
+    These variables include specifiers for the 
+    :py:const:`~betrack.utils.message.Message.BLUE`,
+    :py:const:`~betrack.utils.message.Message.GREEN`, 
+    :py:const:`~betrack.utils.message.Message.YELLOW`, and
+    :py:const:`~betrack.utils.message.Message.RED` colors, for
+    :py:const:`~betrack.utils.message.Message.BOLD` text and to reset
+    the text formatting to its default configuration,
+    :py:const:`~betrack.utils.message.Message.ENDS`.
+    """
+    
     BLUE    = '\033[94m'
     GREEN   = '\033[92m'
     YELLOW  = '\033[93m'
     RED     = '\033[91m'
     ENDS    = '\x1b[0m'
     BOLD    = '\033[01m'
-
-    def disable(self):
-        self.BLUE   = ''
-        self.YELLOW = ''
-        self.RED    = ''
-        self.ENDS   = ''
-        self.BOLD   = ''
-        
+    
 
 def mprint(*args, **kwargs):
     """
-#    Compute the range of a continuously-valued time series.
-#    
-#    Examples: ::
-#    
-#        >>> from pyinform import utils
-#        >>> utils.series_range([0,1,2,3,4,5])
-#        (5, 0, 5)
-#        >>> utils.series_range([-0.1, 8.5, 0.02, -6.3])
-#        (14.8, -6.3, 8.5)
-#    :param sequence series: the time series
-#    :returns: the range and the minimum/maximum values
-#    :rtype: 3-tuple (float, float, float)
-#    :raises InformError: if an error occurs within the ``inform`` C call
+    Formats the values as a status message and prints them to a stream, 
+    or to ``sys.stdout`` by default.
+
+    :param file: a file-like object (stream); defaults to the current ``sys.stdout``
+    :type file: file object
+    :param str sep: string inserted between values, default to one space
+    :param str end: string appended after the last value, default to newline.
     """
 
     file  = kwargs.get('file', sys.stdout)    
@@ -53,19 +61,13 @@ def mprint(*args, **kwargs):
 
 def wprint(*args, **kwargs):
     """
-#    Compute the range of a continuously-valued time series.
-#    
-#    Examples: ::
-#    
-#        >>> from pyinform import utils
-#        >>> utils.series_range([0,1,2,3,4,5])
-#        (5, 0, 5)
-#        >>> utils.series_range([-0.1, 8.5, 0.02, -6.3])
-#        (14.8, -6.3, 8.5)
-#    :param sequence series: the time series
-#    :returns: the range and the minimum/maximum values
-#    :rtype: 3-tuple (float, float, float)
-#    :raises InformError: if an error occurs within the ``inform`` C call
+    Formats the values as a warning message and prints them to a stream, 
+    or to ``sys.stdout`` by default.
+
+    :param file: a file-like object (stream); defaults to the current ``sys.stdout``
+    :type file: file object
+    :param str sep: string inserted between values, default to one space
+    :param str end: string appended after the last value, default to newline.
     """
 
     file  = kwargs.get('file', sys.stdout)    
@@ -76,19 +78,13 @@ def wprint(*args, **kwargs):
 
 def eprint(*args, **kwargs):
     """
-#    Compute the range of a continuously-valued time series.
-#    
-#    Examples: ::
-#    
-#        >>> from pyinform import utils
-#        >>> utils.series_range([0,1,2,3,4,5])
-#        (5, 0, 5)
-#        >>> utils.series_range([-0.1, 8.5, 0.02, -6.3])
-#        (14.8, -6.3, 8.5)
-#    :param sequence series: the time series
-#    :returns: the range and the minimum/maximum values
-#    :rtype: 3-tuple (float, float, float)
-#    :raises InformError: if an error occurs within the ``inform`` C call
+    Formats the values as an error message and prints them to a stream, 
+    or to ``sys.stdout`` by default.
+
+    :param file: a file-like object (stream); defaults to the current ``sys.stdout``
+    :type file: file object
+    :param str sep: string inserted between values, default to one space
+    :param str end: string appended after the last value, default to newline.
     """
 
     file  = kwargs.get('file', sys.stdout)    

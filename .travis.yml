@@ -5,9 +5,9 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  
+
 install:
-  - pip install .[test]
+  - pip install .[test]  
 
 script:
   - python setup.py test
@@ -27,4 +27,5 @@ deploy:
   keep-history: true
   local-dir: docs/build/html/
   on:
-    all_branches: trues
+    all_branches: true
+    condition: $TRAVIS_PYTHON_VERSION = "2.7"

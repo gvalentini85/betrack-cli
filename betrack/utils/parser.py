@@ -30,69 +30,73 @@ def open_configuration(filename):
         # Raise exception
         raise IOError(errno.ENOENT, 'file not found', filename)
 
+    
 def parse_file(src, key):
     """
-    Parse a dictionary ``src`` and return a file name specified by ``key``. 
+    Parses a dictionary ``src`` and returns the file name specified by ``key``. 
     This function checks that the file specified by ``key`` exists.
 
     :param dict src: the source dictionary
-    :param str key: the key specifing the file name
+    :param str key: the key specifing the file name to be parsed
     :returns: a file name
     :rtype: str
     :raises IOError: if the file specified by ``key`` is not found 
-    :raises ValueError: if the attribute ``key`` is not found in ``src``
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if isfile(val):
             return val
         else:
             raise IOError(errno.ENOENT, 'file not found', val)            
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_directory(src, key):
     """
-    Parse a dictionary ``src`` and return a directory name specified by ``key``. 
+    Parses a dictionary ``src`` and returns the directory name specified by ``key``. 
     This function checks that the directory specified by ``key`` exists.
 
     :param dict src: the source dictionary
-    :param str key: the key specifing the directory name
+    :param str key: the key specifing the directory name to be parsed
     :returns: a directory name
     :rtype: str
     :raises IOError: if the directory specified by ``key`` is not found 
-    :raises ValueError: if the attribute ``key`` is not found in ``src``
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if isdir(val):
             return val
         else:
             raise IOError(errno.ENOENT, 'directory not found', val)            
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
+    
 def parse_int(src, key, nentries=1):
     """
-    Parse a dictionary ``src`` and return an int or a list of int specified by ``key``. 
-    This function checks that the value or values specified by ``key`` is of 
-    type int or list of int and raises a ``ValueError`` otherwise.
+    Parses a dictionary ``src`` and returns a number ``nentries`` of integers 
+    specified by ``key``. This function checks that the value or values specified 
+    by ``key`` are of type integer and raises a ``ValueError`` otherwise.
 
     :param dict src: the source dictionary
-    :param str key: the key specifing the directory name
-    :param int nentries: the number of integers to parse
-    :returns: read integer(s)
-    :rtype: int or list of int
-    :raises ValueError: if the read value/values are not valid
+    :param str key: the key specifing the integers to be parsed
+    :param int nentries: the number of integers to be parsed
+    :returns: parsed integer(s)
+    :rtype: int
+    :rtype: list
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == int:
             if nentries != 1:
@@ -112,7 +116,7 @@ def parse_int(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type int or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_float(src, key, nentries=1):
@@ -126,13 +130,14 @@ def parse_float(src, key, nentries=1):
     :param int nentries: the number of floats to parse
     :returns: read float(s)
     :rtype: float or list of float
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == float:
             if nentries != 1:
@@ -152,7 +157,7 @@ def parse_float(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type float or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_int_or_float(src, key, nentries=1):
@@ -167,13 +172,14 @@ def parse_int_or_float(src, key, nentries=1):
     :param int nentries: the number of floats to parse
     :returns: read float(s)
     :rtype: float or list of float
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == int or type(val) == float:
             if nentries != 1:
@@ -193,7 +199,7 @@ def parse_int_or_float(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type int or float or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
 
 def parse_bool(src, key, nentries=1):
@@ -207,13 +213,14 @@ def parse_bool(src, key, nentries=1):
     :param int nentries: the number of booleans to parse
     :returns: read boolean(s)
     :rtype: bool or list of bool
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
         if type(val) == bool:
             if nentries != 1:
@@ -233,8 +240,9 @@ def parse_bool(src, key, nentries=1):
         else:
             raise ValueError('attribute ' + key + ' is not of type bool or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 
+    
 def parse_str(src, key, nentries=1):
     """
     Parse a dictionary ``src`` and return a str or a list of str 
@@ -246,15 +254,18 @@ def parse_str(src, key, nentries=1):
     :param int nentries: the number of booleans to parse
     :returns: read boolean(s)
     :rtype: bool or list of bool
-    :raises ValueError: if the read value/values are not valid
+    :raises ValueError: if the parsed values are not valid
+    :raises KeyError: if the attribute ``key`` is not found in ``src``
     """
 
     if nentries < 1:
         raise ValueError('expected number of entries must be greater than zero')
     
-    if src.has_key(key):
+    if key in src:
         val = src.get(key)
-        if type(val) == str or type(val) == unicode:
+        try:                     isunicode = (type(val) == unicode)
+        except NameError as err: isunicode = False        
+        if type(val) == str or isunicode:
             val = val.encode()
             if nentries != 1:
                 msg = 'attribute ' + key + ' has 1 entry, expected ' + str(nentries)
@@ -267,12 +278,14 @@ def parse_str(src, key, nentries=1):
                 msg += ' entries, expected ' + str(nentries)
                 raise ValueError(msg)
             for m in range(0, nval):
-                if type(val[m]) != str and type(val[m]) != unicode:
+                try:                     isunicode = (type(val[m]) == unicode)
+                except NameError as err: isunicode = False                        
+                if type(val[m]) != str and not isunicode:
                     raise ValueError('entry ' + str(m + 1) + ' is not str')
                 else: val[m] = val[m].encode()
             return val                            
         else:
             raise ValueError('attribute ' + key + ' is not of type str or list')
     else:
-        raise ValueError('attribute not found!', key)            
+        raise KeyError('attribute not found!', key)            
 

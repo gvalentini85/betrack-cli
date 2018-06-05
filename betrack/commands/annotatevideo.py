@@ -58,10 +58,11 @@ class AnnotateVideo(BetrackCommand):
                 raise ValueError('<tp-flipframes> must be either \'x\'' + 
                                  ', \'y\', \'xy\', \'yx\'')        
         except ValueError as err:
-            if err[0] != 'attribute not found!':
-                eprint('Invalid attribute: ', err[0], '.', sep='')
-                sys.exit()
+            eprint('Invalid attribute: ', err[0], '.', sep='')
+            sys.exit()
+        except KeyError: pass
 
+                
     def draw_particles(self, frame, df, particles):
         """
         """
@@ -135,10 +136,13 @@ class AnnotateVideo(BetrackCommand):
 
         # Init annotator..
         job.pframes = reverse_colors(job.frames)
-        codec       = VideoWriter_fourcc(b'M', b'J', b'P', b'G')
+        codec       = VideoWriter_fourcc('M', 'J', 'P', 'G')
         fps         = job.framerate
         oshape      = job.frameshape[0:2][::-1]
         oldmargins  = job.margins
+
+        if oldmargins is None:
+            oldmargins = [0, job.frameshape[1], 0, job.frameshape[0]]
         
         if job.valid_margins() and self.drawregion:
             job.margins = [a - b for a, b in zip(job.margins,
@@ -156,9 +160,8 @@ class AnnotateVideo(BetrackCommand):
         # Loop over frames, annotate, crop and save each of them..
         d       = '\033[01m' + '...Exporting video:'
         ut      = ' frame'
-        nframes = len(job.pframes)
-        for i in tqdm(arange(0, nframes), desc=d, unit=ut, total=nframes):
-
+        for i in tqdm(arange(job.period[0], job.period[1]), desc=d, unit=ut, total=job.nframes):
+            
             # Get frame, subset tracks..
             f  = array(job.pframes[i])
             df = job.dflink[job.dflink['frame'] == i]
