@@ -190,5 +190,101 @@ class TestTrackParticles(TestCase):
             tp.configure_tracker(opt['--configuration'])
         self.assertEqual(cm.exception.code, EX_CONFIG)
         remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('tp-link-memory: -1\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('tp-link-predict: yep\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('tp-link-adaptivestop: -1.0\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('tp-link-adaptivestep: -1.0\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('tp-filter-st-threshold: -1\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('tp-filter-cl-quantile: -1.0\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('tp-filter-cl-threshold: 0\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
         
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: 11\n')
+        cf.write('tp-link-searchrange: 10\n')
+        cf.write('jobs:\n')
+        cf.write('  - video: dummy.avi\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
         
