@@ -330,7 +330,7 @@ class TestTrackParticles(TestCase):
     def test_locate_features(self):
         cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
         cf.write('tp-locate-diameter: '  + str(self._pdiameter) + '\n')
-        cf.write('tp-link-searchrange: ' + str(self._hoffset) + '\n')
+        cf.write('tp-link-searchrange: ' + str(self._hoffset) * 2 + '\n')
         cf.write('jobs:\n')
         cf.write('  - video: ' + self._vf.name + '\n')
         cf.close()
@@ -356,7 +356,7 @@ class TestTrackParticles(TestCase):
     def test_link_trajectories(self):
         cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
         cf.write('tp-locate-diameter: '  + str(self._pdiameter) + '\n')
-        cf.write('tp-link-searchrange: ' + str(self._hoffset) + '\n')
+        cf.write('tp-link-searchrange: ' + str(self._hoffset * 2) + '\n')
         cf.write('jobs:\n')
         cf.write('  - video: ' + self._vf.name + '\n')
         cf.close()
@@ -380,9 +380,27 @@ class TestTrackParticles(TestCase):
         remove(cf.name)
 
         
-    @skip("TODO")
     def test_filter_trajectories(self):
-        ''
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: '     + str(self._pdiameter) + '\n')
+        cf.write('tp-link-searchrange: '    + str(self._hoffset * 2) + '\n')
+        cf.write('tp-filter-st-threshold: ' + str(int(self._nframes / 2)) + '\n')
+        cf.write('tp-filter-cl-threshold: 200\n')
+        cf.write('jobs:\n')
+        cf.write('  - video: ' + self._vf.name + '\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        tp.configure_tracker(opt['--configuration'])        
+        tp.jobs[0].load_frames()
+        tp.jobs[0].preprocess_video()        
+        tp.locate_features(tp.jobs[0])
+        tp.link_trajectories(tp.jobs[0])
+        tp.filter_trajectories(tp.jobs[0])
+        
+        self.assertEqual(tp.jobs[0].dflink.shape, (self._nframes * self._nparticles, 10))
+        tp.jobs[0].release_memory()          
+        remove(cf.name)
         
     @skip("TODO")
     def test_export_video(self):

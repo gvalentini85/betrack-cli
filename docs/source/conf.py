@@ -26,7 +26,8 @@ author = u'Gabriele Valentini'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'0.1.0'
+from betrack import __version__
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -161,7 +162,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'betrack', u'betrack Documentation',
-     author, 'betrack', 'One line description of project.',
+     author, 'betrack', 'A command line toolkit to automatically track collective behaviors',
      'Miscellaneous'),
 ]
 
