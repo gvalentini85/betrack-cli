@@ -8,13 +8,14 @@ Tests for our module `betrack.utils.job`.
 """
 
 
-from unittest             import TestCase
+from unittest             import TestCase, skipIf
 from tempfile             import NamedTemporaryFile
 from numpy                import arange, array, zeros, uint8
 from pandas               import DataFrame
 from cv2                  import VideoWriter, VideoWriter_fourcc
 from os                   import remove, name
 from os.path              import isfile
+from sys                  import version, platform
 from betrack.utils.job    import *
 from betrack.utils.parser import open_configuration
 
@@ -124,7 +125,9 @@ class TestJob(TestCase):
         self.assertEqual(job.dflink,  None)
         self.assertFalse(isfile(job.h5storage))
 
-        
+
+    @skipIf(platform.startswith('win') and version.startswith('3.4'),
+            'Skip on Windows+Python3.4 due to tables/HDF5 installation issues!')        
     def test_job_export_trajectories(self):
         job         = Job(self._vf.name)
         job.margins = [10, 100, 10, 100]
