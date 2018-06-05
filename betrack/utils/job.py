@@ -15,7 +15,7 @@ to initialize a list of jobs according to a configuration file.
 
 
 from os      import remove
-from os.path import dirname, realpath, isfile, splitext, basename
+from os.path import dirname, realpath, isfile, splitext, basename, join
 from pandas  import HDFStore
 from pims    import Video
 from errno   import ENOENT
@@ -62,12 +62,12 @@ class Job:
         self.dflink        = None         # Dataframe of the linked trajectories
         self.drawparticles = []           # List of particles to annotate, [] means all
         
-        if self.outdir == '': self.outdir= dirname(realpath(self.video))            
-        self.h5storage  = outdir + splitext(basename(video))[0] + '-locate.h5'        
-        self.h5tracks   = outdir + splitext(basename(video))[0] + '-tracks.h5'        
-        self.csvtracks  = outdir + splitext(basename(video))[0] + '-tracks.csv'        
-        self.jsontracks = outdir + splitext(basename(video))[0] + '-tracks.json'        
-        self.avitracked = outdir + splitext(basename(video))[0] + '-tracked.avi'        
+        if self.outdir == '': self.outdir = dirname(realpath(self.video))            
+        self.h5storage  = join(self.outdir, splitext(basename(video))[0] + '-locate.h5')        
+        self.h5tracks   = join(self.outdir, splitext(basename(video))[0] + '-tracks.h5')     
+        self.csvtracks  = join(self.outdir, splitext(basename(video))[0] + '-tracks.csv')        
+        self.jsontracks = join(self.outdir, splitext(basename(video))[0] + '-tracks.json')
+        self.avitracked = join(self.outdir, splitext(basename(video))[0] + '-tracked.avi')       
 
 
     def str(self, ind=''):
@@ -237,9 +237,10 @@ class Job:
         else: raise TypeError('video not loaded')
         
         # Crop video..
-        if self.valid_margins():
-            self.pframes = crop(self.pframes, self.margins)
-        else: raise ValueError('crop margins are not valid')
+        if self.margins is not None:
+            if self.valid_margins():
+                self.pframes = crop(self.pframes, self.margins)
+            else: raise ValueError('crop margins are not valid')
             
         # If RGB, convert to gray scale..
         if len(self.frameshape) == 3 and self.frameshape[2] == 3:

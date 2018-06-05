@@ -19,8 +19,6 @@ except ImportError:
     EX_OK     = 0
     EX_CONFIG = 78
 
-from json import dumps
-
 # Needed to turn off 'PyTables will pickle object' warnings..
 import warnings
 import pandas
@@ -307,14 +305,10 @@ class TrackParticles(BetrackCommand):
         d  = '\033[01m' + '...Locating features'
         ut = ' frame'
         pf = [dict(features=0)]
-        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(job.pframes, desc=d, unit=ut) as t:       
-            for i, frame in enumerate(t):
 
-#TODO: convert this to select period!        
-#TODO: convert this to select period!        
-#TODO: convert this to select period!        
-                
-                features = trackpy.locate(frame, diameter=self.locate_diameter,
+        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(range(job.period[0], job.period[1]), desc=d, unit=ut, total=job.nframes) as t:
+            for fn in t:
+                features = trackpy.locate(job.pframes[fn], diameter=self.locate_diameter,
                                           minmass=self.locate_minmass,
                                           maxsize=self.locate_maxsize,
                                           separation=self.locate_separation,
@@ -325,11 +319,11 @@ class TrackParticles(BetrackCommand):
                                           preprocess=self.locate_preprocess,
                                           threshold=self.locate_threshold)
                 
-                if hasattr(frame, 'frame_no') and frame.frame_no is not None:
-                    frame_no = frame.frame_no
+                if hasattr(job.pframes[fn], 'frame_no') and job.pframes[fn].frame_no is not None:
+                    frame_no = job.pframes[fn].frame_no
                 else:
-                    frame_no = i
-                    features['frame'] = i
+                    frame_no          = fn
+                    features['frame'] = fn
                     
                 t.set_postfix(nfeatures=len(features))
                 if len(features) == 0:

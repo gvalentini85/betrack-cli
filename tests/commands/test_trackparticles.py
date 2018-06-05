@@ -16,6 +16,7 @@ except ImportError:
 from unittest import TestCase, skip
 from tempfile import NamedTemporaryFile
 from os       import remove, name
+from os.path  import isfile, dirname, realpath
 from cv2      import VideoWriter, VideoWriter_fourcc
 from numpy    import arange, array, zeros, uint8
 
@@ -29,17 +30,26 @@ class TestTrackParticles(TestCase):
         cls._vf         = NamedTemporaryFile(mode='w', suffix='.avi', delete=False)
         cls._vf.close()
         cls._nframes    = 10
+        cls._pdiameter  = 11      # Must be odd!
+        cls._nparticles = 5
+        cls._voffset    = 100
+        cls._hoffset    = 10        
         codec           = VideoWriter_fourcc('M', 'J', 'P', 'G')
         cls._framerate  = cls._nframes
-        cls._frameshape = (100, 100, 3)
+        cls._frameshape = (1000, 1000, 3)
         oshape          = cls._frameshape[0:2][::-1]
         writer          = VideoWriter(cls._vf.name, codec, cls._framerate, oshape)
         
         for i in arange(0, cls._nframes):
-            f          = zeros(cls._frameshape, dtype=uint8)
-            f[:, :, 1] = 100
-            f[:, :, 2] = 200
-            f          = array(f)
+            f = zeros(cls._frameshape, dtype=uint8)
+            for p in arange(0, cls._nparticles):
+                pr         = int(cls._pdiameter/2)
+                y          = cls._voffset * (p + 1)
+                y          = arange(y - pr, y + pr + 1)
+                x          = cls._voffset + cls._hoffset * (i + 1)
+                x          = arange(x - pr, x + pr + 1)
+                f[y, x, 1] = 255
+            f = array(f)
             writer.write(f)
         writer.release()        
         
@@ -317,9 +327,31 @@ class TestTrackParticles(TestCase):
         remove(cf.name)
 
 
-    @skip("TODO")
     def test_locate_features(self):
-        ''
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('tp-locate-diameter: '  + str(self._pdiameter) + '\n')
+        cf.write('tp-link-searchrange: ' + str(self._hoffset) + '\n')
+        cf.write('jobs:\n')
+        cf.write('  - video: ' + self._vf.name + '\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(tp.jobs[0].outdir, dirname(realpath(self._vf.name)))
+        
+        tp.jobs[0].load_frames()
+        tp.jobs[0].preprocess_video()        
+        tp.locate_features(tp.jobs[0])
+        self.assertTrue(isfile(tp.jobs[0].h5storage))
+        self.assertEqual(dirname(realpath(tp.jobs[0].h5storage)),
+                         dirname(realpath(self._vf.name)))
+
+        with trackpy.PandasHDFStoreBig(tp.jobs[0].h5storage) as sf:
+            res = sf.dump()
+        self.assertEqual(res.shape, (self._nframes * self._nparticles, 9))            
+        tp.jobs[0].release_memory()          
+        remove(cf.name)
+
         
     @skip("TODO")
     def test_link_trajectories(self):
