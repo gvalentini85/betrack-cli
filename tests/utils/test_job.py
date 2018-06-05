@@ -8,7 +8,7 @@ Tests for our module `betrack.utils.job`.
 """
 
 
-from unittest             import TestCase, skip
+from unittest             import TestCase
 from tempfile             import NamedTemporaryFile
 from numpy                import arange, array, zeros, uint8, float64
 from pandas               import DataFrame

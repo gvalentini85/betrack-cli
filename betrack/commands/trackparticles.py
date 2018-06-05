@@ -13,6 +13,11 @@ provide a simple and efficient yet flexible interface of ``trackpy``
 through the class :py:class:`~betrack.commands.trackparticles.TrackParticles`.
 """
 
+try:
+    from os import EX_OK, EX_CONFIG
+except ImportError:
+    EX_OK     = 0
+    EX_CONFIG = 78
 
 from json import dumps
 
@@ -24,7 +29,7 @@ warnings.filterwarnings('ignore', category=pandas.io.pytables.PerformanceWarning
 from os      import remove    
 from os.path import isfile
 from tqdm    import tqdm
-import sys
+from sys     import exit, stdout
 import trackpy
 
 from betrack.commands.command import BetrackCommand
@@ -94,7 +99,7 @@ class TrackParticles(BetrackCommand):
             config = open_configuration(filename)            
         except IOError:
             eprint('File not found:', filename)
-            sys.exit()
+            exit(EX_CONFIG)
 
         # Parse tracker configuration..
         try:
