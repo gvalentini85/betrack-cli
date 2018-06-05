@@ -465,7 +465,7 @@ class TrackParticles(BetrackCommand):
             try:
                 job.preprocess_video(invert=self.locate_featuresdark)
             except ValueError as err:                
-                wprint('Preprocessing video: ', err[0], '. Skipping job.', sep='')
+                wprint('Preprocessing video: ', str(err), '. Skipping job.', sep='')
                 continue            
             mprint('...Preprocessing video: Done')
 
