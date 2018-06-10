@@ -31,6 +31,8 @@ from sys     import exit, stdout
 import trackpy
 
 import multiprocessing as mp
+import multiprocessing.pool as mpp
+from functools import partial
 
 
 from betrack.commands.command import BetrackCommand
@@ -302,25 +304,95 @@ class TrackParticles(BetrackCommand):
 
         # Initialize storage file..        
         if isfile(job.h5storage): remove(job.h5storage)
-        
+
+        def workerstar(args):
+            """
             
+            """
+            return worker_locate2(*args)
+        
+        
+        def worker_locate(fn, frame, params):
+            """
+            
+            """
+
+            features = trackpy.locate(frame, diameter=params[0],
+                                      minmass=params[1],
+                                      maxsize=params[2],
+                                      separation=params[3],
+                                      noise_size=params[4],
+                                      smoothing_size=params[5],
+                                      percentile=params[6],
+                                      topn=params[7],
+                                      preprocess=params[8],
+                                      threshold=params[9])
+
+            if hasattr(frame, 'frame_no') and frame.frame_no is not None:
+                frame_no = frame.frame_no
+            else:
+                frame_no          = fn
+                features['frame'] = fn
+        
+            return features
+
+        def worker_locate2(fn, job, params):
+            """
+            
+            """
+
+            features = trackpy.locate(job.pframes[fn], diameter=params[0],
+                                      minmass=params[1],
+                                      maxsize=params[2],
+                                      separation=params[3],
+                                      noise_size=params[4],
+                                      smoothing_size=params[5],
+                                      percentile=params[6],
+                                      topn=params[7],
+                                      preprocess=params[8],
+                                      threshold=params[9])
+                
+            if hasattr(job.pframes[fn], 'frame_no') and job.pframes[fn].frame_no is not None:
+                frame_no = job.pframes[fn].frame_no
+            else:
+                frame_no          = fn
+                features['frame'] = fn
+                
+            return features
+
+        
         # Locate features in all frames..
         d  = '\033[01m' + '...Locating features'
         ut = ' frame'
         pf = [dict(features=0)]
 
-        pool    = mp.Pool(mp.cpu_count())
+        pool    = mpp.ThreadPool(mp.cpu_count())
         params  = (self.locate_diameter, self.locate_minmass,
                    self.locate_maxsize, self.locate_separation,
                    self.locate_noisesize, self.locate_smoothingsize,
                    self.locate_percentile, self.locate_topn,
                    self.locate_preprocess, self.locate_threshold)
+        params2  = {'diameter': self.locate_diameter,
+                    'minmass': self.locate_minmass,
+                    'maxsize': self.locate_maxsize,
+                    'separation': self.locate_separation,
+                    'noise_size': self.locate_noisesize,
+                    'smoothing_size': self.locate_smoothingsize,
+                    'percentile': self.locate_percentile,
+                    'topn': self.locate_topn,
+                    'preprocess': self.locate_preprocess,
+                    'threshold': self.locate_threshold}
         frames  = range(job.period[0], job.period[1])
 
+        func = partial(trackpy.locate, **params2)
+
+        
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(frames, desc=d, unit=ut, total=job.nframes) as bar:
             
-            args = [(x, job.pframes[x], params) for x in frames]
-            for i, x in enumerate(pool.imap(workerstar, args)):
+#            args = [(x, job.pframes[x], params) for x in frames]
+#            args = [(x, job, params) for x in frames]
+#            for i, x in enumerate(pool.imap(workerstar, args)):
+            for i, x in enumerate(pool.imap(func, job.pframes)):
                 nfeatures = len(x)
                 bar.set_postfix(nfeatures=nfeatures)
                 bar.update()
@@ -328,10 +400,7 @@ class TrackParticles(BetrackCommand):
                     continue                
                 else:
                     sf.put(x)
-                
-                    
-            pool.close()
-            pool.join()
+                                    
 
         
     def link_trajectories(self, job):
@@ -515,33 +584,3 @@ class TrackParticles(BetrackCommand):
             return EX_CONFIG
 
 
-def workerstar(args):
-    """
-
-    """
-    return worker_locate(*args)
-        
-            
-def worker_locate(fn, frame, params):
-    """
-
-    """
-
-    features = trackpy.locate(frame, diameter=params[0],
-                              minmass=params[1],
-                              maxsize=params[2],
-                              separation=params[3],
-                              noise_size=params[4],
-                              smoothing_size=params[5],
-                              percentile=params[6],
-                              topn=params[7],
-                              preprocess=params[8],
-                              threshold=params[9])
-
-    if hasattr(frame, 'frame_no') and frame.frame_no is not None:
-        frame_no = frame.frame_no
-    else:
-        frame_no          = fn
-        features['frame'] = fn
-        
-    return features
