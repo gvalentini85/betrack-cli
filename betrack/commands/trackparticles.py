@@ -24,11 +24,14 @@ import warnings
 import pandas
 warnings.filterwarnings('ignore', category=pandas.io.pytables.PerformanceWarning)
 
-from os      import remove    
+from os      import remove, getpid    
 from os.path import isfile
 from tqdm    import tqdm
 from sys     import exit, stdout
 import trackpy
+
+import multiprocessing as mp
+
 
 from betrack.commands.command import BetrackCommand
 from betrack.utils.message    import mprint, wprint, eprint
@@ -297,38 +300,37 @@ class TrackParticles(BetrackCommand):
         :type job: :py:class:`~betrack.utils.job.Job`
         """
 
-        # Initalize storage file..        
+        # Initialize storage file..        
         if isfile(job.h5storage): remove(job.h5storage)
         
-
+            
         # Locate features in all frames..
         d  = '\033[01m' + '...Locating features'
         ut = ' frame'
         pf = [dict(features=0)]
 
-        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(range(job.period[0], job.period[1]), desc=d, unit=ut, total=job.nframes) as t:
-            for fn in t:
-                features = trackpy.locate(job.pframes[fn], diameter=self.locate_diameter,
-                                          minmass=self.locate_minmass,
-                                          maxsize=self.locate_maxsize,
-                                          separation=self.locate_separation,
-                                          noise_size=self.locate_noisesize,
-                                          smoothing_size=self.locate_smoothingsize,
-                                          percentile=self.locate_percentile,
-                                          topn=self.locate_topn,
-                                          preprocess=self.locate_preprocess,
-                                          threshold=self.locate_threshold)
-                
-                if hasattr(job.pframes[fn], 'frame_no') and job.pframes[fn].frame_no is not None:
-                    frame_no = job.pframes[fn].frame_no
-                else:
-                    frame_no          = fn
-                    features['frame'] = fn
-                    
-                t.set_postfix(nfeatures=len(features))
-                if len(features) == 0:
+        pool    = mp.Pool(mp.cpu_count())
+        params  = (self.locate_diameter, self.locate_minmass,
+                   self.locate_maxsize, self.locate_separation,
+                   self.locate_noisesize, self.locate_smoothingsize,
+                   self.locate_percentile, self.locate_topn,
+                   self.locate_preprocess, self.locate_threshold)
+        frames  = range(job.period[0], job.period[1])
+
+        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(frames, desc=d, unit=ut, total=job.nframes) as bar:
+
+            args = [(x, job.pframes[x], params) for x in frames]
+            for x in pool.map(workerstar, args):
+                nfeatures = len(x)
+                bar.set_postfix(nfeatures=nfeatures)                
+                if nfeatures == 0:
                     continue                
-                sf.put(features)        
+                else:
+                    sf.put(x)
+                
+                    
+            pool.close()
+            pool.join()
 
         
     def link_trajectories(self, job):
@@ -510,3 +512,34 @@ class TrackParticles(BetrackCommand):
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     ¯\_(ツ)_/¯ ', sep='')
             return EX_CONFIG
+
+
+def workerstar(args):
+    """
+
+    """
+    return worker_locate(*args)
+        
+            
+def worker_locate(fn, frame, params):
+    """
+
+    """
+
+    features = trackpy.locate(frame, diameter=params[0],
+                              minmass=params[1],
+                              maxsize=params[2],
+                              separation=params[3],
+                              noise_size=params[4],
+                              smoothing_size=params[5],
+                              percentile=params[6],
+                              topn=params[7],
+                              preprocess=params[8],
+                              threshold=params[9])
+
+    if hasattr(frame, 'frame_no') and frame.frame_no is not None:
+        frame_no = frame.frame_no
+    else:
+        frame_no          = fn
+        features['frame'] = fn
+    return features
