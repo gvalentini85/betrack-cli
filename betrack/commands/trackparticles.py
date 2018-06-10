@@ -318,11 +318,12 @@ class TrackParticles(BetrackCommand):
         frames  = range(job.period[0], job.period[1])
 
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(frames, desc=d, unit=ut, total=job.nframes) as bar:
-
+            
             args = [(x, job.pframes[x], params) for x in frames]
-            for x in pool.map(workerstar, args):
+            for i, x in enumerate(pool.imap(workerstar, args)):
                 nfeatures = len(x)
-                bar.set_postfix(nfeatures=nfeatures)                
+                bar.set_postfix(nfeatures=nfeatures)
+                bar.update()
                 if nfeatures == 0:
                     continue                
                 else:
@@ -542,4 +543,5 @@ def worker_locate(fn, frame, params):
     else:
         frame_no          = fn
         features['frame'] = fn
+        
     return features
