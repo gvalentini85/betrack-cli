@@ -227,8 +227,9 @@ trackparticles
         .. automethod:: betrack.commands.trackparticles.TrackParticles.export_video
 			
         .. automethod:: betrack.commands.trackparticles.TrackParticles.run
-			
-			
+		
+
+	   
 betrack.utils
 -------------
 
