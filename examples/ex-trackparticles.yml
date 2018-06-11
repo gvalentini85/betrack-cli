@@ -1,3 +1,4 @@
+parallel:                  True
 tp-featuresdark:           True
 tp-locate-diameter:        13
 tp-link-searchrange:       10

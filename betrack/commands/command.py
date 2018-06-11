@@ -9,6 +9,17 @@ for all commands of *betrack* through the class
 :py:class:`~betrack.commands.command.BetrackCommand`.
 """
 
+try:
+    from os import EX_OK, EX_CONFIG
+except ImportError:
+    EX_OK     = 0
+    EX_CONFIG = 78
+
+from sys                      import exit
+from betrack.utils.message    import eprint
+from betrack.utils.parser     import open_configuration, parse_bool
+
+
 class BetrackCommand(object):
     """
     The class :py:class:`~betrack.commands.command.BetrackCommand` defines
@@ -31,9 +42,38 @@ class BetrackCommand(object):
         :param list \*\*kwargs: arbitrary keyworded arguments
         """
         
-        self.options = options
-        self.args    = args
-        self.kwargs  = kwargs
+        self.options   = options
+        self.args      = args
+        self.kwargs    = kwargs
+        self.parallel  = False
+        self.EX_OK     = EX_OK
+        self.EX_CONFIG = EX_CONFIG
+        
+
+
+    def configure_betrack(self, filename):
+        """
+        Configures *betrack* according to the configuration file given by
+        ``filename``. If a required attribute is missing from the configuration
+        file or if the value of an attribute in the configuration is invalid, 
+        this function prints an error message and halts the execution of *betrack*.
+
+        :param str filename: the name of the configuration file
+        """
+        
+        try:
+            config = open_configuration(filename)            
+        except IOError:
+            eprint('File not found:', filename)
+            exit(self.EX_CONFIG)
+            
+        try:
+            self.parallel = parse_bool(config, 'parallel')
+        except ValueError as err:
+            eprint('Invalid attribute: ', str(err), '.', sep='')
+            exit(self.EX_CONFIG)
+        except KeyError: pass
+            
 
     def run(self):
         """

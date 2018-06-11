@@ -46,6 +46,8 @@ class AnnotateVideo(BetrackCommand):
         """
         """
 
+        super(AnnotateVideo, self).configure_betrack(filename)
+        
         try:
             config = open_configuration(filename)            
         except IOError:

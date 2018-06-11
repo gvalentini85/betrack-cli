@@ -13,27 +13,21 @@ provide a simple and efficient yet flexible interface of ``trackpy``
 through the class :py:class:`~betrack.commands.trackparticles.TrackParticles`.
 """
 
-try:
-    from os import EX_OK, EX_CONFIG
-except ImportError:
-    EX_OK     = 0
-    EX_CONFIG = 78
 
 # Needed to turn off 'PyTables will pickle object' warnings..
 import warnings
 import pandas
 warnings.filterwarnings('ignore', category=pandas.io.pytables.PerformanceWarning)
 
-from os      import remove, getpid    
-from os.path import isfile
-from tqdm    import tqdm
-from sys     import exit, stdout
+from os                       import remove    
+from os.path                  import isfile
+from tqdm                     import tqdm
+from sys                      import exit, stdout
+from functools                import partial
+from multiprocessing          import Pool, cpu_count
+
+from trackpy                  import PandasHDFStoreBig, locate
 import trackpy
-
-import multiprocessing as mp
-from functools import partial
-from multiprocessing.dummy import Pool as ThreadPool
-
 
 from betrack.commands.command import BetrackCommand
 from betrack.utils.message    import mprint, wprint, eprint
@@ -97,12 +91,12 @@ class TrackParticles(BetrackCommand):
 
         :param str filename: the name of the configuration file
         """
-
+        
         try:
             config = open_configuration(filename)            
         except IOError:
             eprint('File not found:', filename)
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
 
         # Parse tracker configuration..
         try:
@@ -111,7 +105,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-exportas> must be either \'hdf\', \'csv\', or \'json\'')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
                 
         try:
@@ -120,16 +114,16 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-diameter> must be odd')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError:
             eprint('Attribute <tp-locate-diameter> is required.')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
             
         try:
             self.locate_featuresdark = parse_bool(config, 'tp-locate-featuresdark')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
         
         try:
@@ -138,7 +132,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-minmass> must be non-negative')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -147,7 +141,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-maxsize> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -156,7 +150,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-separation> must be non-negative')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -165,7 +159,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-noisesize> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -174,7 +168,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-smoothingsize> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -183,7 +177,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-threshold> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -192,7 +186,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-percentile> must be in the interval [0, 100)')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -201,14 +195,14 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-locate-topn> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
             self.locate_preprocess = parse_bool(config, 'tp-locate-preprocess')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -217,10 +211,10 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-link-searchrange> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError:
             eprint('Attribute <tp-link-searchrange> is required.')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
 
         try:
             self.link_memory = parse_int(config, 'tp-link-memory')
@@ -228,14 +222,14 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-link-memory> must be non-negative')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
             self.link_predict = parse_bool(config, 'tp-link-predict')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -244,7 +238,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-link-adaptivestop> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -253,7 +247,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-link-adaptivestep> must be in the interval (0.0, 1.0)')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -262,7 +256,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-filter-st-threshold> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
                 
         try:
@@ -271,7 +265,7 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-filter-cl-quantile> must be in the interval (0.0, 1.0)')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
 
         try:
@@ -281,14 +275,18 @@ class TrackParticles(BetrackCommand):
                 raise ValueError('<tp-filter-cl-threshold> must be positive')
         except ValueError as err:
             eprint('Invalid attribute: ', str(err), '.', sep='')
-            exit(EX_CONFIG)
+            exit(self.EX_CONFIG)
         except KeyError: pass
-                
+
+
+        # Configure betrack..
+        super(TrackParticles, self).configure_betrack(filename)
+        
         # Parse jobs..
         self.jobs = configure_jobs(config['jobs'])
         if len(self.jobs) == 0:
             eprint('No job specified!')
-            exit(EX_CONFIG)                
+            exit(self.EX_CONFIG)
 
 
     def locate_features(self, job):
@@ -304,103 +302,45 @@ class TrackParticles(BetrackCommand):
 
         # Initialize storage file..        
         if isfile(job.h5storage): remove(job.h5storage)
-
-        def workerstar(args):
-            """
-            
-            """
-            return worker_locate2(*args)
         
-        
-        def worker_locate(fn, frame, params):
-            """
-            
-            """
-
-            features = trackpy.locate(frame, diameter=params[0],
-                                      minmass=params[1],
-                                      maxsize=params[2],
-                                      separation=params[3],
-                                      noise_size=params[4],
-                                      smoothing_size=params[5],
-                                      percentile=params[6],
-                                      topn=params[7],
-                                      preprocess=params[8],
-                                      threshold=params[9])
-
-            if hasattr(frame, 'frame_no') and frame.frame_no is not None:
-                frame_no = frame.frame_no
-            else:
-                frame_no          = fn
-                features['frame'] = fn
-        
-            return features
-
-        def worker_locate2(fn, job, params):
-            """
-            
-            """
-
-            features = trackpy.locate(job.pframes[fn], diameter=params[0],
-                                      minmass=params[1],
-                                      maxsize=params[2],
-                                      separation=params[3],
-                                      noise_size=params[4],
-                                      smoothing_size=params[5],
-                                      percentile=params[6],
-                                      topn=params[7],
-                                      preprocess=params[8],
-                                      threshold=params[9])
-                
-            if hasattr(job.pframes[fn], 'frame_no') and job.pframes[fn].frame_no is not None:
-                frame_no = job.pframes[fn].frame_no
-            else:
-                frame_no          = fn
-                features['frame'] = fn
-                
-            return features
+        tqdm_params     = {'desc': '\033[01m' + '...Locating features',
+                           'unit': ' frame',
+                           'total': job.nframes}
+        locate_params   = {'diameter': self.locate_diameter,
+                           'minmass': self.locate_minmass,
+                           'maxsize': self.locate_maxsize,
+                           'separation': self.locate_separation,
+                           'noise_size': self.locate_noisesize,
+                           'smoothing_size': self.locate_smoothingsize,
+                           'percentile': self.locate_percentile,
+                           'topn': self.locate_topn,
+                           'preprocess': self.locate_preprocess,
+                           'threshold': self.locate_threshold}
+        selected_frames = range(job.period[0], job.period[1])
 
         
         # Locate features in all frames..
-        d  = '\033[01m' + '...Locating features'
-        ut = ' frame'
-        pf = [dict(features=0)]
+        with PandasHDFStoreBig(job.h5storage) as sf, tqdm(selected_frames, **tqdm_params) as bar:
+            if self.parallel:                
+                def save_features(frame_no, detected_features):
+                    nfeatures = len(detected_features)
+                    bar.set_postfix(nfeatures=nfeatures)
+                    bar.update()
+                    if nfeatures > 0:
+                        sf.put(detected_features)
+                        
+                _locate_features_parallel(job.pframes, selected_frames,
+                                          locate_params, save=save_features)
+            else:
+                for fn in bar:
+                    features = locate(job.pframes[fn], **locate_params)
+                    features['frame'] = fn
 
-#        pool    = mpp.ThreadPool(mp.cpu_count())
-        params  = (self.locate_diameter, self.locate_minmass,
-                   self.locate_maxsize, self.locate_separation,
-                   self.locate_noisesize, self.locate_smoothingsize,
-                   self.locate_percentile, self.locate_topn,
-                   self.locate_preprocess, self.locate_threshold)
-        params2  = {'diameter': self.locate_diameter,
-                    'minmass': self.locate_minmass,
-                    'maxsize': self.locate_maxsize,
-                    'separation': self.locate_separation,
-                    'noise_size': self.locate_noisesize,
-                    'smoothing_size': self.locate_smoothingsize,
-                    'percentile': self.locate_percentile,
-                    'topn': self.locate_topn,
-                    'preprocess': self.locate_preprocess,
-                    'threshold': self.locate_threshold}
-        frames  = range(job.period[0], job.period[1])
-
-#        func = partial(trackpy.locate, **params2)
-
-        
-        with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(frames, desc=d, unit=ut, total=job.nframes) as bar:
-
-            def hook(frame_no, detected_features):
-                nfeatures = len(detected_features)
-                bar.set_postfix(nfeatures=nfeatures)
-                bar.update()
-                if nfeatures == 0:
-                    ''                
-                else:
-                    sf.put(detected_features)
-
-            
-            batch_threaded(job.pframes, params2, threads=4, report_hook=hook)
-                                    
+                    nfeatures = len(features)
+                    bar.set_postfix(nfeatures=nfeatures)
+                    if nfeatures == 0:
+                        continue                
+                    sf.put(features)
 
         
     def link_trajectories(self, job):
@@ -577,21 +517,30 @@ class TrackParticles(BetrackCommand):
         if completed > 0:
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     \(^-^)/', sep='')
-            return EX_OK
+            return self.EX_OK
         else:
             mprint('Batch process completed, ', completed, '/', njobs,
                    ' jobs successfully completed!     ¯\_(ツ)_/¯ ', sep='')
-            return EX_CONFIG
+            return self.EX_CONFIG
 
 
-        
-def batch_threaded(frames, locate_kw, threads=4, report_hook=None):
-    if not report_hook:
-        def report_hook(): pass
-    func = partial(trackpy.locate, **locate_kw)
-    pool =  ThreadPool(threads)
+def _locate_features_parallel(frames, frame_range, locate_kw, save):
+    """
+    Multiprocess wrapper of the ``trackpy.locate`` function. This function
+    is called internally by :py:func:`~betrack.commands.command.trackparticles.locate_features`
+    and its use outside of this scope is discouraged. 
+
+    :param frames: the frames where to locate features
+    :type frames: ``pims.imageio_reader.ImageIOReader`` or ``slicerator.Pipeline``
+    :param list frame_range: the selected range of frames to be processed
+    :param tuple locate_kw: parameters to be passed to ``trackpy.locate``
+    :param func save: function to process the results of ``trackpy.locate``
+    """
+    
+    func = partial(locate, **locate_kw)
+    pool = Pool(cpu_count())
     for i, frame_stats in enumerate(pool.imap(func, frames)):
-        frame_stats["frame"] = i
-        report_hook(i, frame_stats)
+        frame_stats['frame'] = frame_range[i]
+        save(i, frame_stats)
     pool.close()
     pool.join()

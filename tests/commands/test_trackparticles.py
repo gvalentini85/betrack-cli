@@ -69,6 +69,16 @@ class TestTrackParticles(TestCase):
         self.assertEqual(cm.exception.code, EX_CONFIG)
         
         cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('parallel: sure!')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        with self.assertRaises(SystemExit) as cm:
+            tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(cm.exception.code, EX_CONFIG)
+        remove(cf.name)
+
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
         cf.write('tp-exportas: excel')
         cf.close()
         opt = {'--configuration': cf.name}
@@ -352,6 +362,32 @@ class TestTrackParticles(TestCase):
         tp.jobs[0].release_memory()          
         remove(cf.name)
 
+    def test_locate_features_parallel(self):        
+        cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)
+        cf.write('parallel: True\n')
+        cf.write('tp-locate-diameter: '  + str(self._pdiameter) + '\n')
+        cf.write('tp-link-searchrange: ' + str(self._hoffset) * 2 + '\n')
+        cf.write('jobs:\n')
+        cf.write('  - video: ' + self._vf.name + '\n')
+        cf.close()
+        opt = {'--configuration': cf.name}
+        tp  = TrackParticles(opt)
+        tp.configure_tracker(opt['--configuration'])
+        self.assertEqual(tp.jobs[0].outdir, dirname(realpath(self._vf.name)))
+        
+        tp.jobs[0].load_frames()
+        tp.jobs[0].preprocess_video()        
+        tp.locate_features(tp.jobs[0])
+        self.assertTrue(isfile(tp.jobs[0].h5storage))
+        self.assertEqual(dirname(realpath(tp.jobs[0].h5storage)),
+                         dirname(realpath(self._vf.name)))
+
+        with trackpy.PandasHDFStoreBig(tp.jobs[0].h5storage) as sf:
+            res = sf.dump()
+        self.assertEqual(res.shape, (self._nframes * self._nparticles, 9))            
+        tp.jobs[0].release_memory()          
+        remove(cf.name)
+        
         
     def test_link_trajectories(self):
         cf  = NamedTemporaryFile(mode='w', suffix='.yml', delete=False)

@@ -38,12 +38,13 @@ def main():
     """Main CLI entrypoint."""
     import betrack.commands
     options = docopt(__doc__, version=CLI + ' ' + VERSION)
+    bcommands = ['TrackParticles', 'AnnotateVideo']
 
     for (k, v) in options.items():
         if hasattr(betrack.commands, k.replace('-', '')) and v:
             module = getattr(betrack.commands, k.replace('-', ''))
             betrack.commands = getmembers(module, isclass)
-            command = [command[1] for command in betrack.commands if command[0] != 'BetrackCommand'][0]
+            command = [command[1] for command in betrack.commands if command[0] in bcommands][0]
             command = command(options)
             errcode = command.run()
             exit(errcode)
