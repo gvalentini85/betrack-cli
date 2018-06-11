@@ -31,8 +31,8 @@ from sys     import exit, stdout
 import trackpy
 
 import multiprocessing as mp
-import multiprocessing.pool as mpp
 from functools import partial
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 from betrack.commands.command import BetrackCommand
@@ -366,7 +366,7 @@ class TrackParticles(BetrackCommand):
         ut = ' frame'
         pf = [dict(features=0)]
 
-        pool    = mpp.ThreadPool(mp.cpu_count())
+#        pool    = mpp.ThreadPool(mp.cpu_count())
         params  = (self.locate_diameter, self.locate_minmass,
                    self.locate_maxsize, self.locate_separation,
                    self.locate_noisesize, self.locate_smoothingsize,
@@ -384,22 +384,22 @@ class TrackParticles(BetrackCommand):
                     'threshold': self.locate_threshold}
         frames  = range(job.period[0], job.period[1])
 
-        func = partial(trackpy.locate, **params2)
+#        func = partial(trackpy.locate, **params2)
 
         
         with trackpy.PandasHDFStoreBig(job.h5storage) as sf, tqdm(frames, desc=d, unit=ut, total=job.nframes) as bar:
-            
-#            args = [(x, job.pframes[x], params) for x in frames]
-#            args = [(x, job, params) for x in frames]
-#            for i, x in enumerate(pool.imap(workerstar, args)):
-            for i, x in enumerate(pool.imap(func, job.pframes)):
-                nfeatures = len(x)
+
+            def hook(frame_no, detected_features):
+                nfeatures = len(detected_features)
                 bar.set_postfix(nfeatures=nfeatures)
                 bar.update()
                 if nfeatures == 0:
-                    continue                
+                    ''                
                 else:
-                    sf.put(x)
+                    sf.put(detected_features)
+
+            
+            batch_threaded(job.pframes, params2, threads=4, report_hook=hook)
                                     
 
         
@@ -584,3 +584,14 @@ class TrackParticles(BetrackCommand):
             return EX_CONFIG
 
 
+        
+def batch_threaded(frames, locate_kw, threads=4, report_hook=None):
+    if not report_hook:
+        def report_hook(): pass
+    func = partial(trackpy.locate, **locate_kw)
+    pool =  ThreadPool(threads)
+    for i, frame_stats in enumerate(pool.imap(func, frames)):
+        frame_stats["frame"] = i
+        report_hook(i, frame_stats)
+    pool.close()
+    pool.join()
