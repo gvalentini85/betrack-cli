@@ -13,9 +13,14 @@ from cv2   import (VideoWriter, VideoWriter_fourcc, putText, circle, rectangle,
                    flip, FONT_HERSHEY_SIMPLEX, LINE_AA)
 from tqdm  import tqdm
 
+from functools                import partial
+from multiprocessing          import Lock, cpu_count
+from multiprocessing.pool     import ThreadPool
+
+
 from betrack.commands.command import BetrackCommand
 from betrack.utils.frames     import reverse_colors, crop
-from betrack.utils.message    import eprint
+from betrack.utils.message    import eprint, wprint
 from betrack.utils.parser     import (open_configuration, parse_str)
 
 class AnnotateVideo(BetrackCommand):
@@ -45,8 +50,6 @@ class AnnotateVideo(BetrackCommand):
     def configure_annotator(self, filename):
         """
         """
-
-        super(AnnotateVideo, self).configure_betrack(filename)
         
         try:
             config = open_configuration(filename)            
@@ -63,6 +66,12 @@ class AnnotateVideo(BetrackCommand):
             eprint('Invalid attribute: ', err[0], '.', sep='')
             sys.exit()
         except KeyError: pass
+
+        # Configure betrack..
+        super(AnnotateVideo, self).configure_betrack(filename)
+
+        # Configure jobs..
+        
 
                 
     def draw_particles(self, frame, df, particles):
@@ -159,36 +168,61 @@ class AnnotateVideo(BetrackCommand):
         else: self.drawregion = False
         writer = VideoWriter(job.avitracked, codec, fps, oshape)
 
-        # Loop over frames, annotate, crop and save each of them..
-        d       = '\033[01m' + '...Exporting video:'
-        ut      = ' frame'
-        for i in tqdm(arange(job.period[0], job.period[1]), desc=d, unit=ut, total=job.nframes):
-            
-            # Get frame, subset tracks..
-            f  = array(job.pframes[i])
-            df = job.dflink[job.dflink['frame'] == i]
+        d               = '\033[01m' + '...Exporting video:'
+        ut              = ' frame'
+        selected_frames = arange(job.period[0], job.period[1])
+        annotate_params = {'lock': None,
+                           'drawparticles': job.drawparticles,
+                           'oldmargins':    oldmargins,
+                           'margins':       job.margins,
+                           'crop_margins':  job.valid_margins()}
+        
+        def _annotate_frame(fnum, lock=None, drawparticles=None, oldmargins=None,
+                            margins=None, crop_margins=None):
+            """
+            """
 
+            if lock is not None: lock.acquire()
+            frame       = array(job.pframes[fnum])
+            dfparticles = job.dflink[job.dflink['frame'] == fnum]
+            if lock is not None: lock.release()
+        
             # Draw particles..
-            self.draw_particles(f, df, job.drawparticles)
+            self.draw_particles(frame, dfparticles, drawparticles)
 
             # Draw tracked region..
-            if self.drawregion: self.draw_region(f, oldmargins)
+            if self.drawregion: self.draw_region(frame, oldmargins)
 
             # Draw frame number..
-            if self.drawframenumber: self.draw_frame_number(f, i, oldmargins)
+            if self.drawframenumber: self.draw_frame_number(frame, fnum, oldmargins)
 
             # Crop frame..
-            if job.valid_margins(): f = crop(f, job.margins)
+            if crop_margins: frame = crop(frame, margins)
 
             # Flip frame..
-            if   self.flipframes == 'x': flip(f, flipCode=0, dst=f)
-            elif self.flipframes == 'y': flip(f, flipCode=1, dst=f)
+            if   self.flipframes == 'x': flip(frame, flipCode=0, dst=frame)
+            elif self.flipframes == 'y': flip(frame, flipCode=1, dst=frame)
             elif self.flipframes == 'xy' or self.flipframes == 'yx':
-                flip(f, flipCode=-1, dst=f)
+                flip(frame, flipCode=-1, dst=frame)
 
-            # Write frame to file..
-            writer.write(f)
-            
+            return frame
+    
+        if self.parallel:
+            with tqdm(selected_frames, desc=d, unit=ut, total=job.nframes) as bar:
+                annotate_params['lock'] = Lock()
+                func = partial(_annotate_frame, **annotate_params)
+                pool = ThreadPool(cpu_count())
+                for i, frame in enumerate(pool.imap(func, selected_frames)):
+                    writer.write(frame)
+                    bar.update()
+                pool.close()
+                pool.join()
+                                    
+        else:
+            for i in tqdm(selected_frames, desc=d, unit=ut, total=job.nframes):            
+                f = _annotate_frame(i, **annotate_params)
+                writer.write(f)
+                            
         # Close writer..
         writer.release()
 

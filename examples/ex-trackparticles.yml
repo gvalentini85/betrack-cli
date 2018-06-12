@@ -1,6 +1,6 @@
 parallel:                  True
 tp-featuresdark:           True
-tp-locate-diameter:        13
+tp-locate-diameter:        9
 tp-link-searchrange:       10
 tp-link-predict:           True
 tp-exportas:               csv
@@ -13,6 +13,7 @@ jobs:
   - video:         ../Dropbox (ASU)/TandemRuns/data/videos/TR-T2-001.mp4
     outdir:        ../Dropbox (ASU)/TandemRuns/data/betrack/
     crop-margins:  [1360, 2800, 400, 1300]
+    period-frame:  [10, 100]
 
   - video:         somefile3.mp4
     outdir:        somedir3/

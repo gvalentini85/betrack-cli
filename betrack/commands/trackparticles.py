@@ -329,7 +329,7 @@ class TrackParticles(BetrackCommand):
                     if nfeatures > 0:
                         sf.put(detected_features)
                         
-                _locate_features_parallel(job.pframes, selected_frames,
+                _locate_features_parallel(job.pframes[selected_frames], selected_frames,
                                           locate_params, save=save_features)
             else:
                 for fn in bar:
